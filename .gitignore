@@ -1,3 +1,5 @@
 .env
 example.docx
 practice.docx
+judicial_template.docx
+modules/__pycache__/
