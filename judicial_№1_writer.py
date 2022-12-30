@@ -87,11 +87,11 @@ para = document.add_paragraph('')
 para.add_run(VAR24).bold = True
 para = document.add_paragraph('')
 para.add_run(VAR25).bold = True
-document.add_paragraph(VAR26)
-document.add_paragraph(VAR27)
-document.add_paragraph(VAR28)
+document.add_paragraph(f'\t{VAR26}')
+document.add_paragraph(f'\t{VAR27}')
+document.add_paragraph(f'\t{VAR28}')
 document.add_paragraph(VAR29)
-document.add_paragraph(VAR30)
+document.add_paragraph(f'\t{VAR30}')
 
 table = document.add_table(rows=1, cols=2)
 hdr_cells = table.rows[0].cells
