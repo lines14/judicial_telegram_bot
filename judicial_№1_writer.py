@@ -1,6 +1,7 @@
 # petition for familiarization with the case materials:
 
 import docx
+from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 import os
 import dotenv
@@ -58,6 +59,9 @@ def make_table_columns_align_right(*columns):
 
 document = docx.Document()
 
+# style = document.styles['Normal']
+# style.paragraph_format.line_spacing = Pt(8)
+
 records = (
     (VAR1, VAR2),
     (VAR3, VAR4),
@@ -85,22 +89,35 @@ make_table_columns_align_right(table.columns[0])
 
 para = document.add_paragraph(VAR23)
 para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+para.paragraph_format.space_after = Pt(8)
 
 para = document.add_paragraph()
 para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+para.paragraph_format.space_after = Pt(8)
 para.add_run(VAR24).bold = True
 
 
 para = document.add_paragraph()
 para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+para.paragraph_format.space_after = Pt(8)
 para.add_run(VAR25).bold = True
 
 
-document.add_paragraph(f'\t{VAR26}')
-document.add_paragraph(f'\t{VAR27}')
-document.add_paragraph(f'\t{VAR28}')
-document.add_paragraph(VAR29)
-document.add_paragraph(f'\t{VAR30}')
+para = document.add_paragraph(f'\t{VAR26}')
+para.paragraph_format.space_after = Pt(8)
+
+para = document.add_paragraph(f'\t{VAR27}')
+para.paragraph_format.space_after = Pt(8)
+
+para = document.add_paragraph(f'\t{VAR28}')
+para.paragraph_format.space_after = Pt(8)
+
+para = document.add_paragraph(VAR29)
+para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+para.paragraph_format.space_after = Pt(8)
+
+para = document.add_paragraph(f'\t{VAR30}\n')
+para.paragraph_format.space_after = Pt(8)
 
 table = document.add_table(rows=1, cols=2)
 hdr_cells = table.rows[0].cells
