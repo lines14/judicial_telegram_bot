@@ -39,6 +39,13 @@ VAR30 = os.environ.get('VAR30')
 VAR31 = os.environ.get('VAR31')
 VAR32 = os.environ.get('VAR32')
 
+def make_rows_bold(*rows):
+    for row in rows:
+        for cell in row.cells:
+            for paragraph in cell.paragraphs:
+                for run in paragraph.runs:
+                    run.font.bold = True
+
 document = docx.Document()
 
 records = (
@@ -63,17 +70,29 @@ for first_col, second_col in records:
     row_cells[0].text = first_col
     row_cells[1].text = second_col
 
+make_rows_bold(table.rows[0], table.rows[2], table.rows[7])
+
 document.add_paragraph(VAR23)
-document.add_paragraph(VAR24)
-document.add_paragraph(VAR25)
+
+para = document.add_paragraph('')
+para.add_run(VAR24).bold = True
+
+para = document.add_paragraph('')
+para.add_run(VAR25).bold = True
+
 document.add_paragraph(VAR26)
 document.add_paragraph(VAR27)
 document.add_paragraph(VAR28)
 document.add_paragraph(VAR29)
+document.add_paragraph(VAR30)
 
 table = document.add_table(rows=1, cols=2)
 hdr_cells = table.rows[0].cells
-hdr_cells[0].text = VAR30
-hdr_cells[1].text = VAR31
+hdr_cells[0].text = VAR31
+hdr_cells[1].text = VAR32
+
+make_rows_bold(table.rows[0])
+
+document.add_paragraph('')
 
 document.save('/home/lines14/projects/judicial_telegram_bot/judicial_№1_writer.docx')
