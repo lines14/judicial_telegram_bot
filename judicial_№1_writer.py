@@ -79,14 +79,23 @@ for first_col, second_col in records:
     row_cells = table.add_row().cells
     row_cells[0].text = first_col
     row_cells[1].text = second_col
+
 make_table_rows_bold(table.rows[0], table.rows[2], table.rows[7])
 make_table_columns_align_right(table.columns[0])
 
-document.add_paragraph(VAR23)
-para = document.add_paragraph('')
+para = document.add_paragraph(VAR23)
+para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+para = document.add_paragraph()
+para.alignment = WD_ALIGN_PARAGRAPH.CENTER
 para.add_run(VAR24).bold = True
-para = document.add_paragraph('')
+
+
+para = document.add_paragraph()
+para.alignment = WD_ALIGN_PARAGRAPH.CENTER
 para.add_run(VAR25).bold = True
+
+
 document.add_paragraph(f'\t{VAR26}')
 document.add_paragraph(f'\t{VAR27}')
 document.add_paragraph(f'\t{VAR28}')
@@ -97,6 +106,7 @@ table = document.add_table(rows=1, cols=2)
 hdr_cells = table.rows[0].cells
 hdr_cells[0].text = VAR31
 hdr_cells[1].text = VAR32
+
 make_table_rows_bold(table.rows[0])
 make_table_columns_align_right(table.columns[1])
 
