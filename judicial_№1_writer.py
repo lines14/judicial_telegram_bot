@@ -1,8 +1,10 @@
 # petition for familiarization with the case materials:
 
-import docx
+from docx import Document
 from docx.shared import Pt
+from docx.shared import Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.table import WD_ROW_HEIGHT_RULE
 import os
 import dotenv
 
@@ -48,19 +50,23 @@ def make_table_rows_bold(*rows):
                 for run in paragraph.runs:
                     run.font.bold = True
 
-#     font = paragraph.runs[0].font
-#     font.size= Pt(10)
-
 def make_table_columns_align_right(*columns):
     for column in columns:
         for cell in column.cells:
             for paragraph in cell.paragraphs:
                 paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
 
-document = docx.Document()
+def set_table_rows_height_0_5(*rows):
+    for row in rows:
+        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+        row.height = Cm(0.5)
 
+# font = paragraph.runs[0].font
+# font.size= Pt(10)
 # style = document.styles['Normal']
 # style.paragraph_format.line_spacing = Pt(8)
+
+document = Document()
 
 records = (
     (VAR1, VAR2),
@@ -86,6 +92,7 @@ for first_col, second_col in records:
 
 make_table_rows_bold(table.rows[0], table.rows[2], table.rows[7])
 make_table_columns_align_right(table.columns[0])
+set_table_rows_height_0_5(table.rows[9])
 
 para = document.add_paragraph(VAR23)
 para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
