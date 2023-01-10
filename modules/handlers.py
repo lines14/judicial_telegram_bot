@@ -1,8 +1,8 @@
 from aiogram import types, Dispatcher
-from bot_base import dp, bot
+from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
-from buttons import kb_client
-from buttons import keyboard_generator
+from modules.buttons import kb_client
+from modules.buttons import keyboard_generator
 
 async def start_command(message: types.Message):
     await message.reply('Привет, отправь мне свой запрос!')
