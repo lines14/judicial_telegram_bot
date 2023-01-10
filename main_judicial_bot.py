@@ -1,11 +1,7 @@
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
-import os
-import dotenv
-
-dotenv.load_dotenv()
-TG_TOKEN = os.environ.get('TG_TOKEN')
+from modules.config import TG_TOKEN
 
 bot = Bot(token=TG_TOKEN)
 dp = Dispatcher(bot)
@@ -16,7 +12,7 @@ async def start_command(message: types.Message):
 
 @dp.message_handler(commands=['download'])
 async def get_file(message: types.Message):
-    await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/judicial_writer_1.docx', 'rb'))
+    await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/documents/judicial_writer_1.docx', 'rb'))
 
 def main():
     pass

@@ -14,4 +14,4 @@ from modules import read_all_file
 # print(doc.paragraphs[0].runs[2].text)
 # print(doc.paragraphs[0].runs[3].text)
 
-print(read_all_file.gettext('/home/lines14/projects/judicial_telegram_bot/judicial_№1_writer.docx'))
+print(read_all_file.gettext('/home/lines14/projects/judicial_telegram_bot/documents/judicial_writer_1.docx'))
