@@ -134,4 +134,4 @@ hdr_cells[1].text = VAR32
 make_table_rows_bold(table.rows[0])
 make_table_columns_align_right(table.columns[1])
 
-document.save('/home/lines14/projects/judicial_telegram_bot/judicial_№1_writer.docx')
+document.save('/home/lines14/projects/judicial_telegram_bot/judicial_writer_1.docx')
