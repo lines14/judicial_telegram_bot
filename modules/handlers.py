@@ -1,6 +1,5 @@
 from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
-from aiogram.dispatcher import FSMContext
 from modules.buttons import keys
 from modules.buttons import keyboard_generator
 
@@ -13,4 +12,3 @@ async def get_file(message: types.Message):
 def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(start_command, commands=['start'])
     dp.register_message_handler(get_file, commands=['download'])
-    
