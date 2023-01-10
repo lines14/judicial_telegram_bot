@@ -1,6 +1,4 @@
 .env
-example.docx
-practice.docx
 documents/
 modules/config.py
-modules/.env
+modules/template.py
