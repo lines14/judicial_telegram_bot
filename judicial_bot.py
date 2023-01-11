@@ -1,4 +1,4 @@
-from aiogram.utils.executor import start_webhook
+from aiogram.utils import executor
 from modules.config import WEBHOOK_PATH, WEBHOOK_URL, WEBAPP_HOST, WEBAPP_PORT
 from modules.bot_base import bot
 from modules.bot_base import dp
@@ -15,12 +15,4 @@ from modules import handlers
 handlers.register_handler_client(dp)
 
 if __name__ == '__main__':
-    start_webhook(
-        dispatcher=dp,
-        webhook_path=WEBHOOK_PATH,
-        skip_updates=True,
-        on_startup=on_startup,
-        on_shutdown=on_shutdown,
-        host=WEBAPP_HOST,
-        port=WEBAPP_PORT,
-    )
+    executor.start_webhook(dp, webhook_path=WEBHOOK_PATH, skip_updates=True, on_startup=on_startup, on_shutdown=on_shutdown, host=WEBAPP_HOST, port=WEBAPP_PORT)
