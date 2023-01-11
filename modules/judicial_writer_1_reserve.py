@@ -35,7 +35,7 @@ document = Document()
 
 async def data_print(state):
     async with state.proxy() as data:
-        print(data)
+        pass
 
 records = (
     (template.VAR1, template.VAR2),

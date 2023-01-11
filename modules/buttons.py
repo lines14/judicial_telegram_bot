@@ -1,7 +1,7 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-b1 = KeyboardButton('/start')
-b2 = KeyboardButton('/download')
+b1 = KeyboardButton('/Создать')
+b2 = KeyboardButton('/Получить')
 
 keys = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboard=True
 keys.add(b1).insert(b2)
