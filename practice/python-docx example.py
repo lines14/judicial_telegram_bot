@@ -1,6 +1,22 @@
 import docx
+from docx.shared import Cm, Pt
 
 document = docx.Document()
+
+#_______1
+section = document.sections[-1]
+section.top_margin = Cm(2) #Верхний отступ
+section.bottom_margin = Cm(2) #Нижний отступ
+section.left_margin = Cm(3) #Отступ слева
+section.right_margin = Cm(2) #Отступ справа
+#_______2
+paragraph_format = document.styles['Normal'].paragraph_format
+paragraph_format.line_spacing = Pt(12) #межстрочный интервал
+#_______3
+style = document.styles['Normal']
+font = style.font
+font.name ='Times New Roman' #Стиль шрифта
+font.size = Pt(12) #Размер шрифта
 
 document.add_paragraph('Приветики!')
 

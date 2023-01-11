@@ -1,10 +1,14 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-b1 = KeyboardButton('/Создать')
-b2 = KeyboardButton('/Получить')
+b1 = KeyboardButton('/создать')
+b2 = KeyboardButton('/получить')
+b3 = KeyboardButton('/отмена')
 
 keys = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboard=True
 keys.add(b1).insert(b2)
+
+keys2 = ReplyKeyboardMarkup(resize_keyboard=True)
+keys2.add(b3)
 
 # keyboard: Optional[List[List[KeyboardButton]]] = None
 async def keyboard_generator(key_list):

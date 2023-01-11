@@ -6,7 +6,7 @@ from docx.shared import Pt
 from docx.shared import Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_ROW_HEIGHT_RULE
-from modules import template
+import template_reserve
 
 def make_table_rows_bold(*rows):
     for row in rows:
@@ -33,27 +33,37 @@ def set_table_rows_height_0_5(*rows):
 
 document = Document()
 
-async def data_print(state):
-    async with state.proxy() as data:
-        pass
+section = document.sections[0]
+section.top_margin = Cm(2) #Верхний отступ
+section.bottom_margin = Cm(2) #Нижний отступ
+section.left_margin = Cm(3) #Отступ слева
+section.right_margin = Cm(2) #Отступ справа
+
+# paragraph_format = document.styles['Normal'].paragraph_format
+# paragraph_format.line_spacing = Pt(12) #межстрочный интервал
+
+# style = document.styles['Normal']
+# font = style.font
+# font.name ='Times New Roman' #Стиль шрифта
+# font.size = Pt(12) #Размер шрифта
 
 records = (
-    (template.VAR1, template.VAR2),
-    (template.VAR3, template.VAR4),
-    (template.VAR5, template.VAR6),
-    (template.VAR7, template.VAR8),
-    (template.VAR9, template.VAR10),
-    (template.VAR11, template.VAR12),
-    (template.VAR13, template.VAR14),
-    (template.VAR15, template.VAR16),
-    (template.VAR17, template.VAR18),
-    (template.VAR19, template.VAR20)
+    (template_reserve.VAR1, template_reserve.VAR2),
+    (template_reserve.VAR3, template_reserve.VAR4),
+    (template_reserve.VAR5, template_reserve.VAR6),
+    (template_reserve.VAR7, template_reserve.VAR8),
+    (template_reserve.VAR9, template_reserve.VAR10),
+    (template_reserve.VAR11, template_reserve.VAR12),
+    (template_reserve.VAR13, template_reserve.VAR14),
+    (template_reserve.VAR15, template_reserve.VAR16),
+    (template_reserve.VAR17, template_reserve.VAR18),
+    (template_reserve.VAR19, template_reserve.VAR20)
 )
 
 table = document.add_table(rows=1, cols=2)
 hdr_cells = table.rows[0].cells
-hdr_cells[0].text = template.VAR21
-hdr_cells[1].text = template.VAR22
+hdr_cells[0].text = template_reserve.VAR21
+hdr_cells[1].text = template_reserve.VAR22
 for first_col, second_col in records:
     row_cells = table.add_row().cells
     row_cells[0].text = first_col
@@ -63,42 +73,42 @@ make_table_rows_bold(table.rows[0], table.rows[2], table.rows[7])
 make_table_columns_align_right(table.columns[0])
 set_table_rows_height_0_5(table.rows[9])
 
-para = document.add_paragraph(template.VAR23)
+para = document.add_paragraph(template_reserve.VAR23)
 para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
 para.paragraph_format.space_after = Pt(8)
 
 para = document.add_paragraph()
 para.alignment = WD_ALIGN_PARAGRAPH.CENTER
 para.paragraph_format.space_after = Pt(8)
-para.add_run(template.VAR24).bold = True
+para.add_run(template_reserve.VAR24).bold = True
 
 
 para = document.add_paragraph()
 para.alignment = WD_ALIGN_PARAGRAPH.CENTER
 para.paragraph_format.space_after = Pt(8)
-para.add_run(template.VAR25).bold = True
+para.add_run(template_reserve.VAR25).bold = True
 
 
-para = document.add_paragraph(f'\t{template.VAR26}')
+para = document.add_paragraph(f'\t{template_reserve.VAR26}')
 para.paragraph_format.space_after = Pt(8)
 
-para = document.add_paragraph(f'\t{template.VAR27}')
+para = document.add_paragraph(f'\t{template_reserve.VAR27}')
 para.paragraph_format.space_after = Pt(8)
 
-para = document.add_paragraph(f'\t{template.VAR28}')
+para = document.add_paragraph(f'\t{template_reserve.VAR28}')
 para.paragraph_format.space_after = Pt(8)
 
-para = document.add_paragraph(template.VAR29)
+para = document.add_paragraph(template_reserve.VAR29)
 para.alignment = WD_ALIGN_PARAGRAPH.CENTER
 para.paragraph_format.space_after = Pt(8)
 
-para = document.add_paragraph(f'\t{template.VAR30}\n')
+para = document.add_paragraph(f'\t{template_reserve.VAR30}\n')
 para.paragraph_format.space_after = Pt(8)
 
 table = document.add_table(rows=1, cols=2)
 hdr_cells = table.rows[0].cells
-hdr_cells[0].text = template.VAR31
-hdr_cells[1].text = template.VAR32
+hdr_cells[0].text = template_reserve.VAR31
+hdr_cells[1].text = template_reserve.VAR32
 
 make_table_rows_bold(table.rows[0])
 make_table_columns_align_right(table.columns[1])
