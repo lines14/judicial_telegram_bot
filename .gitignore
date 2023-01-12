@@ -5,3 +5,5 @@ modules/template.py
 modules/template_reserve.py
 practice/template_res.py
 TLS_certificate_generator_bot.sh
+judicial_bot_private.key
+judicial_bot_public.pem
