@@ -9,10 +9,10 @@ from modules.bot_base import dp
 logging.basicConfig(level=logging.INFO)
 dp.middleware.setup(LoggingMiddleware())
 
-CERT=InputFile('/app/judicial_bot_public.pem', 'r')
+# CERT=InputFile('/home/lines14/projects/judicial_telegram_bot/judicial_bot_public.pem', 'r')
 
 async def on_startup(dp):
-    await bot.set_webhook(WEBHOOK_URL) #drop_pending_updates=True
+    await bot.set_webhook(url=WEBHOOK_URL) #drop_pending_updates=True
     print('Бот успешно запущен!')
 
 async def on_shutdown(dp):
