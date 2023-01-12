@@ -3,4 +3,5 @@ documents/
 modules/config.py
 modules/template.py
 modules/template_reserve.py
-practice/template_reserve.py
+practice/template_res.py
+TLS_certificate_generator_bot.sh

@@ -6,7 +6,7 @@ from docx.shared import Pt
 from docx.shared import Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_ROW_HEIGHT_RULE
-import template_reserve
+import template_res
 
 def make_table_rows_bold(*rows):
     for row in rows:
@@ -48,22 +48,22 @@ section.right_margin = Cm(2) #Отступ справа
 # font.size = Pt(12) #Размер шрифта
 
 records = (
-    (template_reserve.VAR1, template_reserve.VAR2),
-    (template_reserve.VAR3, template_reserve.VAR4),
-    (template_reserve.VAR5, template_reserve.VAR6),
-    (template_reserve.VAR7, template_reserve.VAR8),
-    (template_reserve.VAR9, template_reserve.VAR10),
-    (template_reserve.VAR11, template_reserve.VAR12),
-    (template_reserve.VAR13, template_reserve.VAR14),
-    (template_reserve.VAR15, template_reserve.VAR16),
-    (template_reserve.VAR17, template_reserve.VAR18),
-    (template_reserve.VAR19, template_reserve.VAR20)
+    (template_res.VAR1, template_res.VAR2),
+    (template_res.VAR3, template_res.VAR4),
+    (template_res.VAR5, template_res.VAR6),
+    (template_res.VAR7, template_res.VAR8),
+    (template_res.VAR9, template_res.VAR10),
+    (template_res.VAR11, template_res.VAR12),
+    (template_res.VAR13, template_res.VAR14),
+    (template_res.VAR15, template_res.VAR16),
+    (template_res.VAR17, template_res.VAR18),
+    (template_res.VAR19, template_res.VAR20)
 )
 
 table = document.add_table(rows=1, cols=2)
 hdr_cells = table.rows[0].cells
-hdr_cells[0].text = template_reserve.VAR21
-hdr_cells[1].text = template_reserve.VAR22
+hdr_cells[0].text = template_res.VAR21
+hdr_cells[1].text = template_res.VAR22
 for first_col, second_col in records:
     row_cells = table.add_row().cells
     row_cells[0].text = first_col
@@ -73,46 +73,46 @@ make_table_rows_bold(table.rows[0], table.rows[2], table.rows[7])
 make_table_columns_align_right(table.columns[0])
 set_table_rows_height_0_5(table.rows[9])
 
-para = document.add_paragraph(template_reserve.VAR23)
+para = document.add_paragraph(template_res.VAR23)
 para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
 para.paragraph_format.space_after = Pt(8)
 
 para = document.add_paragraph()
 para.alignment = WD_ALIGN_PARAGRAPH.CENTER
 para.paragraph_format.space_after = Pt(8)
-para.add_run(template_reserve.VAR24).bold = True
+para.add_run(template_res.VAR24).bold = True
 
 
 para = document.add_paragraph()
 para.alignment = WD_ALIGN_PARAGRAPH.CENTER
 para.paragraph_format.space_after = Pt(8)
-para.add_run(template_reserve.VAR25).bold = True
+para.add_run(template_res.VAR25).bold = True
 
 
-para = document.add_paragraph(f'\t{template_reserve.VAR26}')
+para = document.add_paragraph(f'\t{template_res.VAR26}')
 para.paragraph_format.space_after = Pt(8)
 
-para = document.add_paragraph(f'\t{template_reserve.VAR27}')
+para = document.add_paragraph(f'\t{template_res.VAR27}')
 para.paragraph_format.space_after = Pt(8)
 
-para = document.add_paragraph(f'\t{template_reserve.VAR28}')
+para = document.add_paragraph(f'\t{template_res.VAR28}')
 para.paragraph_format.space_after = Pt(8)
 
-para = document.add_paragraph(template_reserve.VAR29)
+para = document.add_paragraph(template_res.VAR29)
 para.alignment = WD_ALIGN_PARAGRAPH.CENTER
 para.paragraph_format.space_after = Pt(8)
 
-para = document.add_paragraph(f'\t{template_reserve.VAR30}\n')
+para = document.add_paragraph(f'\t{template_res.VAR30}\n')
 para.paragraph_format.space_after = Pt(8)
 
 records = (
-    (template_reserve.VAR33, template_reserve.VAR34),
+    (template_res.VAR33, template_res.VAR34),
     )
 
 table = document.add_table(rows=1, cols=2)
 hdr_cells = table.rows[0].cells
-hdr_cells[0].text = template_reserve.VAR31
-hdr_cells[1].text = template_reserve.VAR32
+hdr_cells[0].text = template_res.VAR31
+hdr_cells[1].text = template_res.VAR32
 for first_col, second_col in records:
     row_cells = table.add_row().cells
     row_cells[0].text = first_col
