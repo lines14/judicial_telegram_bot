@@ -119,17 +119,12 @@ async def pick_data13(message: types.Message, state: FSMContext):
 async def pick_data14(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data14'] = message.text
-        global completed_task
-        completed_task = data['user_data14']
     await data_print(state)
     await bot.send_message(chat_id = message.from_user.id, text='Данные записаны, нажмите кнопку "получить", чтобы выгрузить готовый документ.', reply_markup=keys)
     await state.finish()
 
 async def get_file(message: types.Message):
-    if completed_task:
-        await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/documents/judicial_writer_1.docx', 'rb'))
-    else:
-        await bot.send_message(chat_id = message.from_user.id, text='Документ не сформирован, сначала нажмите кнопку "создать".')
+    await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/documents/judicial_writer_1.docx', 'rb'))
 
 def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(start_command, commands=['start'])
