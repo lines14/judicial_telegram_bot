@@ -25,6 +25,9 @@ async def start_command(message: types.Message):
     # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
     await bot.send_message(chat_id = message.from_user.id, text='Привет, нажми "создать", а затем введи требуемые данные, чтобы сформировать документ', reply_markup=keys)
 
+async def get_example(message: types.Message):
+    await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/example/judicial_writer_1_example.docx', 'rb'))
+
 async def add_data(message: types.Message):
     await InputUserData.user_data1.set()
     await message.reply('Инстанция для обращения:', reply_markup=keys2)
@@ -126,6 +129,7 @@ async def get_file(message: types.Message):
 
 def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(start_command, commands=['start'])
+    dp.register_message_handler(get_example, commands=['пример'])
     dp.register_message_handler(add_data, commands=['создать'], state=None)
     dp.register_message_handler(cancel_handlers_pick_data, state='*', commands=['отмена'])
     dp.register_message_handler(pick_data1, state=InputUserData.user_data1)
