@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import keys, keys2, keys3
+from modules.buttons import keys, keys2
 from modules.buttons import keyboard_generator
 from modules.judicial_writer_1 import data_print
 class InputUserData(StatesGroup):
@@ -24,6 +24,9 @@ class InputUserData(StatesGroup):
 async def start_command(message: types.Message):
     # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
     await bot.send_message(chat_id = message.from_user.id, text='Привет, нажмите кнопку "создать", а затем введите требуемые данные, чтобы сформировать документ. Или можете посмотреть пример готового документа, нажав кнопку "пример".', reply_markup=keys)
+
+async def get_example(message: types.Message):
+    await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/example/judicial_writer_1_example.docx', 'rb'))
 
 async def add_data(message: types.Message):
     await InputUserData.user_data1.set()
@@ -118,17 +121,15 @@ async def pick_data14(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data14'] = message.text
     await data_print(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Данные записаны, нажмите кнопку "получить", чтобы выгрузить готовый документ.', reply_markup=keys3)
+    await bot.send_message(chat_id = message.from_user.id, text='Данные записаны, нажмите кнопку "получить", чтобы выгрузить готовый документ.', reply_markup=keys)
     await state.finish()
 
 async def get_file(message: types.Message):
     await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/documents/judicial_writer_1.docx', 'rb'))
 
-async def get_example(message: types.Message):
-    await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/example/judicial_writer_1_example.docx', 'rb'))
-
 def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(start_command, commands=['start'])
+    dp.register_message_handler(get_example, commands=['пример'])
     dp.register_message_handler(add_data, commands=['создать'], state=None)
     dp.register_message_handler(cancel_handlers_pick_data, state='*', commands=['отмена'])
     dp.register_message_handler(pick_data1, state=InputUserData.user_data1)
@@ -146,4 +147,3 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(pick_data13, state=InputUserData.user_data13)
     dp.register_message_handler(pick_data14, state=InputUserData.user_data14)
     dp.register_message_handler(get_file, commands=['получить'])
-    dp.register_message_handler(get_example, commands=['пример'])
