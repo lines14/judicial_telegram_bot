@@ -6,10 +6,13 @@ b3 = KeyboardButton('/отмена')
 b4 = KeyboardButton('/пример')
 
 keys = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboard=True
-keys.add(b1).insert(b2).insert(b4)
+keys.add(b1).insert(b4)
 
 keys2 = ReplyKeyboardMarkup(resize_keyboard=True)
 keys2.add(b3)
+
+keys3 = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboard=True
+keys.add(b1).insert(b2).insert(b4)
 
 # keyboard: Optional[List[List[KeyboardButton]]] = None
 async def keyboard_generator(key_list):
