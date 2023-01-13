@@ -3,3 +3,4 @@ documents/
 modules/config.py
 modules/template.py
 practice/template_res.py
+modules/__pycache__
