@@ -3,7 +3,6 @@ from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from modules.buttons import keys, keys2
-from modules.buttons import keyboard_generator
 from modules.judicial_writer_1 import data_print
 class InputUserData(StatesGroup):
     user_data1 = State()
@@ -130,7 +129,7 @@ async def get_file(message: types.Message):
     if completed_task:
         await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/documents/judicial_writer_1.docx', 'rb'))
     else:
-        pass
+        await bot.send_message(chat_id = message.from_user.id, text='Документ не сформирован, сначала нажмите кнопку "создать".')
 
 def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(start_command, commands=['start'])
