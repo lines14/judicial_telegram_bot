@@ -23,7 +23,7 @@ class InputUserData(StatesGroup):
 
 async def start_command(message: types.Message):
     # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
-    await bot.send_message(chat_id = message.from_user.id, text='Привет, нажми "создать", а затем введи требуемые данные, чтобы сформировать документ', reply_markup=keys)
+    await bot.send_message(chat_id = message.from_user.id, text='Привет, нажмите кнопку "создать", а затем введите требуемые данные, чтобы сформировать документ. Или можете посмотреть пример готового документа, нажав кнопку "пример".', reply_markup=keys)
 
 async def get_example(message: types.Message):
     await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/example/judicial_writer_1_example.docx', 'rb'))
@@ -121,7 +121,7 @@ async def pick_data14(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data14'] = message.text
     await data_print(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Данные записаны, нажмите "получить", чтобы выгрузить готовый документ', reply_markup=keys)
+    await bot.send_message(chat_id = message.from_user.id, text='Данные записаны, нажмите кнопку "получить", чтобы выгрузить готовый документ.', reply_markup=keys)
     await state.finish()
 
 async def get_file(message: types.Message):
