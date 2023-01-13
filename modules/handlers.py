@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import keys, keys2
+from modules.buttons import keys, keys2, keys3
 from modules.judicial_writer_1 import data_print
 class InputUserData(StatesGroup):
     user_data1 = State()
@@ -120,7 +120,7 @@ async def pick_data14(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data14'] = message.text
     await data_print(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Данные записаны, нажмите кнопку "получить", чтобы выгрузить готовый документ.', reply_markup=keys)
+    await bot.send_message(chat_id = message.from_user.id, text='Данные записаны, нажмите кнопку "получить", чтобы выгрузить готовый документ.', reply_markup=keys3)
     await state.finish()
 
 async def get_file(message: types.Message):
