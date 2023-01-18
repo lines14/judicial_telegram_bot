@@ -1,7 +1,7 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 b1 = KeyboardButton('/получитьㅤконсультацию')
-b2 = KeyboardButton('/оставитьㅤотзывㅤоㅤмоейㅤработе')
+b2 = KeyboardButton('/оставитьㅤотзыв')
 b3 = KeyboardButton('/сотрудничество')
 b4 = KeyboardButton('/обоㅤмне')
 b5 = KeyboardButton('/предложитьㅤтемуㅤдляㅤновойㅤпубликации')
@@ -19,6 +19,9 @@ b14 = KeyboardButton('/миграция')
 b15 = KeyboardButton('/трудовыеㅤспоры')
 b16 = KeyboardButton('/защитаㅤправㅤпотребителей')
 
+b17 = KeyboardButton('/telegramㅤpublic')
+b18 = KeyboardButton('/instagram')
+b19 = KeyboardButton('/vk')
 
 main_menu_keyboard = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboard=True
 main_menu_keyboard.add(b1).insert(b2).add(b3).insert(b4).add(b5).add(b6)
@@ -28,6 +31,12 @@ consultation_keyboard.add(b13).insert(b14).insert(b15).add(b16).insert(b7)
 
 consultation_keyboard_in = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard_in.add(b8).insert(b7)
+
+feedback_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+feedback_keyboard.add(b7)
+
+about_me_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+about_me_keyboard.add(b17).insert(b18).insert(b19).add(b7)
 
 doc_generator_start_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 doc_generator_start_keyboard.add(b9).insert(b10).insert(b7)

@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in
+from modules.buttons import main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in, feedback_keyboard, about_me_keyboard
 from modules.judicial_writer_1 import data_print
 
 # Машина состояний генератора документов
@@ -32,40 +32,57 @@ async def restart_command(message: types.Message):
     # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
     await bot.send_message(chat_id = message.from_user.id, text='Выберите то, что Вас интересует:', reply_markup=main_menu_keyboard)
 
-async def about_me(message: types.Message):
-    await bot.send_photo(chat_id=message.chat.id, photo=open('/home/lines14/projects/judicial_telegram_bot/documents/about_me.jpg', 'rb'))
-
 # Меню консультации
 
 async def consultation_start_command(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='По какой тематике Вы желаете получить консультацию?', reply_markup=consultation_keyboard)
 
 async def consultation_mobilization(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время:', reply_markup=consultation_keyboard_in)
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in)
 
 async def consultation_migration(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время:', reply_markup=consultation_keyboard_in)
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in)
 
 async def consultation_employment(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время:', reply_markup=consultation_keyboard_in)
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in)
 
 async def consultation_consumer(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время:', reply_markup=consultation_keyboard_in)
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in)
 
 async def consultation_back(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Вы можете обратиться и по другой тематике:', reply_markup=consultation_keyboard)
 
+# Меню отзывов
+
+async def feedback(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете оставить отзыв о нашем с Вами сотрудничестве ответным сообщением, и он обязательно будет опубликован в моих социальных сетях. Благодарю Вас!', reply_markup=feedback_keyboard)
+
+# Обо мне
+
+async def about_me_start_command(message: types.Message):
+    await bot.send_photo(chat_id=message.chat.id, photo=open('/home/lines14/projects/judicial_telegram_bot/documents/about_me.jpg', 'rb'))
+    await bot.send_message(chat_id = message.from_user.id, text='Подписывайтесь на мои социальные сети, чтобы быть в курсе всех юридических новостей:', reply_markup=about_me_keyboard)
+
+async def about_me_telegram(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov', reply_markup=about_me_keyboard)
+
+async def about_me_instagram(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='https://www.instagram.com/bettercallpavlukov/', reply_markup=about_me_keyboard)
+
+async def about_me_vk(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='https://vk.com/yaroslaw_org', reply_markup=about_me_keyboard)
+
 # Меню генератора документов:
 
 async def generator_start_command(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Добро пожаловать в сервис генерации судебных документов. Нажмите кнопку "создать", а затем введите требуемые данные, чтобы сформировать документ. Или можете посмотреть пример готового документа, нажав кнопку "пример".', reply_markup=doc_generator_start_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text='Добро пожаловать в сервис генерации судебных документов. Нажмите кнопку "создать", а затем введите требуемые данные, чтобы сформировать документ. Или можете посмотреть пример готового документа, нажав кнопку "пример"', reply_markup=doc_generator_start_keyboard)
 
 async def get_example(message: types.Message):
     await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/example/judicial_writer_1_example.docx', 'rb'))
 
 async def add_data(message: types.Message):
     await DocGenerator.doc_generator1.set()
-    await message.reply('Инстанция для обращения:', reply_markup=cancel_generator_keyboard)
+    await message.reply('Введите название инстанции для обращения:', reply_markup=cancel_generator_keyboard)
 
 async def cancel_handlers_pick_data(message: types.Message, state: FSMContext):
     current_state = await state.get_state()
@@ -78,85 +95,85 @@ async def doc_generator1(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data1'] = message.text
     await DocGenerator.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Адрес инстанции для обращения:')
+    await bot.send_message(chat_id = message.from_user.id, text='Укажите адрес инстанции для обращения:')
 
 async def doc_generator2(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data2'] = message.text
     await DocGenerator.next()
-    await bot.send_message(chat_id = message.from_user.id, text='ФИО истца:')
+    await bot.send_message(chat_id = message.from_user.id, text='Введите ФИО истца:')
 
 async def doc_generator3(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data3'] = message.text
     await DocGenerator.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Адрес истца:')
+    await bot.send_message(chat_id = message.from_user.id, text='Укажите адрес истца:')
 
 async def doc_generator4(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data4'] = message.text
     await DocGenerator.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Адрес истца для корреспонденции при необходимости:')
+    await bot.send_message(chat_id = message.from_user.id, text='Введите адрес истца для корреспонденции при необходимости:')
 
 async def doc_generator5(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data5'] = message.text
     await DocGenerator.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Представитель истца:')
+    await bot.send_message(chat_id = message.from_user.id, text='Укажите представителя истца при необходимости:')
 
 async def doc_generator6(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data6'] = message.text
     await DocGenerator.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Контактные данные представителя истца:')
+    await bot.send_message(chat_id = message.from_user.id, text='Введите контактные данные представителя истца:')
 
 async def doc_generator7(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data7'] = message.text
     await DocGenerator.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Ответчик:')
+    await bot.send_message(chat_id = message.from_user.id, text='Укажите ответчика:')
 
 async def doc_generator8(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data8'] = message.text
     await DocGenerator.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Адрес ответчика:')
+    await bot.send_message(chat_id = message.from_user.id, text='Введите адрес ответчика:')
 
 async def doc_generator9(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data9'] = message.text
     await DocGenerator.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Номер дела:')
+    await bot.send_message(chat_id = message.from_user.id, text='Укажите номер дела:')
 
 async def doc_generator10(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data10'] = message.text
     await DocGenerator.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Дата подачи обращения:')
+    await bot.send_message(chat_id = message.from_user.id, text='Введите дату подачи Вашего обращения:')
 
 async def doc_generator11(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data11'] = message.text
     await DocGenerator.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Текст обращения:')
+    await bot.send_message(chat_id = message.from_user.id, text='Сформулируйте текст Вашего обращения:')
 
 async def doc_generator12(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data12'] = message.text
     await DocGenerator.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Процессуальный статус обращающегося:')
+    await bot.send_message(chat_id = message.from_user.id, text='Укажите процессуальный статус обращающегося:')
 
 async def doc_generator13(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data13'] = message.text
     await DocGenerator.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Инициалы обращающегося:')
+    await bot.send_message(chat_id = message.from_user.id, text='Введите инициалы обращающегося:')
 
 async def doc_generator14(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data14'] = message.text
     await data_print(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Данные записаны, нажмите кнопку "получить", чтобы выгрузить готовый документ.', reply_markup=doc_generator_finish_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text='Указанные Вами данные приняты, нажмите кнопку "получить", чтобы выгрузить готовый документ', reply_markup=doc_generator_finish_keyboard)
     await state.finish()
 
 async def get_file(message: types.Message):
@@ -171,7 +188,7 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(start_command, commands=['start'])
     dp.register_message_handler(consultation_start_command, commands=['получитьㅤконсультацию'])
     dp.register_message_handler(generator_start_command, commands=['перейтиㅤвㅤгенераторㅤсудебныхㅤдокументов'])
-    dp.register_message_handler(about_me, commands=['обоㅤмне'])
+    dp.register_message_handler(about_me_start_command, commands=['обоㅤмне'])
     dp.register_message_handler(restart_command, commands=['вㅤглавноеㅤменю'])
 
     # Регистраторы меню консультаций
@@ -181,6 +198,16 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(consultation_employment, commands=['трудовыеㅤспоры'])
     dp.register_message_handler(consultation_consumer, commands=['защитаㅤправㅤпотребителей'])
     dp.register_message_handler(consultation_back, commands=['назад'])
+
+    # Регистраторы меню отзывов
+
+    dp.register_message_handler(feedback, commands=['оставитьㅤотзыв'])
+
+    # Регистраторы меню обо мне
+
+    dp.register_message_handler(about_me_telegram, commands=['telegramㅤpublic'])
+    dp.register_message_handler(about_me_instagram, commands=['instagram'])
+    dp.register_message_handler(about_me_vk, commands=['vk'])
 
     # Регистраторы генератора документов
 
