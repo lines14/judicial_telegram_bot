@@ -14,20 +14,20 @@ async def data_print(state):
         for val in values:
             print(val)
 
-    async def make_table_rows_bold(*rows):
+    def make_table_rows_bold(*rows):
         for row in rows:
             for cell in row.cells:
                 for paragraph in cell.paragraphs:
                     for run in paragraph.runs:
                         run.font.bold = True
 
-    async def make_table_columns_align_right(*columns):
+    def make_table_columns_align_right(*columns):
         for column in columns:
             for cell in column.cells:
                 for paragraph in cell.paragraphs:
                     paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
 
-    async def set_table_rows_height_0_5(*rows):
+    def set_table_rows_height_0_5(*rows):
         for row in rows:
             row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
             row.height = Cm(0.5)
@@ -67,9 +67,9 @@ async def data_print(state):
         row_cells[0].text = first_col
         row_cells[1].text = second_col
 
-    await make_table_rows_bold(table.rows[0], table.rows[2], table.rows[7])
-    await make_table_columns_align_right(table.columns[0])
-    await set_table_rows_height_0_5(table.rows[9])
+    make_table_rows_bold(table.rows[0], table.rows[2], table.rows[7])
+    make_table_columns_align_right(table.columns[0])
+    set_table_rows_height_0_5(table.rows[9])
 
     para = document.add_paragraph(values[10])
     para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
@@ -116,7 +116,7 @@ async def data_print(state):
         row_cells[0].text = first_col
         row_cells[1].text = second_col
 
-    await make_table_rows_bold(table.rows[1])
-    await make_table_columns_align_right(table.columns[1])
+    make_table_rows_bold(table.rows[1])
+    make_table_columns_align_right(table.columns[1])
 
     document.save('/home/lines14/projects/judicial_telegram_bot/documents/your_document.docx')

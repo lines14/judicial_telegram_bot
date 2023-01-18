@@ -101,7 +101,7 @@ async def generator_start_command(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Добро пожаловать в сервис генерации судебных документов. Нажмите кнопку "создать", а затем введите требуемые данные, чтобы сформировать документ. Или можете посмотреть пример готового документа, нажав кнопку "пример"', reply_markup=doc_generator_start_keyboard)
 
 async def get_example(message: types.Message):
-    await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/example/judicial_writer_1_example.docx', 'rb'))
+    await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/example/document_example.docx', 'rb'))
 
 async def add_data(message: types.Message):
     await DocGenerator.doc_generator1.set()
@@ -200,7 +200,7 @@ async def doc_generator14(message: types.Message, state: FSMContext):
     await state.finish()
 
 async def get_file(message: types.Message):
-    await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/documents/judicial_writer_1.docx', 'rb'))
+    await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/documents/your_document.docx', 'rb'))
 
 
 
