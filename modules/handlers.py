@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in, feedback_keyboard, about_me_keyboard
+from modules.buttons import main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in, feedback_keyboard, about_me_keyboard, cooperation_keyboard, suggestion_keyboard
 from modules.judicial_writer_1 import data_print
 
 # Машина состояний генератора документов
@@ -22,6 +22,18 @@ class DocGenerator(StatesGroup):
     doc_generator12 = State()
     doc_generator13 = State()
     doc_generator14 = State()
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Главное меню
 
@@ -52,10 +64,21 @@ async def consultation_consumer(message: types.Message):
 async def consultation_back(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Вы можете обратиться и по другой тематике:', reply_markup=consultation_keyboard)
 
-# Меню отзывов
+# Меню отзывов и замечаний
 
 async def feedback(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Вы можете оставить отзыв о нашем с Вами сотрудничестве ответным сообщением, и он обязательно будет опубликован в моих социальных сетях. Благодарю Вас!', reply_markup=feedback_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете оставить отзыв о нашем с Вами сотрудничестве ответным сообщением, и он обязательно будет опубликован в моих социальных сетях. А если у Вас есть замечания или предложения по поводу моих услуг, буду рад принять их к сведению. Благодарю Вас!', reply_markup=feedback_keyboard)
+
+# Меню сотрудничества
+
+async def cooperation(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='Я всегда открыт для сотрудничества, и Вы можете написать мне свои идеи или предложения ответным сообщением', reply_markup=cooperation_keyboard)
+
+# Меню предложений
+
+async def suggestion(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/480')
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими статьями на юридическую тематику, используя хэштеги по ссылке выше, и если они пока-что не затронули сферу Ваших интересов, Вы можете обратиться ко мне за индивидуальной консультацией в другом разделе главного меню или озвучить своё предложение ответным сообщением ниже, и, вполне вероятно, я сделаю публикацию на данную тематику', reply_markup=suggestion_keyboard)
 
 # Обо мне
 
@@ -179,6 +202,20 @@ async def doc_generator14(message: types.Message, state: FSMContext):
 async def get_file(message: types.Message):
     await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/documents/judicial_writer_1.docx', 'rb'))
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Регистраторы функций-хэндлеров
 
 def register_handler_client(dp: Dispatcher):
@@ -189,6 +226,9 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(consultation_start_command, commands=['получитьㅤконсультацию'])
     dp.register_message_handler(generator_start_command, commands=['перейтиㅤвㅤгенераторㅤсудебныхㅤдокументов'])
     dp.register_message_handler(about_me_start_command, commands=['обоㅤмне'])
+    dp.register_message_handler(feedback, commands=['оставитьㅤотзывㅤилиㅤзамечание'])
+    dp.register_message_handler(cooperation, commands=['сотрудничество'])
+    dp.register_message_handler(suggestion, commands=['предложитьㅤтемуㅤдляㅤновойㅤпубликации'])
     dp.register_message_handler(restart_command, commands=['вㅤглавноеㅤменю'])
 
     # Регистраторы меню консультаций
@@ -198,10 +238,6 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(consultation_employment, commands=['трудовыеㅤспоры'])
     dp.register_message_handler(consultation_consumer, commands=['защитаㅤправㅤпотребителей'])
     dp.register_message_handler(consultation_back, commands=['назад'])
-
-    # Регистраторы меню отзывов
-
-    dp.register_message_handler(feedback, commands=['оставитьㅤотзыв'])
 
     # Регистраторы меню обо мне
 

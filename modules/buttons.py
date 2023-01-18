@@ -1,7 +1,7 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 b1 = KeyboardButton('/получитьㅤконсультацию')
-b2 = KeyboardButton('/оставитьㅤотзыв')
+b2 = KeyboardButton('/оставитьㅤотзывㅤилиㅤзамечание')
 b3 = KeyboardButton('/сотрудничество')
 b4 = KeyboardButton('/обоㅤмне')
 b5 = KeyboardButton('/предложитьㅤтемуㅤдляㅤновойㅤпубликации')
@@ -34,6 +34,12 @@ consultation_keyboard_in.add(b8).insert(b7)
 
 feedback_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 feedback_keyboard.add(b7)
+
+cooperation_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+cooperation_keyboard.add(b7)
+
+suggestion_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+suggestion_keyboard.add(b7)
 
 about_me_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 about_me_keyboard.add(b17).insert(b18).insert(b19).add(b7)
