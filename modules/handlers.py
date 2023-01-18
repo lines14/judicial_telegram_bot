@@ -32,6 +32,9 @@ async def restart_command(message: types.Message):
     # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
     await bot.send_message(chat_id = message.from_user.id, text='Выберите то, что Вас интересует:', reply_markup=main_menu_keyboard)
 
+async def about_me(message: types.Message):
+    await bot.send_photo(chat_id=message.chat.id, photo=open('/home/lines14/projects/judicial_telegram_bot/documents/about_me.jpg', 'rb'))
+
 # Меню консультации
 
 async def consultation_start_command(message: types.Message):
@@ -166,8 +169,9 @@ def register_handler_client(dp: Dispatcher):
     # Регистраторы главного меню
 
     dp.register_message_handler(start_command, commands=['start'])
-    dp.register_message_handler(consultation_start_command, commands=['хочуㅤполучитьㅤконсультацию'])
+    dp.register_message_handler(consultation_start_command, commands=['получитьㅤконсультацию'])
     dp.register_message_handler(generator_start_command, commands=['перейтиㅤвㅤгенераторㅤсудебныхㅤдокументов'])
+    dp.register_message_handler(about_me, commands=['обоㅤмне'])
     dp.register_message_handler(restart_command, commands=['вㅤглавноеㅤменю'])
 
     # Регистраторы меню консультаций
