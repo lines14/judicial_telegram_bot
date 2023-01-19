@@ -15,9 +15,9 @@ k9 = InlineKeyboardButton(text='Мой VK', url='https://vk.com/yaroslaw_org')
 b1 = KeyboardButton('Получить консультацию')
 b2 = KeyboardButton('Оставить отзыв или замечание')
 b3 = KeyboardButton('Сотрудничество')
-b4 = KeyboardButton('Обо мне')
-b5 = KeyboardButton('Предложить тему для новой публикации')
-b6 = KeyboardButton('Перейти в генератор судебных документов')
+b4 = KeyboardButton('Предложить тему для публикации')
+b5 = KeyboardButton('Обо мне')
+b6 = KeyboardButton('Генератор судебных документов')
 b7 = KeyboardButton('В главное меню')
 b8 = KeyboardButton('Назад')
 
@@ -45,7 +45,7 @@ socials_inline_keyboard = InlineKeyboardMarkup(row_width=1)
 socials_inline_keyboard.add(k7).add(k8).add(k9)
 
 main_menu_keyboard = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboard=True
-main_menu_keyboard.add(b1).insert(b2).add(b3).insert(b4).add(b5).add(b6)
+main_menu_keyboard.add(b1).insert(b2).add(b3).insert(b4).add(b5).insert(b6)
 
 consultation_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard.add(b13).insert(b14).insert(b15).add(b16).insert(b7)
