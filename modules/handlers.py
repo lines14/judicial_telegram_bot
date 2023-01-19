@@ -118,7 +118,7 @@ async def about_me_start_command(message: types.Message):
 # Меню генератора документов:
 
 async def generator_start_command(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Добро пожаловать в сервис генерации судебных документов. Нажмите кнопку "создать", а затем введите требуемые данные, чтобы сформировать документ. Или можете посмотреть пример готового документа, нажав кнопку "пример"', reply_markup=doc_generator_start_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text='Добро пожаловать в сервис генерации судебных документов. Нажмите кнопку "Создать", а затем введите требуемые данные, чтобы сформировать документ. Или можете посмотреть пример готового документа, нажав кнопку "Пример"', reply_markup=doc_generator_start_keyboard)
 
 async def get_example(message: types.Message):
     await message.reply_document(open('/home/lines14/projects/judicial_telegram_bot/example/document_example.docx', 'rb'))
@@ -132,7 +132,7 @@ async def cancel_handlers_pick_data(message: types.Message, state: FSMContext):
     if current_state is None:
         return
     await state.finish()
-    await message.reply('Вы можете начать заново с нажатия кнопки "создать"', reply_markup=doc_generator_start_keyboard)
+    await message.reply('Вы можете начать заново с нажатия кнопки "Создать"', reply_markup=doc_generator_start_keyboard)
 
 async def doc_generator1(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -216,7 +216,7 @@ async def doc_generator14(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_data14'] = message.text
     await data_print(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Указанные Вами данные приняты, нажмите кнопку "получить", чтобы выгрузить готовый документ', reply_markup=doc_generator_finish_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text='Указанные Вами данные приняты, нажмите кнопку "Получить", чтобы выгрузить готовый документ', reply_markup=doc_generator_finish_keyboard)
     await state.finish()
 
 async def get_file(message: types.Message):
@@ -245,16 +245,13 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(start_command, commands=['start'])
     dp.register_callback_query_handler(start_inline_keyboard_callback_pick, text='yes')
     dp.register_callback_query_handler(start_inline_keyboard_callback_redirect, text='no')
-
-    # Регистраторы главного меню
-
-    dp.register_message_handler(consultation_start_command, commands=['получитьㅤконсультацию'])
-    dp.register_message_handler(generator_start_command, commands=['перейтиㅤвㅤгенераторㅤсудебныхㅤдокументов'])
-    dp.register_message_handler(about_me_start_command, commands=['обоㅤмне'])
-    dp.register_message_handler(feedback, commands=['оставитьㅤотзывㅤилиㅤзамечание'])
-    dp.register_message_handler(cooperation, commands=['сотрудничество'])
-    dp.register_message_handler(suggestion, commands=['предложитьㅤтемуㅤдляㅤновойㅤпубликации'])
-    dp.register_message_handler(restart_command, commands=['вㅤглавноеㅤменю'])
+    dp.register_message_handler(consultation_start_command, text='Получить консультацию')
+    dp.register_message_handler(generator_start_command, text='Перейти в генератор судебных документов')
+    dp.register_message_handler(about_me_start_command, text='Обо мне')
+    dp.register_message_handler(feedback, text='Оставить отзыв или замечание')
+    dp.register_message_handler(cooperation, text='Сотрудничество')
+    dp.register_message_handler(suggestion, text='Предложить тему для новой публикации')
+    dp.register_message_handler(restart_command, text='В главное меню')
 
     # Регистраторы стартового диалога на тему консультаций
 
@@ -265,23 +262,23 @@ def register_handler_client(dp: Dispatcher):
 
     # Регистраторы меню консультаций
 
-    dp.register_message_handler(consultation_mobilization, commands=['мобилизация'])
-    dp.register_message_handler(consultation_migration, commands=['миграция'])
-    dp.register_message_handler(consultation_employment, commands=['трудовыеㅤспоры'])
-    dp.register_message_handler(consultation_consumer, commands=['защитаㅤправㅤпотребителей'])
-    dp.register_message_handler(consultation_back, commands=['назад'])
+    dp.register_message_handler(consultation_mobilization, text='Мобилизация')
+    dp.register_message_handler(consultation_migration, text='Миграция')
+    dp.register_message_handler(consultation_employment, text='Трудовые споры')
+    dp.register_message_handler(consultation_consumer, text='Защита прав потребителей')
+    dp.register_message_handler(consultation_back, text='Назад')
 
     # Регистраторы меню обо мне
 
-    # dp.register_message_handler(about_me_telegram, commands=['telegramㅤpublic'])
-    # dp.register_message_handler(about_me_instagram, commands=['instagram'])
-    # dp.register_message_handler(about_me_vk, commands=['vk'])
+    # dp.register_message_handler(about_me_telegram, text='Моя группа в Telegram')
+    # dp.register_message_handler(about_me_instagram, text='Мой Instagram')
+    # dp.register_message_handler(about_me_vk, text='Мой VK')
 
     # Регистраторы генератора документов
 
-    dp.register_message_handler(get_example, commands=['пример'])
-    dp.register_message_handler(add_data, commands=['создать'], state=None)
-    dp.register_message_handler(cancel_handlers_pick_data, state='*', commands=['отмена'])
+    dp.register_message_handler(get_example, text='Пример')
+    dp.register_message_handler(add_data, text='Создать', state=None)
+    dp.register_message_handler(cancel_handlers_pick_data, state='*', text='Отмена')
     dp.register_message_handler(doc_generator1, state=DocGenerator.doc_generator1)
     dp.register_message_handler(doc_generator2, state=DocGenerator.doc_generator2)
     dp.register_message_handler(doc_generator3, state=DocGenerator.doc_generator3)
@@ -296,4 +293,4 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(doc_generator12, state=DocGenerator.doc_generator12)
     dp.register_message_handler(doc_generator13, state=DocGenerator.doc_generator13)
     dp.register_message_handler(doc_generator14, state=DocGenerator.doc_generator14)
-    dp.register_message_handler(get_file, commands=['получить'])
+    dp.register_message_handler(get_file, text='Получить')
