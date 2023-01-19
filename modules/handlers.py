@@ -203,6 +203,13 @@ async def consultation_consumer_add_appeal(message: types.Message, state: FSMCon
 async def consultation_back(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Вы можете обратиться и по другой тематике:', reply_markup=consultation_keyboard)
 
+async def consultation_back_for_consultation_FSM(message: types.Message, state: FSMContext):
+    current_state = await state.get_state()
+    if current_state is None:
+        return
+    await state.finish()
+    await message.reply('Вы можете обратиться и по другой тематике:', reply_markup=consultation_keyboard)
+
 # Меню отзывов и замечаний
 
 async def feedback(message: types.Message):
@@ -405,6 +412,8 @@ def register_handler_client(dp: Dispatcher):
 
     # Регистраторы меню консультаций со сборщиками данных
 
+    dp.register_message_handler(consultation_back, text='Назад')
+    dp.register_message_handler(consultation_back_for_consultation_FSM, state='*', text='Вернуться назад')
     dp.register_message_handler(consultation_mobilization, text='Мобилизация')
     dp.register_message_handler(consultation_mobilization_add_appeal, state=AppealMobilization.appeal_mobilization1)
     dp.register_message_handler(consultation_migration, text='Миграция')
@@ -413,7 +422,6 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(consultation_employment_add_appeal, state=AppealEmployment.appeal_employment1)
     dp.register_message_handler(consultation_consumer, text='Защита прав потребителей')
     dp.register_message_handler(consultation_consumer_add_appeal, state=AppealConsumer.appeal_consumer1)
-    dp.register_message_handler(consultation_back, text='Назад')
 
     # Регистраторы меню обо мне
 
