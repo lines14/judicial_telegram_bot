@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import intro_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in, feedback_keyboard, about_me_keyboard, cooperation_keyboard, suggestion_keyboard
+from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in, consultation_keyboard_in_after_inline, feedback_keyboard, cooperation_keyboard, suggestion_keyboard
 from modules.judicial_writer_1 import data_print
 
 # Машина состояний генератора документов
@@ -35,18 +35,34 @@ class DocGenerator(StatesGroup):
 
 
 
-# Главное меню
+# Диалог приветствия и главное меню
 
 async def start_command(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Приветствую Вас, я, Павлюков Я.Я., юрист и медиатор. Желаете получить у меня консультацию?', reply_markup=intro_inline_keyboard)
-    await bot.send_message(chat_id = message.from_user.id, text='Вы можете также выбрать интересующий Вас раздел в меню ниже', reply_markup=main_menu_keyboard)
 
-async def start_inline_keyboard_callback_handler(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='По какой тематике Вы желаете получить консультацию?', reply_markup=consultation_keyboard)
+async def start_inline_keyboard_callback_redirect(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете выбрать интересующий Вас раздел в меню ниже:', reply_markup=main_menu_keyboard)
 
 async def restart_command(message: types.Message):
     # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
     await bot.send_message(chat_id = message.from_user.id, text='Выберите то, что Вас интересует:', reply_markup=main_menu_keyboard)
+
+# Стартовый диалог на тему консультации
+
+async def start_inline_keyboard_callback_pick(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='По какой тематике Вы желаете получить консультацию?', reply_markup=consultation_inline_keyboard)
+
+async def start_inline_keyboard_callback_mobilization(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline)
+
+async def start_inline_keyboard_callback_migration(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline)
+
+async def start_inline_keyboard_callback_employment(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline)
+
+async def start_inline_keyboard_callback_consumer(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline)
 
 # Меню консультации
 
@@ -88,16 +104,16 @@ async def suggestion(message: types.Message):
 
 async def about_me_start_command(message: types.Message):
     await bot.send_photo(chat_id=message.chat.id, photo=open('/home/lines14/projects/judicial_telegram_bot/documents/about_me.jpg', 'rb'))
-    await bot.send_message(chat_id = message.from_user.id, text='Подписывайтесь на мои социальные сети, чтобы быть в курсе всех юридических новостей:', reply_markup=about_me_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text='Подписывайтесь на мои социальные сети, чтобы быть в курсе всех юридических новостей:', reply_markup=socials_inline_keyboard)
 
-async def about_me_telegram(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov', reply_markup=about_me_keyboard)
+# async def about_me_telegram(message: types.Message):
+#     await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov', reply_markup=about_me_keyboard)
 
-async def about_me_instagram(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='https://www.instagram.com/bettercallpavlukov/', reply_markup=about_me_keyboard)
+# async def about_me_instagram(message: types.Message):
+#     await bot.send_message(chat_id = message.from_user.id, text='https://www.instagram.com/bettercallpavlukov/', reply_markup=about_me_keyboard)
 
-async def about_me_vk(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='https://vk.com/yaroslaw_org', reply_markup=about_me_keyboard)
+# async def about_me_vk(message: types.Message):
+#     await bot.send_message(chat_id = message.from_user.id, text='https://vk.com/yaroslaw_org', reply_markup=about_me_keyboard)
 
 # Меню генератора документов:
 
@@ -224,10 +240,13 @@ async def get_file(message: types.Message):
 
 def register_handler_client(dp: Dispatcher):
 
-    # Регистраторы главного меню
+    # Регистраторы диалога приветствия и главного меню
 
     dp.register_message_handler(start_command, commands=['start'])
-    dp.register_message_handler(start_inline_keyboard_callback_handler, text='yes')
+    dp.register_callback_query_handler(start_inline_keyboard_callback_pick, text='yes')
+    dp.register_callback_query_handler(start_inline_keyboard_callback_redirect, text='no')
+
+    # Регистраторы главного меню
 
     dp.register_message_handler(consultation_start_command, commands=['получитьㅤконсультацию'])
     dp.register_message_handler(generator_start_command, commands=['перейтиㅤвㅤгенераторㅤсудебныхㅤдокументов'])
@@ -236,6 +255,13 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(cooperation, commands=['сотрудничество'])
     dp.register_message_handler(suggestion, commands=['предложитьㅤтемуㅤдляㅤновойㅤпубликации'])
     dp.register_message_handler(restart_command, commands=['вㅤглавноеㅤменю'])
+
+    # Регистраторы стартового диалога на тему консультаций
+
+    dp.register_callback_query_handler(start_inline_keyboard_callback_mobilization, text='mobilization')
+    dp.register_callback_query_handler(start_inline_keyboard_callback_migration, text='migration')
+    dp.register_callback_query_handler(start_inline_keyboard_callback_employment, text='employment')
+    dp.register_callback_query_handler(start_inline_keyboard_callback_consumer, text='consumer')
 
     # Регистраторы меню консультаций
 
@@ -247,9 +273,9 @@ def register_handler_client(dp: Dispatcher):
 
     # Регистраторы меню обо мне
 
-    dp.register_message_handler(about_me_telegram, commands=['telegramㅤpublic'])
-    dp.register_message_handler(about_me_instagram, commands=['instagram'])
-    dp.register_message_handler(about_me_vk, commands=['vk'])
+    # dp.register_message_handler(about_me_telegram, commands=['telegramㅤpublic'])
+    # dp.register_message_handler(about_me_instagram, commands=['instagram'])
+    # dp.register_message_handler(about_me_vk, commands=['vk'])
 
     # Регистраторы генератора документов
 
