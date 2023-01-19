@@ -4,12 +4,14 @@ from aiogram.utils.executor import start_webhook
 from modules.config import WEBHOOK_PATH, WEBHOOK_URL, WEBAPP_HOST, WEBAPP_PORT
 from modules.bot_base import bot
 from modules.bot_base import dp
+from modules import data_base
 
 logging.basicConfig(level=logging.INFO)
 dp.middleware.setup(LoggingMiddleware())
 
 async def on_startup(_):
     await bot.set_webhook(WEBHOOK_URL, drop_pending_updates=True) #certificate=CERT
+    data_base.sql_start()
     print('Бот успешно запущен!')
 
 async def on_shutdown(_):

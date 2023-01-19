@@ -4,6 +4,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in, consultation_keyboard_in_after_inline, feedback_keyboard, cooperation_keyboard, suggestion_keyboard
 from modules.judicial_writer_1 import data_print
+from modules import data_base
 
 # Машина состояний генератора документов
 
@@ -23,9 +24,10 @@ class DocGenerator(StatesGroup):
     doc_generator13 = State()
     doc_generator14 = State()
 
+# Машина состояний инлайн обращения за консультацией на тему мобилизации
 
-
-
+class InlineAppealMobilization(StatesGroup):
+    inline_appeal_mobilization1 = State()
 
 
 
@@ -54,8 +56,39 @@ async def restart_command(message: types.Message):
 async def start_inline_keyboard_callback_pick(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='По какой тематике Вы желаете получить консультацию?', reply_markup=consultation_inline_keyboard)
 
+
+
+
+
+
+
+
+
 async def start_inline_keyboard_callback_mobilization(message: types.Message):
+    await InlineAppealMobilization.inline_appeal_mobilization1.set()
     await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline)
+
+async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['user_id'] = message.chat.id
+        data['section'] = 'Мобилизация'
+        data['appeal'] = message.text
+    await data_base.sql_add_appeal(state)
+    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!')
+    await state.finish()
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 async def start_inline_keyboard_callback_migration(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline)
@@ -257,7 +290,9 @@ def register_handler_client(dp: Dispatcher):
 
     # Регистраторы стартового диалога на тему консультаций
 
-    dp.register_callback_query_handler(start_inline_keyboard_callback_mobilization, text='mobilization')
+    dp.register_callback_query_handler(start_inline_keyboard_callback_mobilization, text='mobilization', state=None)
+    dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal, state=InlineAppealMobilization.inline_appeal_mobilization1)
+
     dp.register_callback_query_handler(start_inline_keyboard_callback_migration, text='migration')
     dp.register_callback_query_handler(start_inline_keyboard_callback_employment, text='employment')
     dp.register_callback_query_handler(start_inline_keyboard_callback_consumer, text='consumer')
