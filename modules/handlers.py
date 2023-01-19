@@ -40,7 +40,7 @@ class DocGenerator(StatesGroup):
 async def start_command(message: types.Message):
     name = message.from_user.first_name
     surname = message.from_user.last_name
-    await bot.send_message(chat_id = message.from_user.id, text=f'Приветствую Вас, {name} {surname}!\nЯ, Павлюков Я.Я., юрист и медиатор. Желаете получить у меня консультацию?', reply_markup=intro_inline_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text=f'Приветствую Вас, {name} {surname}!\nЯ юрист и медиатор Ярослав Павлюков. Желаете получить у меня консультацию?', reply_markup=intro_inline_keyboard)
 
 async def start_inline_keyboard_callback_redirect(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Вы можете выбрать интересующий Вас раздел в меню ниже:', reply_markup=main_menu_keyboard)
