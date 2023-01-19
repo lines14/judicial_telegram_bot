@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in, feedback_keyboard, about_me_keyboard, cooperation_keyboard, suggestion_keyboard
+from modules.buttons import intro_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in, feedback_keyboard, about_me_keyboard, cooperation_keyboard, suggestion_keyboard
 from modules.judicial_writer_1 import data_print
 
 # Машина состояний генератора документов
@@ -38,7 +38,11 @@ class DocGenerator(StatesGroup):
 # Главное меню
 
 async def start_command(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Вас приветствует юрист Павлюков Я.Я. Выберите интересующий Вас раздел ниже:', reply_markup=main_menu_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text='Приветствую Вас, я, Павлюков Я.Я., юрист и медиатор. Желаете получить у меня консультацию?', reply_markup=intro_inline_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете также выбрать интересующий Вас раздел в меню ниже', reply_markup=main_menu_keyboard)
+
+async def start_inline_keyboard_callback_handler(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='По какой тематике Вы желаете получить консультацию?', reply_markup=consultation_keyboard)
 
 async def restart_command(message: types.Message):
     # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
@@ -223,6 +227,8 @@ def register_handler_client(dp: Dispatcher):
     # Регистраторы главного меню
 
     dp.register_message_handler(start_command, commands=['start'])
+    dp.register_message_handler(start_inline_keyboard_callback_handler, text='yes')
+
     dp.register_message_handler(consultation_start_command, commands=['получитьㅤконсультацию'])
     dp.register_message_handler(generator_start_command, commands=['перейтиㅤвㅤгенераторㅤсудебныхㅤдокументов'])
     dp.register_message_handler(about_me_start_command, commands=['обоㅤмне'])

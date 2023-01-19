@@ -1,4 +1,6 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
+
+k1 = InlineKeyboardButton(text='Получитьㅤконсультацию', callback_data='yes')
 
 b1 = KeyboardButton('/получитьㅤконсультацию')
 b2 = KeyboardButton('/оставитьㅤотзывㅤилиㅤзамечание')
@@ -22,6 +24,9 @@ b16 = KeyboardButton('/защитаㅤправㅤпотребителей')
 b17 = KeyboardButton('/telegramㅤpublic')
 b18 = KeyboardButton('/instagram')
 b19 = KeyboardButton('/vk')
+
+intro_inline_keyboard = InlineKeyboardMarkup(row_width=1)
+intro_inline_keyboard.insert(k1)
 
 main_menu_keyboard = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboard=True
 main_menu_keyboard.add(b1).insert(b2).add(b3).insert(b4).add(b5).add(b6)
