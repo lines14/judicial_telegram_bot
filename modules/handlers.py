@@ -38,7 +38,9 @@ class DocGenerator(StatesGroup):
 # Диалог приветствия и главное меню
 
 async def start_command(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Приветствую Вас, я, Павлюков Я.Я., юрист и медиатор. Желаете получить у меня консультацию?', reply_markup=intro_inline_keyboard)
+    name = message.from_user.first_name
+    surname = message.from_user.last_name
+    await bot.send_message(chat_id = message.from_user.id, text=f'Приветствую Вас, {name} {surname}!\nЯ, Павлюков Я.Я., юрист и медиатор. Желаете получить у меня консультацию?', reply_markup=intro_inline_keyboard)
 
 async def start_inline_keyboard_callback_redirect(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Вы можете выбрать интересующий Вас раздел в меню ниже:', reply_markup=main_menu_keyboard)
