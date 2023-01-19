@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in, consultation_keyboard_in_after_inline, feedback_keyboard, cooperation_keyboard, suggestion_keyboard
+from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in, consultation_keyboard_in_abort, consultation_keyboard_in_after_inline, consultation_keyboard_in_after_inline_abort, feedback_keyboard, cooperation_keyboard, suggestion_keyboard, feedback_keyboard_abort, cooperation_keyboard_abort, suggestion_keyboard_abort
 from modules.judicial_writer_1 import data_print
 from modules import data_base
 
@@ -79,6 +79,13 @@ async def restart_command(message: types.Message):
     # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
     await bot.send_message(chat_id = message.from_user.id, text='Выберите то, что Вас интересует:', reply_markup=main_menu_keyboard)
 
+async def restart_command_for_all_FSM(message: types.Message, state: FSMContext):
+    current_state = await state.get_state()
+    if current_state is None:
+        return
+    await state.finish()
+    await message.reply('Выберите то, что Вас интересует:', reply_markup=main_menu_keyboard)
+
 # Стартовый диалог на тему консультации со сборщиками данных
 
 async def start_inline_keyboard_callback_pick(message: types.Message):
@@ -86,7 +93,7 @@ async def start_inline_keyboard_callback_pick(message: types.Message):
 
 async def start_inline_keyboard_callback_mobilization(message: types.Message):
     await InlineAppealMobilization.inline_appeal_mobilization1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline)
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline_abort)
 
 async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -94,12 +101,12 @@ async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.
         data['section'] = 'Мобилизация'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "В главное меню" внизу экрана')
+    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "Главное меню" внизу экрана', reply_markup=consultation_keyboard_in_after_inline)
     await state.finish()
 
 async def start_inline_keyboard_callback_migration(message: types.Message):
     await InlineAppealMigration.inline_appeal_migration1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline)
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline_abort)
 
 async def start_inline_keyboard_callback_migration_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -107,12 +114,12 @@ async def start_inline_keyboard_callback_migration_add_appeal(message: types.Mes
         data['section'] = 'Миграция'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "В главное меню" внизу экрана')
+    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "Главное меню" внизу экрана', reply_markup=consultation_keyboard_in_after_inline)
     await state.finish()
 
 async def start_inline_keyboard_callback_employment(message: types.Message):
     await InlineAppealEmployment.inline_appeal_employment1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline)
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline_abort)
 
 async def start_inline_keyboard_callback_employment_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -120,12 +127,12 @@ async def start_inline_keyboard_callback_employment_add_appeal(message: types.Me
         data['section'] = 'Трудовые споры'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "В главное меню" внизу экрана')
+    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "Главное меню" внизу экрана', reply_markup=consultation_keyboard_in_after_inline)
     await state.finish()
 
 async def start_inline_keyboard_callback_consumer(message: types.Message):
     await InlineAppealConsumer.inline_appeal_consumer1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline)
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline_abort)
 
 async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -133,7 +140,7 @@ async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Mess
         data['section'] = 'Защита прав потребителей'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "В главное меню" внизу экрана')
+    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "Главное меню" внизу экрана', reply_markup=consultation_keyboard_in_after_inline)
     await state.finish()
 
 # Меню консультации со сборщиками данных
@@ -143,7 +150,7 @@ async def consultation_start_command(message: types.Message):
 
 async def consultation_mobilization(message: types.Message):
     await AppealMobilization.appeal_mobilization1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in)
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
 
 async def consultation_mobilization_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -151,12 +158,12 @@ async def consultation_mobilization_add_appeal(message: types.Message, state: FS
         data['section'] = 'Мобилизация'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "В главное меню" внизу экрана')
+    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "Главное меню" внизу экрана', reply_markup=consultation_keyboard_in)
     await state.finish()
 
 async def consultation_migration(message: types.Message):
     await AppealMigration.appeal_migration1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in)
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
 
 async def consultation_migration_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -164,12 +171,12 @@ async def consultation_migration_add_appeal(message: types.Message, state: FSMCo
         data['section'] = 'Миграция'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "В главное меню" внизу экрана')
+    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "Главное меню" внизу экрана', reply_markup=consultation_keyboard_in)
     await state.finish()
 
 async def consultation_employment(message: types.Message):
     await AppealEmployment.appeal_employment1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in)
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
 
 async def consultation_employment_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -177,12 +184,12 @@ async def consultation_employment_add_appeal(message: types.Message, state: FSMC
         data['section'] = 'Трудовые споры'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "В главное меню" внизу экрана')
+    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "Главное меню" внизу экрана', reply_markup=consultation_keyboard_in)
     await state.finish()
 
 async def consultation_consumer(message: types.Message):
     await AppealConsumer.appeal_consumer1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in)
+    await bot.send_message(chat_id = message.from_user.id, text='Оставьте своё обращение ответным сообщением, и я свяжусь с Вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
 
 async def consultation_consumer_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -190,7 +197,7 @@ async def consultation_consumer_add_appeal(message: types.Message, state: FSMCon
         data['section'] = 'Защита прав потребителей'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "В главное меню" внизу экрана')
+    await bot.send_message(chat_id = message.from_user.id, text='Ваше обращение принято, я свяжусь с Вами в самое ближайшее время!\nОбращаю Ваше внимание на то, что Вы можете получить дополнительную информацию по Вашему вопросу в других разделах, нажав кнопку "Главное меню" внизу экрана', reply_markup=consultation_keyboard_in)
     await state.finish()
 
 async def consultation_back(message: types.Message):
@@ -200,7 +207,7 @@ async def consultation_back(message: types.Message):
 
 async def feedback(message: types.Message):
     await AppealFeedback.appeal_feedback1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Вы можете оставить отзыв о нашем с Вами сотрудничестве ответным сообщением, и он обязательно будет опубликован в моих социальных сетях. А если у Вас есть замечания или предложения по поводу моих услуг, буду рад принять их к сведению. Благодарю Вас!', reply_markup=feedback_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете оставить отзыв о нашем с Вами сотрудничестве ответным сообщением, и он обязательно будет опубликован в моих социальных сетях. А если у Вас есть замечания или предложения по поводу моих услуг, буду рад принять их к сведению. Благодарю Вас!', reply_markup=feedback_keyboard_abort)
 
 async def feedback_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -208,14 +215,14 @@ async def feedback_add_appeal(message: types.Message, state: FSMContext):
         data['section'] = 'Отзывы'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Благодарю Вас! Я ценю Вашу обратную связь.\nВы можете вернуться в главное меню, нажав кнопку "В главное меню" внизу экрана')
+    await bot.send_message(chat_id = message.from_user.id, text='Благодарю Вас! Я ценю Вашу обратную связь.\nВы можете вернуться в главное меню, нажав кнопку "Главное меню" внизу экрана', reply_markup=feedback_keyboard)
     await state.finish()
 
 # Меню сотрудничества
 
 async def cooperation(message: types.Message):
     await AppealCooperation.appeal_cooperation1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Я всегда открыт для сотрудничества, и Вы можете написать мне свои идеи или предложения ответным сообщением', reply_markup=cooperation_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text='Я всегда открыт для сотрудничества, и Вы можете написать мне свои идеи или предложения ответным сообщением', reply_markup=cooperation_keyboard_abort)
 
 async def cooperation_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -223,14 +230,14 @@ async def cooperation_add_appeal(message: types.Message, state: FSMContext):
         data['section'] = 'Сотрудничество'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Я рассмотрю Ваше предложение на тему сотрудничества и свяжусь с Вами в самое ближайшее время!\nВы можете вернуться в главное меню, нажав кнопку "В главное меню" внизу экрана')
+    await bot.send_message(chat_id = message.from_user.id, text='Я рассмотрю Ваше предложение на тему сотрудничества и свяжусь с Вами в самое ближайшее время!\nВы можете вернуться в главное меню, нажав кнопку "Главное меню" внизу экрана', reply_markup=cooperation_keyboard)
     await state.finish()
 
 # Меню предложений
 
 async def suggestion(message: types.Message):
     await AppealSuggestion.appeal_suggestion1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими статьями на юридическую тематику, используя хэштеги по ссылке ниже, и если они пока-что не затронули сферу Ваших интересов, Вы можете обратиться ко мне за индивидуальной консультацией в другом разделе главного меню или озвучить своё предложение ответным сообщением ниже, и, вполне вероятно, я сделаю публикацию на данную тематику', reply_markup=suggestion_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими статьями на юридическую тематику, используя хэштеги по ссылке ниже, и если они пока-что не затронули сферу Ваших интересов, Вы можете обратиться ко мне за индивидуальной консультацией в другом разделе главного меню или озвучить своё предложение ответным сообщением ниже, и, вполне вероятно, я сделаю публикацию на данную тематику', reply_markup=suggestion_keyboard_abort)
     await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/480')
 
 async def suggestion_add_appeal(message: types.Message, state: FSMContext):
@@ -239,7 +246,7 @@ async def suggestion_add_appeal(message: types.Message, state: FSMContext):
         data['section'] = 'Предложения тем для публикаций'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Ваше предложение принято, спасибо!\nВы можете вернуться в главное меню, нажав кнопку "В главное меню" внизу экрана')
+    await bot.send_message(chat_id = message.from_user.id, text='Ваше предложение принято, спасибо!\nВы можете вернуться в главное меню, нажав кнопку "Главное меню" внизу экрана', reply_markup=suggestion_keyboard)
     await state.finish()
 
 # Обо мне
@@ -373,6 +380,8 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(start_command, commands=['start'])
     dp.register_callback_query_handler(start_inline_keyboard_callback_pick, text='yes')
     dp.register_callback_query_handler(start_inline_keyboard_callback_redirect, text='no')
+    dp.register_message_handler(restart_command, text='Главное меню')
+    dp.register_message_handler(restart_command_for_all_FSM, state='*', text='В главное меню')
     dp.register_message_handler(consultation_start_command, text='Получить консультацию')
     dp.register_message_handler(generator_start_command, text='Генератор судебных документов')
     dp.register_message_handler(about_me_start_command, text='Обо мне')
@@ -382,7 +391,6 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(cooperation_add_appeal, state=AppealCooperation.appeal_cooperation1)
     dp.register_message_handler(suggestion, text='Предложить тему для публикации')
     dp.register_message_handler(suggestion_add_appeal, state=AppealSuggestion.appeal_suggestion1)
-    dp.register_message_handler(restart_command, text='В главное меню')
 
     # Регистраторы стартового диалога на тему консультаций со сборщиками данных
 

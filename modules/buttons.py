@@ -18,18 +18,19 @@ b3 = KeyboardButton('Сотрудничество')
 b4 = KeyboardButton('Предложить тему для публикации')
 b5 = KeyboardButton('Обо мне')
 b6 = KeyboardButton('Генератор судебных документов')
-b7 = KeyboardButton('В главное меню')
-b8 = KeyboardButton('Назад')
+b7 = KeyboardButton('Главное меню')
+b8 = KeyboardButton('В главное меню')
+b9 = KeyboardButton('Назад')
 
-b9 = KeyboardButton('Создать')
-b10 = KeyboardButton('Пример')
-b11 = KeyboardButton('Отмена')
-b12 = KeyboardButton('Получить')
+b10 = KeyboardButton('Создать')
+b11 = KeyboardButton('Пример')
+b12 = KeyboardButton('Отмена')
+b13 = KeyboardButton('Получить')
 
-b13 = KeyboardButton('Мобилизация')
-b14 = KeyboardButton('Миграция')
-b15 = KeyboardButton('Трудовые споры')
-b16 = KeyboardButton('Защита прав потребителей')
+b14 = KeyboardButton('Мобилизация')
+b15 = KeyboardButton('Миграция')
+b16 = KeyboardButton('Трудовые споры')
+b17 = KeyboardButton('Защита прав потребителей')
 
 # b17 = KeyboardButton('Моя группа в Telegram')
 # b18 = KeyboardButton('Мой Instagram')
@@ -48,34 +49,49 @@ main_menu_keyboard = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboa
 main_menu_keyboard.add(b1).insert(b2).add(b3).insert(b4).add(b5).insert(b6)
 
 consultation_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard.add(b13).insert(b14).insert(b15).add(b16).insert(b7)
+consultation_keyboard.add(b14).insert(b15).insert(b16).add(b17).insert(b7)
 
 consultation_keyboard_in = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard_in.add(b8).insert(b7)
+consultation_keyboard_in.add(b9).insert(b7)
+
+consultation_keyboard_in_abort = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_abort.add(b9).insert(b8)
 
 consultation_keyboard_in_after_inline = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard_in_after_inline.add(b7)
 
+consultation_keyboard_in_after_inline_abort = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_after_inline_abort.add(b8)
+
 feedback_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 feedback_keyboard.add(b7)
+
+feedback_keyboard_abort = ReplyKeyboardMarkup(resize_keyboard=True)
+feedback_keyboard_abort.add(b8)
 
 cooperation_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 cooperation_keyboard.add(b7)
 
+cooperation_keyboard_abort = ReplyKeyboardMarkup(resize_keyboard=True)
+cooperation_keyboard_abort.add(b8)
+
 suggestion_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 suggestion_keyboard.add(b7)
+
+suggestion_keyboard_abort = ReplyKeyboardMarkup(resize_keyboard=True)
+suggestion_keyboard_abort.add(b8)
 
 # about_me_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 # about_me_keyboard.add(b17).insert(b18).insert(b19).add(b7)
 
 doc_generator_start_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-doc_generator_start_keyboard.add(b9).insert(b10).insert(b7)
+doc_generator_start_keyboard.add(b10).insert(b11).insert(b7)
 
 cancel_generator_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-cancel_generator_keyboard.add(b11)
+cancel_generator_keyboard.add(b12)
 
 doc_generator_finish_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-doc_generator_finish_keyboard.add(b9).insert(b12).insert(b7)
+doc_generator_finish_keyboard.add(b10).insert(b13).insert(b7)
 
 # # keyboard: Optional[List[List[KeyboardButton]]] = None
 # async def keyboard_generator(key_list):
