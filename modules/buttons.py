@@ -46,8 +46,8 @@ consultation_inline_keyboard.add(k3).add(k4).add(k5).add(k6).add(k2)
 socials_inline_keyboard = InlineKeyboardMarkup(row_width=1)
 socials_inline_keyboard.add(k7).add(k8).add(k9)
 
-main_menu_keyboard = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboard=True
-main_menu_keyboard.add(b1).insert(b2).add(b3).insert(b4).add(b5).insert(b6)
+main_menu_keyboard = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboard=True .insert(b6)
+main_menu_keyboard.add(b1).insert(b2).add(b3).insert(b4).add(b5)
 
 consultation_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard.add(b15).insert(b16).insert(b17).add(b18).insert(b7)
@@ -93,6 +93,8 @@ cancel_generator_keyboard.add(b13)
 
 doc_generator_finish_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 doc_generator_finish_keyboard.add(b11).insert(b14).insert(b7)
+
+# Генератор клавиатур
 
 # # keyboard: Optional[List[List[KeyboardButton]]] = None
 # async def keyboard_generator(key_list):
