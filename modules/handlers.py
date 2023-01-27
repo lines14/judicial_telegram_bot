@@ -31,6 +31,10 @@ class InlineAppealMobilization(StatesGroup):
     inline_appeal_mobilization1 = State()
     inline_appeal_mobilization2 = State()
 
+class InlineAppealMobilizationOnlyTelegram(StatesGroup):
+    inline_appeal_mobilization_only_telegram1 = State()
+    inline_appeal_mobilization_only_telegram2 = State()
+
 class InlineAppealMigration(StatesGroup):
     inline_appeal_migration1 = State()
     inline_appeal_migration2 = State()
@@ -137,6 +141,26 @@ async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_mobilization)
     await state.finish()
+
+async def start_inline_keyboard_callback_mobilization_only_telegram(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['phone'] = 'Напишите мне в телеграм'
+    await InlineAppealMobilization.next()
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
+
+async def start_inline_keyboard_callback_mobilization_add_appeal_only_telegram(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['user_id'] = message.chat.id
+        data['section'] = 'Мобилизация'
+        data['appeal'] = message.text
+    await data_base.sql_add_appeal(state)
+    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_mobilization)
+    await state.finish()
+
+
+
+
+
 
 
 
@@ -499,6 +523,9 @@ def register_handler_client(dp: Dispatcher):
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
     dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_suggestion, state=InlineAppealMobilization.inline_appeal_mobilization1)
     dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal, state=InlineAppealMobilization.inline_appeal_mobilization2)
+    dp.register_callback_query_handler(start_inline_keyboard_callback_mobilization_only_telegram, state='*', text='Напишите мне в телеграм')
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
+    dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal_only_telegram, state=InlineAppealMobilizationOnlyTelegram.inline_appeal_mobilization_only_telegram2)
 
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_migration, text='migration', state=None)
