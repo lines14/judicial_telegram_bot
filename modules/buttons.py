@@ -1,16 +1,17 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
 k1 = InlineKeyboardButton(text='Хочу получить консультацию', callback_data='yes')
-k2 = InlineKeyboardButton(text='Хочу обратиться по другой теме', callback_data='no')
+k2 = InlineKeyboardButton(text='Хочу обратиться не за консультацией', callback_data='no')
 
 k3 = InlineKeyboardButton(text='Мобилизация', callback_data='mobilization')
 k4 = InlineKeyboardButton(text='Миграция', callback_data='migration')
 k5 = InlineKeyboardButton(text='Трудовые споры', callback_data='employment')
 k6 = InlineKeyboardButton(text='Защита прав потребителей', callback_data='consumer')
+k7 = InlineKeyboardButton(text='Хочу обратиться по другой теме', callback_data='missclick')
 
-k7 = InlineKeyboardButton(text='Моя группа в Telegram', url='https://t.me/bettercallpavlukov')
-k8 = InlineKeyboardButton(text='Мой Instagram', url='https://www.instagram.com/bettercallpavlukov/')
-k9 = InlineKeyboardButton(text='Мой VK', url='https://vk.com/yaroslaw_org')
+k8 = InlineKeyboardButton(text='Моя группа в Telegram', url='https://t.me/bettercallpavlukov')
+k9 = InlineKeyboardButton(text='Мой Instagram', url='https://www.instagram.com/bettercallpavlukov/')
+k10 = InlineKeyboardButton(text='Мой VK', url='https://vk.com/yaroslaw_org')
 
 b1 = KeyboardButton('Получить консультацию')
 b2 = KeyboardButton('Оставить отзыв или замечание')
@@ -33,9 +34,15 @@ b16 = KeyboardButton('Миграция')
 b17 = KeyboardButton('Трудовые споры')
 b18 = KeyboardButton('Защита прав потребителей')
 
-# b19 = KeyboardButton('Моя группа в Telegram')
-# b20 = KeyboardButton('Мой Instagram')
-# b21 = KeyboardButton('Мой VK')
+b19 = KeyboardButton('Спасибо, буду ждать')
+b20 = KeyboardButton('Хочу почитать посты на тему мобилизации')
+b21 = KeyboardButton('Хочу почитать посты на тему миграции')
+b22 = KeyboardButton('Хочу почитать посты на тему трудовых споров')
+b23 = KeyboardButton('Хочу почитать посты на тему защиты прав потребителей')
+
+# b24 = KeyboardButton('Моя группа в Telegram')
+# b25 = KeyboardButton('Мой Instagram')
+# b26 = KeyboardButton('Мой VK')
 
 intro_inline_keyboard = InlineKeyboardMarkup(row_width=1)
 intro_inline_keyboard.add(k1).add(k2)
@@ -43,8 +50,11 @@ intro_inline_keyboard.add(k1).add(k2)
 consultation_inline_keyboard = InlineKeyboardMarkup(row_width=1)
 consultation_inline_keyboard.add(k3).add(k4).add(k5).add(k6).add(k2)
 
+consultation_inline_keyboard_missclick = InlineKeyboardMarkup(row_width=1)
+consultation_inline_keyboard_missclick.add(k7)
+
 socials_inline_keyboard = InlineKeyboardMarkup(row_width=1)
-socials_inline_keyboard.add(k7).add(k8).add(k9)
+socials_inline_keyboard.add(k8).add(k9).add(k10)
 
 main_menu_keyboard = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboard=True .insert(b6)
 main_menu_keyboard.add(b1).insert(b2).add(b3).insert(b4).add(b5)
@@ -52,17 +62,35 @@ main_menu_keyboard.add(b1).insert(b2).add(b3).insert(b4).add(b5)
 consultation_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard.add(b15).insert(b16).insert(b17).add(b18).insert(b7)
 
-consultation_keyboard_in = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard_in.add(b9).insert(b7)
+consultation_keyboard_in_mobilization = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_mobilization.add(b19).insert(b20)
+
+consultation_keyboard_in_migration = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_migration.add(b19).insert(b21)
+
+consultation_keyboard_in_employment = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_employment.add(b19).insert(b22)
+
+consultation_keyboard_in_consumer = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_consumer.add(b19).insert(b23)
 
 consultation_keyboard_in_abort = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard_in_abort.add(b10).insert(b8)
 
-consultation_keyboard_in_after_inline = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard_in_after_inline.add(b7)
+consultation_keyboard_in_after_inline_mobilization = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_after_inline_mobilization.add(b19).insert(b20)
 
-consultation_keyboard_in_after_inline_abort = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard_in_after_inline_abort.add(b8)
+consultation_keyboard_in_after_inline_migration = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_after_inline_migration.add(b19).insert(b21)
+
+consultation_keyboard_in_after_inline_employment = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_after_inline_employment.add(b19).insert(b22)
+
+consultation_keyboard_in_after_inline_consumer = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_after_inline_consumer.add(b19).insert(b23)
+
+consultation_keyboard_in_after_inline_recomendations = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_after_inline_recomendations.add(b7)
 
 feedback_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 feedback_keyboard.add(b7)

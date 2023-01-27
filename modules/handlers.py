@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in, consultation_keyboard_in_abort, consultation_keyboard_in_after_inline, consultation_keyboard_in_after_inline_abort, feedback_keyboard, cooperation_keyboard, suggestion_keyboard, feedback_keyboard_abort, cooperation_keyboard_abort, suggestion_keyboard_abort
+from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_abort, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_recomendations, feedback_keyboard, cooperation_keyboard, suggestion_keyboard, feedback_keyboard_abort, cooperation_keyboard_abort, suggestion_keyboard_abort
 from modules.judicial_writer_1 import data_print
 from modules import data_base
 
@@ -91,9 +91,20 @@ async def restart_command_for_all_FSM(message: types.Message, state: FSMContext)
 async def start_inline_keyboard_callback_pick(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
 
+async def restart_inline_keyboard_callback_pick(message: types.Message, state: FSMContext):
+    current_state = await state.get_state()
+    if current_state is None:
+        return
+    await state.finish()
+    await bot.send_message(chat_id = message.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
+
+async def recomendations_after_inline(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже', reply_markup=consultation_keyboard_in_after_inline_recomendations)
+    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/480')
+
 async def start_inline_keyboard_callback_mobilization(message: types.Message):
     await InlineAppealMobilization.inline_appeal_mobilization1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline_abort)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
 
 async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -101,12 +112,12 @@ async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.
         data['section'] = 'Мобилизация'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline)
+    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_mobilization)
     await state.finish()
 
 async def start_inline_keyboard_callback_migration(message: types.Message):
     await InlineAppealMigration.inline_appeal_migration1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline_abort)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
 
 async def start_inline_keyboard_callback_migration_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -114,12 +125,12 @@ async def start_inline_keyboard_callback_migration_add_appeal(message: types.Mes
         data['section'] = 'Миграция'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline)
+    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_migration)
     await state.finish()
 
 async def start_inline_keyboard_callback_employment(message: types.Message):
     await InlineAppealEmployment.inline_appeal_employment1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline_abort)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
 
 async def start_inline_keyboard_callback_employment_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -127,12 +138,12 @@ async def start_inline_keyboard_callback_employment_add_appeal(message: types.Me
         data['section'] = 'Трудовые споры'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline)
+    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_employment)
     await state.finish()
 
 async def start_inline_keyboard_callback_consumer(message: types.Message):
     await InlineAppealConsumer.inline_appeal_consumer1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_after_inline_abort)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
 
 async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -140,7 +151,7 @@ async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Mess
         data['section'] = 'Защита прав потребителей'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline)
+    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_consumer)
     await state.finish()
 
 # Меню консультации со сборщиками данных
@@ -158,7 +169,7 @@ async def consultation_mobilization_add_appeal(message: types.Message, state: FS
         data['section'] = 'Мобилизация'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in)
+    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_mobilization)
     await state.finish()
 
 async def consultation_migration(message: types.Message):
@@ -171,7 +182,7 @@ async def consultation_migration_add_appeal(message: types.Message, state: FSMCo
         data['section'] = 'Миграция'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in)
+    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_migration)
     await state.finish()
 
 async def consultation_employment(message: types.Message):
@@ -184,7 +195,7 @@ async def consultation_employment_add_appeal(message: types.Message, state: FSMC
         data['section'] = 'Трудовые споры'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in)
+    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_employment)
     await state.finish()
 
 async def consultation_consumer(message: types.Message):
@@ -197,7 +208,7 @@ async def consultation_consumer_add_appeal(message: types.Message, state: FSMCon
         data['section'] = 'Защита прав потребителей'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in)
+    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_consumer)
     await state.finish()
 
 async def consultation_back(message: types.Message):
@@ -388,7 +399,8 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(start_command, commands=['start'])
     dp.register_callback_query_handler(start_inline_keyboard_callback_pick, text='yes')
     dp.register_callback_query_handler(start_inline_keyboard_callback_redirect, text='no')
-    dp.register_message_handler(restart_command, text='Главное меню')
+    dp.register_message_handler(restart_command, text=['Главное меню', 'Спасибо, буду ждать'])
+    dp.register_message_handler(recomendations_after_inline, text=['Хочу почитать посты на тему мобилизации', 'Хочу почитать посты на тему миграции', 'Хочу почитать посты на тему трудовых споров', 'Хочу почитать посты на тему защиты прав потребителей'])
     dp.register_message_handler(restart_command_for_all_FSM, state='*', text='В главное меню')
     dp.register_message_handler(consultation_start_command, text='Получить консультацию')
     # dp.register_message_handler(generator_start_command, text='Генератор судебных документов')
@@ -403,12 +415,16 @@ def register_handler_client(dp: Dispatcher):
     # Регистраторы стартового диалога на тему консультаций со сборщиками данных
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_mobilization, text='mobilization', state=None)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
     dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal, state=InlineAppealMobilization.inline_appeal_mobilization1)
     dp.register_callback_query_handler(start_inline_keyboard_callback_migration, text='migration', state=None)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
     dp.register_message_handler(start_inline_keyboard_callback_migration_add_appeal, state=InlineAppealMigration.inline_appeal_migration1)
     dp.register_callback_query_handler(start_inline_keyboard_callback_employment, text='employment', state=None)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
     dp.register_message_handler(start_inline_keyboard_callback_employment_add_appeal, state=InlineAppealEmployment.inline_appeal_employment1)
     dp.register_callback_query_handler(start_inline_keyboard_callback_consumer, text='consumer', state=None)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
     dp.register_message_handler(start_inline_keyboard_callback_consumer_add_appeal, state=InlineAppealConsumer.inline_appeal_consumer1)
 
     # Регистраторы меню консультаций со сборщиками данных
