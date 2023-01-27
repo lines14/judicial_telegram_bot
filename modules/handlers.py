@@ -31,10 +31,6 @@ class InlineAppealMobilization(StatesGroup):
     inline_appeal_mobilization1 = State()
     inline_appeal_mobilization2 = State()
 
-class InlineAppealMobilizationOnlyTelegram(StatesGroup):
-    inline_appeal_mobilization_only_telegram1 = State()
-    inline_appeal_mobilization_only_telegram2 = State()
-
 class InlineAppealMigration(StatesGroup):
     inline_appeal_migration1 = State()
     inline_appeal_migration2 = State()
@@ -524,8 +520,7 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_suggestion, state=InlineAppealMobilization.inline_appeal_mobilization1)
     dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal, state=InlineAppealMobilization.inline_appeal_mobilization2)
     dp.register_callback_query_handler(start_inline_keyboard_callback_mobilization_only_telegram, state='*', text='Напишите мне в телеграм')
-    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
-    dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal_only_telegram, state=InlineAppealMobilizationOnlyTelegram.inline_appeal_mobilization_only_telegram2)
+    dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal_only_telegram, state=InlineAppealMobilization.inline_appeal_mobilization2)
 
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_migration, text='migration', state=None)
