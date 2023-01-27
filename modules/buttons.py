@@ -72,7 +72,7 @@ consultation_keyboard_in_employment = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard_in_employment.add(b19).insert(b22)
 
 consultation_keyboard_in_consumer = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard_in_consumer.add(b19).insert(b23)
+consultation_keyboard_in_consumer.add(b19).add(b23)
 
 consultation_keyboard_in_abort = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard_in_abort.add(b10).insert(b8)
@@ -87,7 +87,7 @@ consultation_keyboard_in_after_inline_employment = ReplyKeyboardMarkup(resize_ke
 consultation_keyboard_in_after_inline_employment.add(b19).insert(b22)
 
 consultation_keyboard_in_after_inline_consumer = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard_in_after_inline_consumer.add(b19).insert(b23)
+consultation_keyboard_in_after_inline_consumer.add(b19).add(b23)
 
 consultation_keyboard_in_after_inline_recomendations = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard_in_after_inline_recomendations.add(b7)

@@ -417,15 +417,22 @@ def register_handler_client(dp: Dispatcher):
     dp.register_callback_query_handler(start_inline_keyboard_callback_mobilization, text='mobilization', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
     dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal, state=InlineAppealMobilization.inline_appeal_mobilization1)
+
+
     dp.register_callback_query_handler(start_inline_keyboard_callback_migration, text='migration', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
     dp.register_message_handler(start_inline_keyboard_callback_migration_add_appeal, state=InlineAppealMigration.inline_appeal_migration1)
+
+
     dp.register_callback_query_handler(start_inline_keyboard_callback_employment, text='employment', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
     dp.register_message_handler(start_inline_keyboard_callback_employment_add_appeal, state=InlineAppealEmployment.inline_appeal_employment1)
+
+
     dp.register_callback_query_handler(start_inline_keyboard_callback_consumer, text='consumer', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
     dp.register_message_handler(start_inline_keyboard_callback_consumer_add_appeal, state=InlineAppealConsumer.inline_appeal_consumer1)
+    
 
     # Регистраторы меню консультаций со сборщиками данных
 
