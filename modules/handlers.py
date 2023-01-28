@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_mobilization_only_telegram, consultation_keyboard_in_migration_only_telegram, consultation_keyboard_in_employment_only_telegram, consultation_keyboard_in_consumer_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_recomendations, feedback_keyboard, cooperation_keyboard, suggestion_keyboard, feedback_keyboard_abort, cooperation_keyboard_abort, suggestion_keyboard_abort
+from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_recomendations, feedback_keyboard, cooperation_keyboard, suggestion_keyboard, feedback_keyboard_abort, cooperation_keyboard_abort, suggestion_keyboard_abort
 from modules.judicial_writer_1 import data_print
 from modules import data_base
 
@@ -47,15 +47,19 @@ class InlineAppealConsumer(StatesGroup):
 
 class AppealMobilization(StatesGroup):
     appeal_mobilization1 = State()
+    appeal_mobilization2 = State()
 
 class AppealMigration(StatesGroup):
     appeal_migration1 = State()
+    appeal_migration2 = State()
 
 class AppealEmployment(StatesGroup):
     appeal_employment1 = State()
+    appeal_employment2 = State()
 
 class AppealConsumer(StatesGroup):
     appeal_consumer1 = State()
+    appeal_consumer2 = State()
 
 # Машины состояний отзывов, предложений сотрудничества и предложений тем для публикаций
 
@@ -269,6 +273,12 @@ async def consultation_back_for_consultation_FSM(message: types.Message, state: 
 
 async def consultation_mobilization(message: types.Message):
     await AppealMobilization.appeal_mobilization1.set()
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
+
+async def consultation_mobilization_add_suggestion(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['phone'] = message.text
+    await AppealMobilization.next()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
 
 async def consultation_mobilization_add_appeal(message: types.Message, state: FSMContext):
@@ -284,6 +294,12 @@ async def consultation_mobilization_add_appeal(message: types.Message, state: FS
 
 async def consultation_migration(message: types.Message):
     await AppealMigration.appeal_migration1.set()
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
+
+async def consultation_migration_add_suggestion(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['phone'] = message.text
+    await AppealMigration.next()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
 
 async def consultation_migration_add_appeal(message: types.Message, state: FSMContext):
@@ -299,6 +315,12 @@ async def consultation_migration_add_appeal(message: types.Message, state: FSMCo
 
 async def consultation_employment(message: types.Message):
     await AppealEmployment.appeal_employment1.set()
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
+
+async def consultation_employment_add_suggestion(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['phone'] = message.text
+    await AppealEmployment.next()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
 
 async def consultation_employment_add_appeal(message: types.Message, state: FSMContext):
@@ -314,6 +336,12 @@ async def consultation_employment_add_appeal(message: types.Message, state: FSMC
 
 async def consultation_consumer(message: types.Message):
     await AppealConsumer.appeal_consumer1.set()
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
+
+async def consultation_consumer_add_suggestion(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['phone'] = message.text
+    await AppealConsumer.next()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
 
 async def consultation_consumer_add_appeal(message: types.Message, state: FSMContext):
@@ -333,6 +361,7 @@ async def feedback(message: types.Message):
 
 async def feedback_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['phone'] = ''
         data['user_id'] = message.chat.id
         data['section'] = 'Отзывы'
         data['appeal'] = message.text
@@ -348,6 +377,7 @@ async def cooperation(message: types.Message):
 
 async def cooperation_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['phone'] = ''
         data['user_id'] = message.chat.id
         data['section'] = 'Сотрудничество'
         data['appeal'] = message.text
@@ -364,6 +394,7 @@ async def suggestion(message: types.Message):
 
 async def suggestion_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['phone'] = ''
         data['user_id'] = message.chat.id
         data['section'] = 'Предложения тем для публикаций'
         data['appeal'] = message.text
@@ -509,11 +540,11 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(consultation_start_command, text='Получить консультацию')
     # dp.register_message_handler(generator_start_command, text='Генератор судебных документов')
     dp.register_message_handler(about_me_start_command, text='Обо мне')
-    dp.register_message_handler(feedback, text='Оставить отзыв или замечание')
+    dp.register_message_handler(feedback, text='Оставить отзыв или замечание', state=None)
     dp.register_message_handler(feedback_add_appeal, state=AppealFeedback.appeal_feedback1)
-    dp.register_message_handler(cooperation, text='Сотрудничество')
+    dp.register_message_handler(cooperation, text='Сотрудничество', state=None)
     dp.register_message_handler(cooperation_add_appeal, state=AppealCooperation.appeal_cooperation1)
-    dp.register_message_handler(suggestion, text='Предложить тему для публикации')
+    dp.register_message_handler(suggestion, text='Предложить тему для публикации', state=None)
     dp.register_message_handler(suggestion_add_appeal, state=AppealSuggestion.appeal_suggestion1)
 
     # Регистраторы стартового диалога на тему консультаций со сборщиками данных
@@ -562,23 +593,27 @@ def register_handler_client(dp: Dispatcher):
 
     # Мобилизация
 
-    dp.register_message_handler(consultation_mobilization, text='Мобилизация')
-    dp.register_message_handler(consultation_mobilization_add_appeal, state=AppealMobilization.appeal_mobilization1)
+    dp.register_message_handler(consultation_mobilization, text='Мобилизация', state=None)
+    dp.register_message_handler(consultation_mobilization_add_suggestion, state=AppealMobilization.appeal_mobilization1)
+    dp.register_message_handler(consultation_mobilization_add_appeal, state=AppealMobilization.appeal_mobilization2)
 
     # Миграция
 
-    dp.register_message_handler(consultation_migration, text='Миграция')
-    dp.register_message_handler(consultation_migration_add_appeal, state=AppealMigration.appeal_migration1)
+    dp.register_message_handler(consultation_migration, text='Миграция', state=None)
+    dp.register_message_handler(consultation_migration_add_suggestion, state=AppealMigration.appeal_migration1)
+    dp.register_message_handler(consultation_migration_add_appeal, state=AppealMigration.appeal_migration2)
 
     # Трудовые споры
 
-    dp.register_message_handler(consultation_employment, text='Трудовые споры')
-    dp.register_message_handler(consultation_employment_add_appeal, state=AppealEmployment.appeal_employment1)
+    dp.register_message_handler(consultation_employment, text='Трудовые споры', state=None)
+    dp.register_message_handler(consultation_employment_add_suggestion, state=AppealEmployment.appeal_employment1)
+    dp.register_message_handler(consultation_employment_add_appeal, state=AppealEmployment.appeal_employment2)
 
     # Защита прав потребителей
 
-    dp.register_message_handler(consultation_consumer, text='Защита прав потребителей')
-    dp.register_message_handler(consultation_consumer_add_appeal, state=AppealConsumer.appeal_consumer1)
+    dp.register_message_handler(consultation_consumer, text='Защита прав потребителей', state=None)
+    dp.register_message_handler(consultation_consumer_add_suggestion, state=AppealConsumer.appeal_consumer1)
+    dp.register_message_handler(consultation_consumer_add_appeal, state=AppealConsumer.appeal_consumer2)
 
     # Регистраторы меню обо мне
 
