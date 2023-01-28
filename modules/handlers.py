@@ -247,6 +247,28 @@ async def start_inline_keyboard_callback_migration_add_appeal_only_telegram(mess
     await bot.send_message(chat_id = message.from_user.id, text='Помимо этого, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
     await state.finish()
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Трудовые споры
 
 async def start_inline_keyboard_callback_employment(message: types.Message):
@@ -677,30 +699,32 @@ def register_handler_client(dp: Dispatcher):
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_migration, text='migration', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
-    dp.register_message_handler(start_inline_keyboard_callback_migration_add_suggestion, state=InlineAppealMigration.inline_appeal_migration1)
-    dp.register_message_handler(start_inline_keyboard_callback_migration_add_appeal, state=InlineAppealMigration.inline_appeal_migration2)
+    dp.register_message_handler(start_inline_keyboard_callback_migration_phone_processing, state=InlineAppealMigration.inline_appeal_migration1)
+    dp.register_message_handler(start_inline_keyboard_callback_migration_add_suggestion, state=InlineAppealMigration.inline_appeal_migration2)
+    dp.register_message_handler(start_inline_keyboard_callback_migration_add_appeal, state=InlineAppealMigration.inline_appeal_migration3)
     dp.register_callback_query_handler(start_inline_keyboard_callback_migration_only_telegram, text='Напишите мне в телеграм', state=InlineAppealMigration.inline_appeal_migration1)
-    dp.register_message_handler(start_inline_keyboard_callback_migration_add_appeal_only_telegram, state=InlineAppealMigration.inline_appeal_migration2)
+    dp.register_message_handler(start_inline_keyboard_callback_migration_add_appeal_only_telegram, state=InlineAppealMigration.inline_appeal_migration3)
 
     # Трудовые споры
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_employment, text='employment', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
-    dp.register_message_handler(start_inline_keyboard_callback_employment_add_suggestion, state=InlineAppealEmployment.inline_appeal_employment1)
-    dp.register_message_handler(start_inline_keyboard_callback_employment_add_appeal, state=InlineAppealEmployment.inline_appeal_employment2)
+    dp.register_message_handler(start_inline_keyboard_callback_employment_phone_processing, state=InlineAppealEmployment.inline_appeal_employment1)
+    dp.register_message_handler(start_inline_keyboard_callback_employment_add_suggestion, state=InlineAppealEmployment.inline_appeal_employment2)
+    dp.register_message_handler(start_inline_keyboard_callback_employment_add_appeal, state=InlineAppealEmployment.inline_appeal_employment3)
     dp.register_callback_query_handler(start_inline_keyboard_callback_employment_only_telegram, text='Напишите мне в телеграм', state=InlineAppealEmployment.inline_appeal_employment1)
-    dp.register_message_handler(start_inline_keyboard_callback_employment_add_appeal_only_telegram, state=InlineAppealEmployment.inline_appeal_employment2)
+    dp.register_message_handler(start_inline_keyboard_callback_employment_add_appeal_only_telegram, state=InlineAppealEmployment.inline_appeal_employment3)
 
     # Защита прав потребителей
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_consumer, text='consumer', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
-    dp.register_message_handler(start_inline_keyboard_callback_consumer_add_suggestion, state=InlineAppealConsumer.inline_appeal_consumer1)
-    dp.register_message_handler(start_inline_keyboard_callback_consumer_add_appeal, state=InlineAppealConsumer.inline_appeal_consumer2)
+    dp.register_message_handler(start_inline_keyboard_callback_consumer_phone_processing, state=InlineAppealConsumer.inline_appeal_consumer1)
+    dp.register_message_handler(start_inline_keyboard_callback_consumer_add_suggestion, state=InlineAppealConsumer.inline_appeal_consumer2)
+    dp.register_message_handler(start_inline_keyboard_callback_consumer_add_appeal, state=InlineAppealConsumer.inline_appeal_consumer3)
     dp.register_callback_query_handler(start_inline_keyboard_callback_consumer_only_telegram, text='Напишите мне в телеграм', state=InlineAppealConsumer.inline_appeal_consumer1)
-    dp.register_message_handler(start_inline_keyboard_callback_consumer_add_appeal_only_telegram, state=InlineAppealConsumer.inline_appeal_consumer2)
+    dp.register_message_handler(start_inline_keyboard_callback_consumer_add_appeal_only_telegram, state=InlineAppealConsumer.inline_appeal_consumer3)
     
-
     # Регистраторы меню консультаций со сборщиками данных
 
     dp.register_message_handler(consultation_back, text='Назад')
