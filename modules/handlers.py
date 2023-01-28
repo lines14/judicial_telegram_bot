@@ -106,18 +106,7 @@ async def recomendations_after_inline(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже', reply_markup=consultation_keyboard_in_after_inline_recomendations)
     await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/480')
 
-
-
-
-
-
-
-
-
-
-
-
-
+# Мобилизация
 
 async def start_inline_keyboard_callback_mobilization(message: types.Message):
     await InlineAppealMobilization.inline_appeal_mobilization1.set()
@@ -153,20 +142,7 @@ async def start_inline_keyboard_callback_mobilization_add_appeal_only_telegram(m
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_mobilization)
     await state.finish()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Миграция
 
 async def start_inline_keyboard_callback_migration(message: types.Message):
     await InlineAppealMigration.inline_appeal_migration1.set()
@@ -187,16 +163,22 @@ async def start_inline_keyboard_callback_migration_add_appeal(message: types.Mes
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_migration)
     await state.finish()
 
+async def start_inline_keyboard_callback_migration_only_telegram(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['phone'] = 'Напишите мне в телеграм'
+    await InlineAppealMigration.next()
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
 
+async def start_inline_keyboard_callback_migration_add_appeal_only_telegram(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['user_id'] = message.chat.id
+        data['section'] = 'Миграция'
+        data['appeal'] = message.text
+    await data_base.sql_add_appeal(state)
+    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_migration)
+    await state.finish()
 
-
-
-
-
-
-
-
-
+# Трудовые споры
 
 async def start_inline_keyboard_callback_employment(message: types.Message):
     await InlineAppealEmployment.inline_appeal_employment1.set()
@@ -217,14 +199,22 @@ async def start_inline_keyboard_callback_employment_add_appeal(message: types.Me
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_employment)
     await state.finish()
 
+async def start_inline_keyboard_callback_employment_only_telegram(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['phone'] = 'Напишите мне в телеграм'
+    await InlineAppealEmployment.next()
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
 
+async def start_inline_keyboard_callback_employment_add_appeal_only_telegram(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['user_id'] = message.chat.id
+        data['section'] = 'Трудовые споры'
+        data['appeal'] = message.text
+    await data_base.sql_add_appeal(state)
+    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_employment)
+    await state.finish()
 
-
-
-
-
-
-
+# Защита прав потребителей
 
 async def start_inline_keyboard_callback_consumer(message: types.Message):
     await InlineAppealConsumer.inline_appeal_consumer1.set()
@@ -245,20 +235,37 @@ async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Mess
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_consumer)
     await state.finish()
 
+async def start_inline_keyboard_callback_consumer_only_telegram(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['phone'] = 'Напишите мне в телеграм'
+    await InlineAppealConsumer.next()
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
 
-
-
-
-
-
-
-
-
+async def start_inline_keyboard_callback_consumer_add_appeal_only_telegram(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['user_id'] = message.chat.id
+        data['section'] = 'Защита прав потребителей'
+        data['appeal'] = message.text
+    await data_base.sql_add_appeal(state)
+    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_consumer)
+    await state.finish()
 
 # Меню консультации со сборщиками данных
 
 async def consultation_start_command(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_keyboard)
+
+async def consultation_back(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете обратиться и по другому направлению:', reply_markup=consultation_keyboard)
+
+async def consultation_back_for_consultation_FSM(message: types.Message, state: FSMContext):
+    current_state = await state.get_state()
+    if current_state is None:
+        return
+    await state.finish()
+    await message.reply('Вы можете обратиться и по другому направлению:', reply_markup=consultation_keyboard)
+
+# Мобилизация
 
 async def consultation_mobilization(message: types.Message):
     await AppealMobilization.appeal_mobilization1.set()
@@ -273,6 +280,8 @@ async def consultation_mobilization_add_appeal(message: types.Message, state: FS
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_mobilization)
     await state.finish()
 
+# Миграция
+
 async def consultation_migration(message: types.Message):
     await AppealMigration.appeal_migration1.set()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
@@ -285,6 +294,8 @@ async def consultation_migration_add_appeal(message: types.Message, state: FSMCo
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_migration)
     await state.finish()
+
+# Трудовые споры
 
 async def consultation_employment(message: types.Message):
     await AppealEmployment.appeal_employment1.set()
@@ -299,6 +310,8 @@ async def consultation_employment_add_appeal(message: types.Message, state: FSMC
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_employment)
     await state.finish()
 
+# Защита прав потребителей
+
 async def consultation_consumer(message: types.Message):
     await AppealConsumer.appeal_consumer1.set()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
@@ -311,16 +324,6 @@ async def consultation_consumer_add_appeal(message: types.Message, state: FSMCon
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_consumer)
     await state.finish()
-
-async def consultation_back(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Вы можете обратиться и по другому направлению:', reply_markup=consultation_keyboard)
-
-async def consultation_back_for_consultation_FSM(message: types.Message, state: FSMContext):
-    current_state = await state.get_state()
-    if current_state is None:
-        return
-    await state.finish()
-    await message.reply('Вы можете обратиться и по другому направлению:', reply_markup=consultation_keyboard)
 
 # Меню отзывов и замечаний
 
@@ -515,42 +518,65 @@ def register_handler_client(dp: Dispatcher):
 
     # Регистраторы стартового диалога на тему консультаций со сборщиками данных
 
+    #Мобилизация
+
     dp.register_callback_query_handler(start_inline_keyboard_callback_mobilization, text='mobilization', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
     dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_suggestion, state=InlineAppealMobilization.inline_appeal_mobilization1)
     dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal, state=InlineAppealMobilization.inline_appeal_mobilization2)
-    dp.register_callback_query_handler(start_inline_keyboard_callback_mobilization_only_telegram, state='*', text='Напишите мне в телеграм')
+    dp.register_callback_query_handler(start_inline_keyboard_callback_mobilization_only_telegram, text='Напишите мне в телеграм', state=InlineAppealMobilization.inline_appeal_mobilization1)
     dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal_only_telegram, state=InlineAppealMobilization.inline_appeal_mobilization2)
 
+    # Миграция
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_migration, text='migration', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
     dp.register_message_handler(start_inline_keyboard_callback_migration_add_suggestion, state=InlineAppealMigration.inline_appeal_migration1)
     dp.register_message_handler(start_inline_keyboard_callback_migration_add_appeal, state=InlineAppealMigration.inline_appeal_migration2)
+    dp.register_callback_query_handler(start_inline_keyboard_callback_migration_only_telegram, text='Напишите мне в телеграм', state=InlineAppealMigration.inline_appeal_migration1)
+    dp.register_message_handler(start_inline_keyboard_callback_migration_add_appeal_only_telegram, state=InlineAppealMigration.inline_appeal_migration2)
 
+    # Трудовые споры
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_employment, text='employment', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
     dp.register_message_handler(start_inline_keyboard_callback_employment_add_suggestion, state=InlineAppealEmployment.inline_appeal_employment1)
     dp.register_message_handler(start_inline_keyboard_callback_employment_add_appeal, state=InlineAppealEmployment.inline_appeal_employment2)
+    dp.register_callback_query_handler(start_inline_keyboard_callback_employment_only_telegram, text='Напишите мне в телеграм', state=InlineAppealEmployment.inline_appeal_employment1)
+    dp.register_message_handler(start_inline_keyboard_callback_employment_add_appeal_only_telegram, state=InlineAppealEmployment.inline_appeal_employment2)
 
+    # Защита прав потребителей
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_consumer, text='consumer', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
     dp.register_message_handler(start_inline_keyboard_callback_consumer_add_suggestion, state=InlineAppealConsumer.inline_appeal_consumer1)
     dp.register_message_handler(start_inline_keyboard_callback_consumer_add_appeal, state=InlineAppealConsumer.inline_appeal_consumer2)
+    dp.register_callback_query_handler(start_inline_keyboard_callback_consumer_only_telegram, text='Напишите мне в телеграм', state=InlineAppealConsumer.inline_appeal_consumer1)
+    dp.register_message_handler(start_inline_keyboard_callback_consumer_add_appeal_only_telegram, state=InlineAppealConsumer.inline_appeal_consumer2)
     
 
     # Регистраторы меню консультаций со сборщиками данных
 
     dp.register_message_handler(consultation_back, text='Назад')
     dp.register_message_handler(consultation_back_for_consultation_FSM, state='*', text='Вернуться назад')
+
+    # Мобилизация
+
     dp.register_message_handler(consultation_mobilization, text='Мобилизация')
     dp.register_message_handler(consultation_mobilization_add_appeal, state=AppealMobilization.appeal_mobilization1)
+
+    # Миграция
+
     dp.register_message_handler(consultation_migration, text='Миграция')
     dp.register_message_handler(consultation_migration_add_appeal, state=AppealMigration.appeal_migration1)
+
+    # Трудовые споры
+
     dp.register_message_handler(consultation_employment, text='Трудовые споры')
     dp.register_message_handler(consultation_employment_add_appeal, state=AppealEmployment.appeal_employment1)
+
+    # Защита прав потребителей
+
     dp.register_message_handler(consultation_consumer, text='Защита прав потребителей')
     dp.register_message_handler(consultation_consumer_add_appeal, state=AppealConsumer.appeal_consumer1)
 
