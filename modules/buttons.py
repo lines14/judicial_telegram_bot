@@ -72,17 +72,29 @@ consultation_keyboard.add(b15).insert(b16).insert(b17).add(b18).insert(b7)
 consultation_keyboard_in_mobilization = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard_in_mobilization.add(b19).insert(b20)
 
+consultation_keyboard_in_mobilization_only_telegram = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_mobilization_only_telegram.add(b24).add(b19).insert(b20)
+
 consultation_keyboard_in_migration = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard_in_migration.add(b19).insert(b21)
+
+consultation_keyboard_in_migration_only_telegram = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_migration_only_telegram.add(b24).add(b19).insert(b21)
 
 consultation_keyboard_in_employment = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard_in_employment.add(b19).insert(b22)
 
+consultation_keyboard_in_employment_only_telegram = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_employment_only_telegram.add(b24).add(b19).insert(b22)
+
 consultation_keyboard_in_consumer = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard_in_consumer.add(b19).add(b23)
 
+consultation_keyboard_in_consumer_only_telegram = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_consumer_only_telegram.add(b24).add(b19).add(b23)
+
 consultation_keyboard_in_abort = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard_in_abort.add(b10).insert(b8)
+consultation_keyboard_in_abort.add(b8)
 
 consultation_keyboard_in_after_inline_mobilization = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard_in_after_inline_mobilization.add(b19).insert(b20)
