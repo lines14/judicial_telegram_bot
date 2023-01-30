@@ -6,6 +6,7 @@ from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard,
 from modules.judicial_writer_1 import data_print
 from modules import data_base
 from modules.phone_processing import phone_checker
+from datetime import datetime
 
 # Машины состояний бота
 
@@ -148,6 +149,9 @@ async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         data['section'] = 'Мобилизация'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_mobilization)
@@ -163,6 +167,9 @@ async def start_inline_keyboard_callback_mobilization_add_appeal_only_telegram(m
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         data['section'] = 'Мобилизация'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_mobilization)
@@ -196,6 +203,9 @@ async def start_inline_keyboard_callback_migration_add_appeal(message: types.Mes
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         data['section'] = 'Миграция'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_migration)
@@ -211,6 +221,9 @@ async def start_inline_keyboard_callback_migration_add_appeal_only_telegram(mess
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         data['section'] = 'Миграция'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_migration)
@@ -244,6 +257,9 @@ async def start_inline_keyboard_callback_employment_add_appeal(message: types.Me
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         data['section'] = 'Трудовые споры'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_employment)
@@ -259,6 +275,9 @@ async def start_inline_keyboard_callback_employment_add_appeal_only_telegram(mes
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         data['section'] = 'Трудовые споры'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_employment)
@@ -292,6 +311,9 @@ async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Mess
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         data['section'] = 'Защита прав потребителей'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_consumer)
@@ -307,6 +329,9 @@ async def start_inline_keyboard_callback_consumer_add_appeal_only_telegram(messa
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         data['section'] = 'Защита прав потребителей'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_consumer)
@@ -355,6 +380,9 @@ async def consultation_mobilization_add_appeal(message: types.Message, state: FS
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         data['section'] = 'Мобилизация'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_mobilization)
@@ -388,6 +416,9 @@ async def consultation_migration_add_appeal(message: types.Message, state: FSMCo
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         data['section'] = 'Миграция'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_migration)
@@ -422,6 +453,9 @@ async def consultation_employment_add_appeal(message: types.Message, state: FSMC
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         data['section'] = 'Трудовые споры'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_employment)
@@ -455,6 +489,9 @@ async def consultation_consumer_add_appeal(message: types.Message, state: FSMCon
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         data['section'] = 'Защита прав потребителей'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_consumer)
@@ -471,6 +508,9 @@ async def feedback_add_appeal(message: types.Message, state: FSMContext):
         data['phone'] = ''
         data['user_id'] = message.chat.id
         data['section'] = 'Отзывы'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Благодарю! Я ценю вашу обратную связь', reply_markup=feedback_keyboard)
@@ -487,6 +527,9 @@ async def cooperation_add_appeal(message: types.Message, state: FSMContext):
         data['phone'] = ''
         data['user_id'] = message.chat.id
         data['section'] = 'Сотрудничество'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Я рассмотрю ваше предложение на тему сотрудничества и свяжусь с вами в самое ближайшее время', reply_markup=cooperation_keyboard)
@@ -504,6 +547,9 @@ async def suggestion_add_appeal(message: types.Message, state: FSMContext):
         data['phone'] = ''
         data['user_id'] = message.chat.id
         data['section'] = 'Предложения тем для публикаций'
+        current_datetime = datetime.now()
+        data['date'] = f'{current_datetime.day}:{current_datetime.month}:{current_datetime.year}'
+        data['time'] = f'{current_datetime.hour}:{current_datetime.minute}'
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Ваше предложение принято, спасибо!', reply_markup=suggestion_keyboard)
