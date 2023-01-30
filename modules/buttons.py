@@ -13,7 +13,7 @@ k8 = InlineKeyboardButton(text='Моя группа в Telegram', url='https://t
 k9 = InlineKeyboardButton(text='Мой Instagram', url='https://www.instagram.com/bettercallpavlukov/')
 k10 = InlineKeyboardButton(text='Мой VK', url='https://vk.com/yaroslaw_org')
 
-k11 = KeyboardButton(text='Напишите мне в телеграм', callback_data='Напишите мне в телеграм')
+# k11 = KeyboardButton(text='Напишите мне в телеграм', callback_data='Напишите мне в телеграм')
 
 b1 = KeyboardButton('Получить консультацию')
 b2 = KeyboardButton('Оставить отзыв или замечание')
@@ -54,8 +54,11 @@ intro_inline_keyboard.add(k1).add(k2)
 consultation_inline_keyboard = InlineKeyboardMarkup(row_width=1)
 consultation_inline_keyboard.add(k3).add(k4).add(k5).add(k6).add(k2)
 
-consultation_inline_keyboard_phone_keeper = InlineKeyboardMarkup(row_width=1)
-consultation_inline_keyboard_phone_keeper.add(k11).insert(k7)
+# consultation_inline_keyboard_phone_keeper = InlineKeyboardMarkup(row_width=1)
+# consultation_inline_keyboard_phone_keeper.add(k11).insert(k7)
+
+consultation_inline_keyboard_phone_keeper = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+consultation_inline_keyboard_phone_keeper.add(b24)
 
 consultation_inline_keyboard_missclick = InlineKeyboardMarkup(row_width=1)
 consultation_inline_keyboard_missclick.add(k7)

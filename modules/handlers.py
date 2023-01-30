@@ -8,6 +8,7 @@ from modules import data_base
 from modules.phone_processing import phone_checker
 from datetime import datetime
 import typing
+from aiogram.types import ReplyKeyboardRemove
 
 # Машины состояний бота
 
@@ -107,57 +108,28 @@ async def restart_inline_keyboard_callback_pick(message: types.Message, state: F
     if current_state is None:
         return
     await state.finish()
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете выбрать другое направление:', reply_markup=types.ReplyKeyboardRemove())
     await bot.send_message(chat_id = message.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
 
 async def recomendations_after_inline(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже', reply_markup=consultation_keyboard_in_after_inline_recomendations)
     await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/480')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Мобилизация
 
 async def start_inline_keyboard_callback_mobilization(message: types.Message):
     await InlineAppealMobilization.inline_appeal_mobilization1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом) без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_phone_keeper)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона, чтобы я мог связаться с вами:', reply_markup=consultation_inline_keyboard_phone_keeper)
+    await bot.send_message(chat_id = message.from_user.id, text='В международном формате с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick)
 
-async def start_inline_keyboard_callback_mobilization_phone_processing(message: types.Message, state: FSMContext):
+async def start_inline_keyboard_callback_mobilization_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
-        data['status'] = ''
-        data['phone'] = message.text
+        if not message.text:
+            data['status'] = 'Свяжитесь со мной в Telegram'
+            data['phone'] = message.contact.phone_number
+        else:
+            data['status'] = 'Позвоните мне'
+            data['phone'] = message.text
         
         phone_checked = await phone_checker(data['phone'])
         if phone_checked == 'ok':
@@ -165,32 +137,10 @@ async def start_inline_keyboard_callback_mobilization_phone_processing(message: 
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
         else:
             await InlineAppealMobilization.inline_appeal_mobilization1.set()
-            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом) без пробелов или тире', reply_markup=consultation_inline_keyboard_phone_keeper)
+            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона:', reply_markup=consultation_inline_keyboard_phone_keeper)
+            await bot.send_message(chat_id = message.from_user.id, text='Пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick)
 
 async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['user_id'] = message.chat.id
-        if message.from_user.username == None:
-            data['nickname'] = ''
-        else:
-            data['nickname'] = message.from_user.username
-        data['fullname'] = message.from_user.full_name
-        data['section'] = 'Мобилизация'
-        current_datetime = datetime.now()
-        data['datetime'] = str(current_datetime)[0:-7]
-        data['appeal'] = message.text
-    await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_mobilization)
-    await state.finish()
-
-async def start_inline_keyboard_callback_mobilization_only_telegram(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['status'] = ''
-        data['phone'] = 'Напишите мне в телеграм'
-    await InlineAppealMobilization.inline_appeal_mobilization2.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
-
-async def start_inline_keyboard_callback_mobilization_add_appeal_only_telegram(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
@@ -210,12 +160,17 @@ async def start_inline_keyboard_callback_mobilization_add_appeal_only_telegram(m
 
 async def start_inline_keyboard_callback_migration(message: types.Message):
     await InlineAppealMigration.inline_appeal_migration1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом) без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_phone_keeper)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона, чтобы я мог связаться с вами:', reply_markup=consultation_inline_keyboard_phone_keeper)
+    await bot.send_message(chat_id = message.from_user.id, text='В международном формате с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick)
 
-async def start_inline_keyboard_callback_migration_phone_processing(message: types.Message, state: FSMContext):
+async def start_inline_keyboard_callback_migration_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
-        data['status'] = ''
-        data['phone'] = message.text
+        if not message.text:
+            data['status'] = 'Свяжитесь со мной в Telegram'
+            data['phone'] = message.contact.phone_number
+        else:
+            data['status'] = 'Позвоните мне'
+            data['phone'] = message.text
 
         phone_checked = await phone_checker(data['phone'])
         if phone_checked == 'ok':
@@ -223,32 +178,10 @@ async def start_inline_keyboard_callback_migration_phone_processing(message: typ
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
         else:
             await InlineAppealMigration.inline_appeal_migration1.set()
-            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом) без пробелов или тире', reply_markup=consultation_inline_keyboard_phone_keeper)
+            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона:', reply_markup=consultation_inline_keyboard_phone_keeper)
+            await bot.send_message(chat_id = message.from_user.id, text='Пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick)
 
 async def start_inline_keyboard_callback_migration_add_appeal(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['user_id'] = message.chat.id
-        if message.from_user.username == None:
-            data['nickname'] = ''
-        else:
-            data['nickname'] = message.from_user.username
-        data['fullname'] = message.from_user.full_name
-        data['section'] = 'Миграция'
-        current_datetime = datetime.now()
-        data['datetime'] = str(current_datetime)[0:-7]
-        data['appeal'] = message.text
-    await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_migration)
-    await state.finish()
-
-async def start_inline_keyboard_callback_migration_only_telegram(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['status'] = ''
-        data['phone'] = 'Напишите мне в телеграм'
-    await InlineAppealMigration.inline_appeal_migration2.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
-
-async def start_inline_keyboard_callback_migration_add_appeal_only_telegram(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
@@ -268,12 +201,17 @@ async def start_inline_keyboard_callback_migration_add_appeal_only_telegram(mess
 
 async def start_inline_keyboard_callback_employment(message: types.Message):
     await InlineAppealEmployment.inline_appeal_employment1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом) без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_phone_keeper)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона, чтобы я мог связаться с вами:', reply_markup=consultation_inline_keyboard_phone_keeper)
+    await bot.send_message(chat_id = message.from_user.id, text='В международном формате с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick)
 
-async def start_inline_keyboard_callback_employment_phone_processing(message: types.Message, state: FSMContext):
+async def start_inline_keyboard_callback_employment_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
-        data['status'] = ''
-        data['phone'] = message.text
+        if not message.text:
+            data['status'] = 'Свяжитесь со мной в Telegram'
+            data['phone'] = message.contact.phone_number
+        else:
+            data['status'] = 'Позвоните мне'
+            data['phone'] = message.text
 
         phone_checked = await phone_checker(data['phone'])
         if phone_checked == 'ok':
@@ -281,32 +219,10 @@ async def start_inline_keyboard_callback_employment_phone_processing(message: ty
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
         else:
             await InlineAppealEmployment.inline_appeal_employment1.set()
-            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом) без пробелов или тире', reply_markup=consultation_inline_keyboard_phone_keeper)
+            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона:', reply_markup=consultation_inline_keyboard_phone_keeper)
+            await bot.send_message(chat_id = message.from_user.id, text='Пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick)
 
 async def start_inline_keyboard_callback_employment_add_appeal(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['user_id'] = message.chat.id
-        if message.from_user.username == None:
-            data['nickname'] = ''
-        else:
-            data['nickname'] = message.from_user.username
-        data['fullname'] = message.from_user.full_name
-        data['section'] = 'Трудовые споры'
-        current_datetime = datetime.now()
-        data['datetime'] = str(current_datetime)[0:-7]
-        data['appeal'] = message.text
-    await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_employment)
-    await state.finish()
-
-async def start_inline_keyboard_callback_employment_only_telegram(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['status'] = ''
-        data['phone'] = 'Напишите мне в телеграм'
-    await InlineAppealEmployment.inline_appeal_employment2.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
-
-async def start_inline_keyboard_callback_employment_add_appeal_only_telegram(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
@@ -326,12 +242,17 @@ async def start_inline_keyboard_callback_employment_add_appeal_only_telegram(mes
 
 async def start_inline_keyboard_callback_consumer(message: types.Message):
     await InlineAppealConsumer.inline_appeal_consumer1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом) без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_phone_keeper)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона, чтобы я мог связаться с вами:', reply_markup=consultation_inline_keyboard_phone_keeper)
+    await bot.send_message(chat_id = message.from_user.id, text='В международном формате с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick)
 
-async def start_inline_keyboard_callback_consumer_phone_processing(message: types.Message, state: FSMContext):
+async def start_inline_keyboard_callback_consumer_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
-        data['status'] = ''
-        data['phone'] = message.text
+        if not message.text:
+            data['status'] = 'Свяжитесь со мной в Telegram'
+            data['phone'] = message.contact.phone_number
+        else:
+            data['status'] = 'Позвоните мне'
+            data['phone'] = message.text
 
         phone_checked = await phone_checker(data['phone'])
         if phone_checked == 'ok':
@@ -339,7 +260,8 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: type
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
         else:
             await InlineAppealConsumer.inline_appeal_consumer1.set()
-            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом) без пробелов или тире', reply_markup=consultation_inline_keyboard_phone_keeper)
+            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона:', reply_markup=consultation_inline_keyboard_phone_keeper)
+            await bot.send_message(chat_id = message.from_user.id, text='Пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick)
 
 async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -356,63 +278,6 @@ async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Mess
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_consumer)
     await state.finish()
-
-async def start_inline_keyboard_callback_consumer_only_telegram(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['status'] = ''
-        data['phone'] = 'Напишите мне в телеграм'
-    await InlineAppealConsumer.inline_appeal_consumer2.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
-
-async def start_inline_keyboard_callback_consumer_add_appeal_only_telegram(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['user_id'] = message.chat.id
-        if message.from_user.username == None:
-            data['nickname'] = ''
-        else:
-            data['nickname'] = message.from_user.username
-        data['fullname'] = message.from_user.full_name
-        data['section'] = 'Защита прав потребителей'
-        current_datetime = datetime.now()
-        data['datetime'] = str(current_datetime)[0:-7]
-        data['appeal'] = message.text
-    await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_consumer)
-    await state.finish()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Меню консультации со сборщиками данных
 
@@ -433,7 +298,7 @@ async def consultation_back_for_consultation_FSM(message: types.Message, state: 
 
 async def consultation_mobilization(message: types.Message):
     await AppealMobilization.appeal_mobilization1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом) без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
 
 async def consultation_mobilization_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
@@ -450,7 +315,7 @@ async def consultation_mobilization_phone_processing(message: typing.Union[types
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
         else:
             await AppealMobilization.appeal_mobilization1.set()
-            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом) без пробелов или тире', reply_markup=consultation_keyboard_in_only_telegram)
+            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_keyboard_in_only_telegram)
 
 async def consultation_mobilization_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -472,7 +337,7 @@ async def consultation_mobilization_add_appeal(message: types.Message, state: FS
 
 async def consultation_migration(message: types.Message):
     await AppealMigration.appeal_migration1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом) без пробелов или тире, чтобы я мог связаться с вами.\n\nВ следующем сообщении я попрошу вас написать ваш вопрос, а сразу после отправки вашего вопроса, вы получите от меня в подарок чек-лист "Переезд из России: деньги и документы"', reply_markup=consultation_keyboard_in_only_telegram)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами.\n\nВ следующем сообщении я попрошу вас написать ваш вопрос, а сразу после отправки вашего вопроса, вы получите от меня в подарок чек-лист "Переезд из России: деньги и документы"', reply_markup=consultation_keyboard_in_only_telegram)
 
 async def consultation_migration_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
@@ -489,7 +354,7 @@ async def consultation_migration_phone_processing(message: typing.Union[types.Co
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
         else:
             await AppealMigration.appeal_migration1.set()
-            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом) без пробелов или тире', reply_markup=consultation_keyboard_in_only_telegram)
+            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_keyboard_in_only_telegram)
 
 async def consultation_migration_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -512,7 +377,7 @@ async def consultation_migration_add_appeal(message: types.Message, state: FSMCo
 
 async def consultation_employment(message: types.Message):
     await AppealEmployment.appeal_employment1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом) без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
 
 async def consultation_employment_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
@@ -529,7 +394,7 @@ async def consultation_employment_phone_processing(message: typing.Union[types.C
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
         else:
             await AppealEmployment.appeal_employment1.set()
-            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом) без пробелов или тире', reply_markup=consultation_keyboard_in_only_telegram)
+            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_keyboard_in_only_telegram)
 
 async def consultation_employment_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -551,7 +416,7 @@ async def consultation_employment_add_appeal(message: types.Message, state: FSMC
 
 async def consultation_consumer(message: types.Message):
     await AppealConsumer.appeal_consumer1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом) без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
 
 async def consultation_consumer_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
@@ -568,7 +433,7 @@ async def consultation_consumer_phone_processing(message: typing.Union[types.Con
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
         else:
             await AppealConsumer.appeal_consumer1.set()
-            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом) без пробелов или тире', reply_markup=consultation_keyboard_in_only_telegram)
+            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_keyboard_in_only_telegram)
 
 async def consultation_consumer_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -807,37 +672,29 @@ def register_handler_client(dp: Dispatcher):
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_mobilization, text='mobilization', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
-    dp.register_message_handler(start_inline_keyboard_callback_mobilization_phone_processing, state=InlineAppealMobilization.inline_appeal_mobilization1)
+    dp.register_message_handler(start_inline_keyboard_callback_mobilization_phone_processing, content_types=['contact', 'text'], state=InlineAppealMobilization.inline_appeal_mobilization1)
     dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal, state=InlineAppealMobilization.inline_appeal_mobilization2)
-    dp.register_callback_query_handler(start_inline_keyboard_callback_mobilization_only_telegram, text='Напишите мне в телеграм', state=InlineAppealMobilization.inline_appeal_mobilization1)
-    dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal_only_telegram, state=InlineAppealMobilization.inline_appeal_mobilization2)
 
     # Миграция
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_migration, text='migration', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
-    dp.register_message_handler(start_inline_keyboard_callback_migration_phone_processing, state=InlineAppealMigration.inline_appeal_migration1)
+    dp.register_message_handler(start_inline_keyboard_callback_migration_phone_processing, content_types=['contact', 'text'], state=InlineAppealMigration.inline_appeal_migration1)
     dp.register_message_handler(start_inline_keyboard_callback_migration_add_appeal, state=InlineAppealMigration.inline_appeal_migration2)
-    dp.register_callback_query_handler(start_inline_keyboard_callback_migration_only_telegram, text='Напишите мне в телеграм', state=InlineAppealMigration.inline_appeal_migration1)
-    dp.register_message_handler(start_inline_keyboard_callback_migration_add_appeal_only_telegram, state=InlineAppealMigration.inline_appeal_migration2)
 
     # Трудовые споры
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_employment, text='employment', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
-    dp.register_message_handler(start_inline_keyboard_callback_employment_phone_processing, state=InlineAppealEmployment.inline_appeal_employment1)
+    dp.register_message_handler(start_inline_keyboard_callback_employment_phone_processing, content_types=['contact', 'text'], state=InlineAppealEmployment.inline_appeal_employment1)
     dp.register_message_handler(start_inline_keyboard_callback_employment_add_appeal, state=InlineAppealEmployment.inline_appeal_employment2)
-    dp.register_callback_query_handler(start_inline_keyboard_callback_employment_only_telegram, text='Напишите мне в телеграм', state=InlineAppealEmployment.inline_appeal_employment1)
-    dp.register_message_handler(start_inline_keyboard_callback_employment_add_appeal_only_telegram, state=InlineAppealEmployment.inline_appeal_employment2)
 
     # Защита прав потребителей
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_consumer, text='consumer', state=None)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
-    dp.register_message_handler(start_inline_keyboard_callback_consumer_phone_processing, state=InlineAppealConsumer.inline_appeal_consumer1)
+    dp.register_message_handler(start_inline_keyboard_callback_consumer_phone_processing, content_types=['contact', 'text'], state=InlineAppealConsumer.inline_appeal_consumer1)
     dp.register_message_handler(start_inline_keyboard_callback_consumer_add_appeal, state=InlineAppealConsumer.inline_appeal_consumer2)
-    dp.register_callback_query_handler(start_inline_keyboard_callback_consumer_only_telegram, text='Напишите мне в телеграм', state=InlineAppealConsumer.inline_appeal_consumer1)
-    dp.register_message_handler(start_inline_keyboard_callback_consumer_add_appeal_only_telegram, state=InlineAppealConsumer.inline_appeal_consumer2)
     
     # Регистраторы меню консультаций со сборщиками данных
 
