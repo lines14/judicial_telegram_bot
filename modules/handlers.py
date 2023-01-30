@@ -87,9 +87,8 @@ class AppealSuggestion(StatesGroup):
 # Диалог приветствия и главное меню
 
 async def start_command(message: types.Message):
-    name = message.from_user.first_name
-    surname = message.from_user.last_name
-    await bot.send_message(chat_id = message.from_user.id, text=f'Приветствую вас, {name} {surname}!\nНа связи Ярослав Павлюков. Хотите получить консультацию?', reply_markup=intro_inline_keyboard)
+    fullname = message.from_user.full_name
+    await bot.send_message(chat_id = message.from_user.id, text=f'Приветствую вас, {fullname}!\nНа связи Ярослав Павлюков. Хотите получить консультацию?', reply_markup=intro_inline_keyboard)
 
 async def start_inline_keyboard_callback_redirect(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Вы можете выбрать интересующий вас раздел в меню ниже:', reply_markup=main_menu_keyboard)
@@ -148,6 +147,11 @@ async def start_inline_keyboard_callback_mobilization_add_suggestion(message: ty
 async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Мобилизация'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -165,6 +169,11 @@ async def start_inline_keyboard_callback_mobilization_only_telegram(message: typ
 async def start_inline_keyboard_callback_mobilization_add_appeal_only_telegram(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Мобилизация'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -200,6 +209,11 @@ async def start_inline_keyboard_callback_migration_add_suggestion(message: types
 async def start_inline_keyboard_callback_migration_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Миграция'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -217,6 +231,11 @@ async def start_inline_keyboard_callback_migration_only_telegram(message: types.
 async def start_inline_keyboard_callback_migration_add_appeal_only_telegram(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Миграция'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -252,6 +271,11 @@ async def start_inline_keyboard_callback_employment_add_suggestion(message: type
 async def start_inline_keyboard_callback_employment_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Трудовые споры'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -269,6 +293,11 @@ async def start_inline_keyboard_callback_employment_only_telegram(message: types
 async def start_inline_keyboard_callback_employment_add_appeal_only_telegram(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Трудовые споры'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -304,6 +333,11 @@ async def start_inline_keyboard_callback_consumer_add_suggestion(message: types.
 async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Защита прав потребителей'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -321,6 +355,11 @@ async def start_inline_keyboard_callback_consumer_only_telegram(message: types.M
 async def start_inline_keyboard_callback_consumer_add_appeal_only_telegram(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Защита прав потребителей'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -371,6 +410,11 @@ async def consultation_mobilization_add_suggestion(message: types.Message, state
 async def consultation_mobilization_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Мобилизация'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -406,6 +450,11 @@ async def consultation_migration_add_suggestion(message: types.Message, state: F
 async def consultation_migration_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Миграция'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -442,6 +491,11 @@ async def consultation_employment_add_suggestion(message: types.Message, state: 
 async def consultation_employment_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Трудовые споры'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -477,6 +531,11 @@ async def consultation_consumer_add_suggestion(message: types.Message, state: FS
 async def consultation_consumer_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Защита прав потребителей'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -495,6 +554,11 @@ async def feedback_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['phone'] = ''
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Отзывы'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -513,6 +577,11 @@ async def cooperation_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['phone'] = ''
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Сотрудничество'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
@@ -532,6 +601,11 @@ async def suggestion_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['phone'] = ''
         data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
         data['section'] = 'Предложения тем для публикаций'
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
