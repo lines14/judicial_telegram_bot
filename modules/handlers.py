@@ -7,6 +7,7 @@ from modules.judicial_writer_1 import data_print
 from modules import data_base
 from modules.phone_processing import phone_checker
 from datetime import datetime
+import typing
 
 # Машины состояний бота
 
@@ -55,22 +56,18 @@ class InlineAppealConsumer(StatesGroup):
 class AppealMobilization(StatesGroup):
     appeal_mobilization1 = State()
     appeal_mobilization2 = State()
-    appeal_mobilization3 = State()
 
 class AppealMigration(StatesGroup):
     appeal_migration1 = State()
     appeal_migration2 = State()
-    appeal_migration3 = State()
 
 class AppealEmployment(StatesGroup):
     appeal_employment1 = State()
     appeal_employment2 = State()
-    appeal_employment3 = State()
 
 class AppealConsumer(StatesGroup):
     appeal_consumer1 = State()
     appeal_consumer2 = State()
-    appeal_consumer3 = State()
 
 # Машины состояний отзывов, предложений сотрудничества и предложений тем для публикаций
 
@@ -389,23 +386,20 @@ async def consultation_mobilization(message: types.Message):
     await AppealMobilization.appeal_mobilization1.set()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом) без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
 
-async def consultation_mobilization_phone_processing(message: types.Message, state: FSMContext):
+async def consultation_mobilization_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
-        data['phone'] = message.text
+        if not message.text:
+            data['phone'] = message.contact.phone_number
+        else:
+            data['phone'] = message.text
         phone_checked = await phone_checker(data['phone'])
         
         if phone_checked == 'ok':
-            await AppealMobilization.appeal_mobilization3.set()
+            await AppealMobilization.appeal_mobilization2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
         else:
             await AppealMobilization.appeal_mobilization1.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом) без пробелов или тире', reply_markup=consultation_keyboard_in_only_telegram)
-
-async def consultation_mobilization_add_suggestion(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['phone'] = message.text
-    await AppealMobilization.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
 
 async def consultation_mobilization_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -429,23 +423,20 @@ async def consultation_migration(message: types.Message):
     await AppealMigration.appeal_migration1.set()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом) без пробелов или тире, чтобы я мог связаться с вами.\n\nВ следующем сообщении я попрошу вас написать ваш вопрос, а сразу после отправки вашего вопроса, вы получите от меня в подарок чек-лист "Переезд из России: деньги и документы"', reply_markup=consultation_keyboard_in_only_telegram)
 
-async def consultation_migration_phone_processing(message: types.Message, state: FSMContext):
+async def consultation_migration_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
-        data['phone'] = message.text
+        if not message.text:
+            data['phone'] = message.contact.phone_number
+        else:
+            data['phone'] = message.text
         phone_checked = await phone_checker(data['phone'])
         
         if phone_checked == 'ok':
-            await AppealMigration.appeal_migration3.set()
+            await AppealMigration.appeal_migration2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
         else:
             await AppealMigration.appeal_migration1.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом) без пробелов или тире', reply_markup=consultation_keyboard_in_only_telegram)
-
-async def consultation_migration_add_suggestion(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['phone'] = message.text
-    await AppealMigration.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
 
 async def consultation_migration_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -470,23 +461,20 @@ async def consultation_employment(message: types.Message):
     await AppealEmployment.appeal_employment1.set()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом) без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
 
-async def consultation_employment_phone_processing(message: types.Message, state: FSMContext):
+async def consultation_employment_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
-        data['phone'] = message.text
+        if not message.text:
+            data['phone'] = message.contact.phone_number
+        else:
+            data['phone'] = message.text
         phone_checked = await phone_checker(data['phone'])
         
         if phone_checked == 'ok':
-            await AppealEmployment.appeal_employment3.set()
+            await AppealEmployment.appeal_employment2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
         else:
             await AppealEmployment.appeal_employment1.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом) без пробелов или тире', reply_markup=consultation_keyboard_in_only_telegram)
-
-async def consultation_employment_add_suggestion(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['phone'] = message.text
-    await AppealEmployment.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
 
 async def consultation_employment_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -510,23 +498,20 @@ async def consultation_consumer(message: types.Message):
     await AppealConsumer.appeal_consumer1.set()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом) без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
 
-async def consultation_consumer_phone_processing(message: types.Message, state: FSMContext):
+async def consultation_consumer_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
-        data['phone'] = message.text
+        if not message.text:
+            data['phone'] = message.contact.phone_number
+        else:
+            data['phone'] = message.text
         phone_checked = await phone_checker(data['phone'])
         
         if phone_checked == 'ok':
-            await AppealConsumer.appeal_consumer3.set()
+            await AppealConsumer.appeal_consumer2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
         else:
             await AppealConsumer.appeal_consumer1.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом) без пробелов или тире', reply_markup=consultation_keyboard_in_only_telegram)
-
-async def consultation_consumer_add_suggestion(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['phone'] = message.text
-    await AppealConsumer.next()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
 
 async def consultation_consumer_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -809,30 +794,26 @@ def register_handler_client(dp: Dispatcher):
     # Мобилизация
 
     dp.register_message_handler(consultation_mobilization, text='Мобилизация', state=None)
-    dp.register_message_handler(consultation_mobilization_phone_processing, state=AppealMobilization.appeal_mobilization1)
-    dp.register_message_handler(consultation_mobilization_add_suggestion, state=AppealMobilization.appeal_mobilization2)
-    dp.register_message_handler(consultation_mobilization_add_appeal, state=AppealMobilization.appeal_mobilization3)
+    dp.register_message_handler(consultation_mobilization_phone_processing, content_types=['contact', 'text'], state=AppealMobilization.appeal_mobilization1)
+    dp.register_message_handler(consultation_mobilization_add_appeal, state=AppealMobilization.appeal_mobilization2)
 
     # Миграция
 
     dp.register_message_handler(consultation_migration, text='Миграция', state=None)
-    dp.register_message_handler(consultation_migration_phone_processing, state=AppealMigration.appeal_migration1)
-    dp.register_message_handler(consultation_migration_add_suggestion, state=AppealMigration.appeal_migration2)
-    dp.register_message_handler(consultation_migration_add_appeal, state=AppealMigration.appeal_migration3)
+    dp.register_message_handler(consultation_migration_phone_processing, content_types=['contact', 'text'], state=AppealMigration.appeal_migration1)
+    dp.register_message_handler(consultation_migration_add_appeal, state=AppealMigration.appeal_migration2)
 
     # Трудовые споры
 
     dp.register_message_handler(consultation_employment, text='Трудовые споры', state=None)
-    dp.register_message_handler(consultation_employment_phone_processing, state=AppealEmployment.appeal_employment1)
-    dp.register_message_handler(consultation_employment_add_suggestion, state=AppealEmployment.appeal_employment2)
-    dp.register_message_handler(consultation_employment_add_appeal, state=AppealEmployment.appeal_employment3)
+    dp.register_message_handler(consultation_employment_phone_processing, content_types=['contact', 'text'], state=AppealEmployment.appeal_employment1)
+    dp.register_message_handler(consultation_employment_add_appeal, state=AppealEmployment.appeal_employment2)
 
     # Защита прав потребителей
 
     dp.register_message_handler(consultation_consumer, text='Защита прав потребителей', state=None)
-    dp.register_message_handler(consultation_consumer_phone_processing, state=AppealConsumer.appeal_consumer1)
-    dp.register_message_handler(consultation_consumer_add_suggestion, state=AppealConsumer.appeal_consumer2)
-    dp.register_message_handler(consultation_consumer_add_appeal, state=AppealConsumer.appeal_consumer3)
+    dp.register_message_handler(consultation_consumer_phone_processing, content_types=['contact', 'text'], state=AppealConsumer.appeal_consumer1)
+    dp.register_message_handler(consultation_consumer_add_appeal, state=AppealConsumer.appeal_consumer2)
 
     # Регистраторы меню обо мне
 
