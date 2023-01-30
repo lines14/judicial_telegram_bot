@@ -1,6 +1,24 @@
 async def phone_checker(phone):
-    if phone == 'Напишите мне в телеграм':
-        return 'ok'
+    if phone[0] == '7':
+        phonelist = []
+        for i in phone:
+            phonelist.append(i)
+        phonelist.reverse()
+        phonelist.append('+')
+        phonelist.reverse()
+        phone = ''.join(phonelist)
+
+        if phone[0] == '+':
+            slicer = slice(1, len(phone))
+            phone_to_check = phone[slicer]
+            for i in phone_to_check:
+                if i.isdecimal():
+                    continue
+                else:
+                    return 'fail'
+            return phone
+        else:
+            return 'fail'
     else:
         if phone[0] == '+':
             slicer = slice(1, len(phone))
@@ -10,7 +28,7 @@ async def phone_checker(phone):
                     continue
                 else:
                     return 'fail'
-            return 'ok'
+            return phone
         else:
             return 'fail'
 

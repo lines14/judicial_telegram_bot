@@ -131,12 +131,14 @@ async def start_inline_keyboard_callback_mobilization_phone_processing(message: 
         if not message.text:
             data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
+            phone_checked = await phone_checker(data['phone'])
         else:
             data['status'] = 'Позвоните мне'
             data['phone'] = message.text
+            phone_checked = await phone_checker(data['phone'])
         
-        phone_checked = await phone_checker(data['phone'])
-        if phone_checked == 'ok':
+        if phone_checked != 'fail':
+            data['phone'] = await phone_checker(data['phone'])
             await InlineAppealMobilization.inline_appeal_mobilization2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
         else:
@@ -172,12 +174,14 @@ async def start_inline_keyboard_callback_migration_phone_processing(message: typ
         if not message.text:
             data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
+            phone_checked = await phone_checker(data['phone'])
         else:
             data['status'] = 'Позвоните мне'
             data['phone'] = message.text
-
-        phone_checked = await phone_checker(data['phone'])
-        if phone_checked == 'ok':
+            phone_checked = await phone_checker(data['phone'])
+        
+        if phone_checked != 'fail':
+            data['phone'] = await phone_checker(data['phone'])
             await InlineAppealMigration.inline_appeal_migration2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
         else:
@@ -214,12 +218,14 @@ async def start_inline_keyboard_callback_employment_phone_processing(message: ty
         if not message.text:
             data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
+            phone_checked = await phone_checker(data['phone'])
         else:
             data['status'] = 'Позвоните мне'
             data['phone'] = message.text
-
-        phone_checked = await phone_checker(data['phone'])
-        if phone_checked == 'ok':
+            phone_checked = await phone_checker(data['phone'])
+        
+        if phone_checked != 'fail':
+            data['phone'] = await phone_checker(data['phone'])
             await InlineAppealEmployment.inline_appeal_employment2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
         else:
@@ -255,12 +261,14 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: typi
         if not message.text:
             data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
+            phone_checked = await phone_checker(data['phone'])
         else:
             data['status'] = 'Позвоните мне'
             data['phone'] = message.text
-
-        phone_checked = await phone_checker(data['phone'])
-        if phone_checked == 'ok':
+            phone_checked = await phone_checker(data['phone'])
+        
+        if phone_checked != 'fail':
+            data['phone'] = await phone_checker(data['phone'])
             await InlineAppealConsumer.inline_appeal_consumer2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
         else:
@@ -314,12 +322,14 @@ async def consultation_mobilization_phone_processing(message: typing.Union[types
         if not message.text:
             data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
+            phone_checked = await phone_checker(data['phone'])
         else:
             data['status'] = 'Позвоните мне'
             data['phone'] = message.text
-
-        phone_checked = await phone_checker(data['phone'])
-        if phone_checked == 'ok':
+            phone_checked = await phone_checker(data['phone'])
+        
+        if phone_checked != 'fail':
+            data['phone'] = await phone_checker(data['phone'])
             await AppealMobilization.appeal_mobilization2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
         else:
@@ -353,12 +363,14 @@ async def consultation_migration_phone_processing(message: typing.Union[types.Co
         if not message.text:
             data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
+            phone_checked = await phone_checker(data['phone'])
         else:
             data['status'] = 'Позвоните мне'
             data['phone'] = message.text
-
-        phone_checked = await phone_checker(data['phone'])
-        if phone_checked == 'ok':
+            phone_checked = await phone_checker(data['phone'])
+        
+        if phone_checked != 'fail':
+            data['phone'] = await phone_checker(data['phone'])
             await AppealMigration.appeal_migration2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
         else:
@@ -393,12 +405,14 @@ async def consultation_employment_phone_processing(message: typing.Union[types.C
         if not message.text:
             data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
+            phone_checked = await phone_checker(data['phone'])
         else:
             data['status'] = 'Позвоните мне'
             data['phone'] = message.text
-
-        phone_checked = await phone_checker(data['phone'])
-        if phone_checked == 'ok':
+            phone_checked = await phone_checker(data['phone'])
+        
+        if phone_checked != 'fail':
+            data['phone'] = await phone_checker(data['phone'])
             await AppealEmployment.appeal_employment2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
         else:
@@ -432,12 +446,14 @@ async def consultation_consumer_phone_processing(message: typing.Union[types.Con
         if not message.text:
             data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
+            phone_checked = await phone_checker(data['phone'])
         else:
             data['status'] = 'Позвоните мне'
             data['phone'] = message.text
-
-        phone_checked = await phone_checker(data['phone'])
-        if phone_checked == 'ok':
+            phone_checked = await phone_checker(data['phone'])
+        
+        if phone_checked != 'fail':
+            data['phone'] = await phone_checker(data['phone'])
             await AppealConsumer.appeal_consumer2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
         else:
