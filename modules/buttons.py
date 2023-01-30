@@ -15,6 +15,14 @@ k10 = InlineKeyboardButton(text='Мой VK', url='https://vk.com/yaroslaw_org')
 
 # k11 = KeyboardButton(text='Напишите мне в телеграм', callback_data='Напишите мне в телеграм')
 
+k12 = InlineKeyboardButton(text='Спасибо, буду ждать', callback_data='Thank you')
+k13 = InlineKeyboardButton(text='Хочу почитать посты на тему мобилизации', callback_data='Read mobilization')
+k14 = InlineKeyboardButton(text='Хочу почитать посты на тему миграции', callback_data='Read migration')
+k15 = InlineKeyboardButton(text='Хочу почитать посты на тему трудовых споров', callback_data='Read employment')
+k16 = InlineKeyboardButton(text='Хочу почитать посты на тему защиты прав потребителей', callback_data='Read consumer')
+
+k17 = InlineKeyboardButton(text='В главное меню', callback_data='To main menu')
+
 b1 = KeyboardButton('Получить консультацию')
 b2 = KeyboardButton('Оставить отзыв или замечание')
 b3 = KeyboardButton('Сотрудничество')
@@ -90,20 +98,23 @@ consultation_keyboard_in_only_telegram.add(b24).add(b10).insert(b8)
 consultation_keyboard_in_abort = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard_in_abort.add(b10).insert(b8)
 
-consultation_keyboard_in_after_inline_mobilization = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard_in_after_inline_mobilization.add(b19).insert(b20)
+consultation_keyboard_in_after_recomendations = ReplyKeyboardMarkup(resize_keyboard=True)
+consultation_keyboard_in_after_recomendations.add(b7)
 
-consultation_keyboard_in_after_inline_migration = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard_in_after_inline_migration.add(b19).insert(b21)
+consultation_keyboard_in_after_inline_mobilization = InlineKeyboardMarkup(row_width=1)
+consultation_keyboard_in_after_inline_mobilization.add(k12).add(k13)
 
-consultation_keyboard_in_after_inline_employment = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard_in_after_inline_employment.add(b19).insert(b22)
+consultation_keyboard_in_after_inline_migration = InlineKeyboardMarkup(row_width=1)
+consultation_keyboard_in_after_inline_migration.add(k12).add(k14)
 
-consultation_keyboard_in_after_inline_consumer = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard_in_after_inline_consumer.add(b19).add(b23)
+consultation_keyboard_in_after_inline_employment = InlineKeyboardMarkup(row_width=1)
+consultation_keyboard_in_after_inline_employment.add(k12).add(k15)
 
-consultation_keyboard_in_after_inline_recomendations = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard_in_after_inline_recomendations.add(b7)
+consultation_keyboard_in_after_inline_consumer = InlineKeyboardMarkup(row_width=1)
+consultation_keyboard_in_after_inline_consumer.add(k12).add(k16)
+
+consultation_keyboard_in_after_inline_recomendations = InlineKeyboardMarkup(row_width=1)
+consultation_keyboard_in_after_inline_recomendations.add(k17)
 
 feedback_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 feedback_keyboard.add(b7)

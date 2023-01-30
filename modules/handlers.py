@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_recomendations, feedback_keyboard, cooperation_keyboard, suggestion_keyboard, feedback_keyboard_abort, cooperation_keyboard_abort, suggestion_keyboard_abort
+from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_recomendations, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_recomendations, feedback_keyboard, cooperation_keyboard, suggestion_keyboard, feedback_keyboard_abort, cooperation_keyboard_abort, suggestion_keyboard_abort
 from modules.judicial_writer_1 import data_print
 from modules import data_base
 from modules.phone_processing import phone_checker
@@ -91,6 +91,10 @@ async def restart_command(message: types.Message):
     # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
     await bot.send_message(chat_id = message.from_user.id, text='Выберите то, что вас интересует:', reply_markup=main_menu_keyboard)
 
+async def restart_command_inline(message: types.Message):
+    # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
+    await bot.send_message(chat_id = message.from_user.id, text='Выберите то, что вас интересует:', reply_markup=main_menu_keyboard)
+
 async def restart_command_for_all_FSM(message: types.Message, state: FSMContext):
     current_state = await state.get_state()
     if current_state is None:
@@ -112,8 +116,8 @@ async def restart_inline_keyboard_callback_pick(message: types.Message, state: F
     await bot.send_message(chat_id = message.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
 
 async def recomendations_after_inline(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже', reply_markup=consultation_keyboard_in_after_inline_recomendations)
-    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/480')
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже')
+    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/480', reply_markup=consultation_keyboard_in_after_inline_recomendations)
 
 # Мобилизация
 
@@ -293,6 +297,10 @@ async def consultation_back_for_consultation_FSM(message: types.Message, state: 
         return
     await state.finish()
     await message.reply('Вы можете обратиться и по другому направлению:', reply_markup=consultation_keyboard)
+
+async def recomendations_after(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже')
+    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/480', reply_markup=consultation_keyboard_in_after_recomendations)
 
 # Мобилизация
 
@@ -654,7 +662,9 @@ def register_handler_client(dp: Dispatcher):
     dp.register_callback_query_handler(start_inline_keyboard_callback_pick, text='yes')
     dp.register_callback_query_handler(start_inline_keyboard_callback_redirect, text='no')
     dp.register_message_handler(restart_command, text=['Главное меню', 'Спасибо, буду ждать'])
-    dp.register_message_handler(recomendations_after_inline, text=['Хочу почитать посты на тему мобилизации', 'Хочу почитать посты на тему миграции', 'Хочу почитать посты на тему трудовых споров', 'Хочу почитать посты на тему защиты прав потребителей'])
+    dp.register_callback_query_handler(restart_command_inline, text=['To main menu', 'Thank you'])
+    dp.register_message_handler(recomendations_after, text=['Хочу почитать посты на тему мобилизации', 'Хочу почитать посты на тему миграции', 'Хочу почитать посты на тему трудовых споров', 'Хочу почитать посты на тему защиты прав потребителей'])
+    dp.register_callback_query_handler(recomendations_after_inline, text=['Read mobilization', 'Read migration', 'Read employment', 'Read consumer'])
     dp.register_message_handler(restart_command_for_all_FSM, state='*', text='В главное меню')
     dp.register_message_handler(consultation_start_command, text='Получить консультацию')
     # dp.register_message_handler(generator_start_command, text='Генератор судебных документов')
