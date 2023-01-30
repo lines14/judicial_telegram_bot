@@ -117,6 +117,41 @@ async def recomendations_after_inline(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже', reply_markup=consultation_keyboard_in_after_inline_recomendations)
     await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/480')
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Мобилизация
 
 async def start_inline_keyboard_callback_mobilization(message: types.Message):
@@ -125,9 +160,10 @@ async def start_inline_keyboard_callback_mobilization(message: types.Message):
 
 async def start_inline_keyboard_callback_mobilization_phone_processing(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['status'] = ''
         data['phone'] = message.text
-        phone_checked = await phone_checker(data['phone'])
         
+        phone_checked = await phone_checker(data['phone'])
         if phone_checked == 'ok':
             await InlineAppealMobilization.inline_appeal_mobilization3.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
@@ -137,6 +173,7 @@ async def start_inline_keyboard_callback_mobilization_phone_processing(message: 
 
 async def start_inline_keyboard_callback_mobilization_add_suggestion(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['status'] = ''
         data['phone'] = message.text
     await InlineAppealMobilization.next()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
@@ -159,6 +196,7 @@ async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.
 
 async def start_inline_keyboard_callback_mobilization_only_telegram(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['status'] = ''
         data['phone'] = 'Напишите мне в телеграм'
     await InlineAppealMobilization.inline_appeal_mobilization3.set()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
@@ -187,9 +225,10 @@ async def start_inline_keyboard_callback_migration(message: types.Message):
 
 async def start_inline_keyboard_callback_migration_phone_processing(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['status'] = ''
         data['phone'] = message.text
+
         phone_checked = await phone_checker(data['phone'])
-        
         if phone_checked == 'ok':
             await InlineAppealMigration.inline_appeal_migration3.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
@@ -199,6 +238,7 @@ async def start_inline_keyboard_callback_migration_phone_processing(message: typ
 
 async def start_inline_keyboard_callback_migration_add_suggestion(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['status'] = ''
         data['phone'] = message.text
     await InlineAppealMigration.next()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
@@ -221,6 +261,7 @@ async def start_inline_keyboard_callback_migration_add_appeal(message: types.Mes
 
 async def start_inline_keyboard_callback_migration_only_telegram(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['status'] = ''
         data['phone'] = 'Напишите мне в телеграм'
     await InlineAppealMigration.inline_appeal_migration3.set()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
@@ -249,9 +290,10 @@ async def start_inline_keyboard_callback_employment(message: types.Message):
 
 async def start_inline_keyboard_callback_employment_phone_processing(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['status'] = ''
         data['phone'] = message.text
+
         phone_checked = await phone_checker(data['phone'])
-        
         if phone_checked == 'ok':
             await InlineAppealEmployment.inline_appeal_employment3.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
@@ -261,6 +303,7 @@ async def start_inline_keyboard_callback_employment_phone_processing(message: ty
 
 async def start_inline_keyboard_callback_employment_add_suggestion(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['status'] = ''
         data['phone'] = message.text
     await InlineAppealEmployment.next()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
@@ -283,6 +326,7 @@ async def start_inline_keyboard_callback_employment_add_appeal(message: types.Me
 
 async def start_inline_keyboard_callback_employment_only_telegram(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['status'] = ''
         data['phone'] = 'Напишите мне в телеграм'
     await InlineAppealEmployment.inline_appeal_employment3.set()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
@@ -311,9 +355,10 @@ async def start_inline_keyboard_callback_consumer(message: types.Message):
 
 async def start_inline_keyboard_callback_consumer_phone_processing(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['status'] = ''
         data['phone'] = message.text
+
         phone_checked = await phone_checker(data['phone'])
-        
         if phone_checked == 'ok':
             await InlineAppealConsumer.inline_appeal_consumer3.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
@@ -323,6 +368,7 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: type
 
 async def start_inline_keyboard_callback_consumer_add_suggestion(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['status'] = ''
         data['phone'] = message.text
     await InlineAppealConsumer.next()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
@@ -345,6 +391,7 @@ async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Mess
 
 async def start_inline_keyboard_callback_consumer_only_telegram(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
+        data['status'] = ''
         data['phone'] = 'Напишите мне в телеграм'
     await InlineAppealConsumer.inline_appeal_consumer3.set()
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
@@ -364,6 +411,40 @@ async def start_inline_keyboard_callback_consumer_add_appeal_only_telegram(messa
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_consumer)
     await state.finish()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Меню консультации со сборщиками данных
 
@@ -389,11 +470,13 @@ async def consultation_mobilization(message: types.Message):
 async def consultation_mobilization_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
         if not message.text:
+            data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
         else:
+            data['status'] = 'Позвоните мне'
             data['phone'] = message.text
+
         phone_checked = await phone_checker(data['phone'])
-        
         if phone_checked == 'ok':
             await AppealMobilization.appeal_mobilization2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
@@ -426,11 +509,13 @@ async def consultation_migration(message: types.Message):
 async def consultation_migration_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
         if not message.text:
+            data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
         else:
+            data['status'] = 'Позвоните мне'
             data['phone'] = message.text
+
         phone_checked = await phone_checker(data['phone'])
-        
         if phone_checked == 'ok':
             await AppealMigration.appeal_migration2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
@@ -464,11 +549,13 @@ async def consultation_employment(message: types.Message):
 async def consultation_employment_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
         if not message.text:
+            data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
         else:
+            data['status'] = 'Позвоните мне'
             data['phone'] = message.text
+
         phone_checked = await phone_checker(data['phone'])
-        
         if phone_checked == 'ok':
             await AppealEmployment.appeal_employment2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
@@ -501,11 +588,13 @@ async def consultation_consumer(message: types.Message):
 async def consultation_consumer_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
         if not message.text:
+            data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
         else:
+            data['status'] = 'Позвоните мне'
             data['phone'] = message.text
+
         phone_checked = await phone_checker(data['phone'])
-        
         if phone_checked == 'ok':
             await AppealConsumer.appeal_consumer2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_keyboard_in_abort)
