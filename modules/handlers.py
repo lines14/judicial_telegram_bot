@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_recomendations, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_recomendations, feedback_keyboard, cooperation_keyboard, suggestion_keyboard, feedback_keyboard_abort, cooperation_keyboard_abort, suggestion_keyboard_abort
+from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_recomendations, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_recomendations, feedback_keyboard, cooperation_keyboard_in, cooperation_keyboard_in_abort, cooperation_keyboard_in_only_telegram, suggestion_keyboard, feedback_keyboard_abort, suggestion_keyboard_abort
 from modules.judicial_writer_1 import data_print
 from modules import data_base
 from modules.phone_processing import phone_checker
@@ -73,6 +73,7 @@ class AppealFeedback(StatesGroup):
 
 class AppealCooperation(StatesGroup):
     appeal_cooperation1 = State()
+    appeal_cooperation2 = State()
 
 class AppealSuggestion(StatesGroup):
     appeal_suggestion1 = State()
@@ -504,30 +505,6 @@ async def feedback_add_appeal(message: types.Message, state: FSMContext):
     await bot.send_message(chat_id = message.from_user.id, text='Благодарю! Я ценю вашу обратную связь', reply_markup=feedback_keyboard)
     await state.finish()
 
-# Меню сотрудничества
-
-async def cooperation(message: types.Message):
-    await AppealCooperation.appeal_cooperation1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Я всегда открыт для сотрудничества, и вы можете написать мне свои идеи или предложения ответным сообщением', reply_markup=cooperation_keyboard_abort)
-
-async def cooperation_add_appeal(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['status'] = ''
-        data['phone'] = ''
-        data['user_id'] = message.chat.id
-        if message.from_user.username == None:
-            data['nickname'] = ''
-        else:
-            data['nickname'] = message.from_user.username
-        data['fullname'] = message.from_user.full_name
-        data['section'] = 'Сотрудничество'
-        current_datetime = datetime.now()
-        data['datetime'] = str(current_datetime)[0:-7]
-        data['appeal'] = message.text
-    await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Я рассмотрю ваше предложение на тему сотрудничества и свяжусь с вами в самое ближайшее время', reply_markup=cooperation_keyboard)
-    await state.finish()
-
 # Меню предложений
 
 async def suggestion(message: types.Message):
@@ -551,6 +528,48 @@ async def suggestion_add_appeal(message: types.Message, state: FSMContext):
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
     await bot.send_message(chat_id = message.from_user.id, text='Ваше предложение принято, спасибо!', reply_markup=suggestion_keyboard)
+    await state.finish()
+
+# Меню сотрудничества
+
+async def cooperation(message: types.Message):
+    await AppealCooperation.appeal_cooperation1.set()
+    await bot.send_message(chat_id = message.from_user.id, text='Я всегда открыт для сотрудничества, и вы можете написать мне свои идеи или предложения')
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=cooperation_keyboard_in_only_telegram)
+
+async def cooperation_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+    async with state.proxy() as data:
+        if not message.text:
+            data['status'] = 'Свяжитесь со мной в Telegram'
+            data['phone'] = message.contact.phone_number
+            phone_checked = await phone_checker(data['phone'])
+        else:
+            data['status'] = 'Позвоните мне'
+            data['phone'] = message.text
+            phone_checked = await phone_checker(data['phone'])
+        
+        if phone_checked != 'fail':
+            data['phone'] = await phone_checker(data['phone'])
+            await AppealCooperation.appeal_cooperation2.set()
+            await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваше предложение ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=cooperation_keyboard_in_abort)
+        else:
+            await AppealCooperation.appeal_cooperation1.set()
+            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=cooperation_keyboard_in_only_telegram)
+
+async def cooperation_add_appeal(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
+        data['section'] = 'Сотрудничество'
+        current_datetime = datetime.now()
+        data['datetime'] = str(current_datetime)[0:-7]
+        data['appeal'] = message.text
+    await data_base.sql_add_appeal(state)
+    await bot.send_message(chat_id = message.from_user.id, text='Я рассмотрю ваше предложение на тему сотрудничества и свяжусь с вами в самое ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=cooperation_keyboard_in)
     await state.finish()
 
 # Обо мне
@@ -695,8 +714,6 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(about_me_start_command, text='Обо мне')
     dp.register_message_handler(feedback, text='Оставить отзыв или замечание', state=None)
     dp.register_message_handler(feedback_add_appeal, state=AppealFeedback.appeal_feedback1)
-    dp.register_message_handler(cooperation, text='Сотрудничество', state=None)
-    dp.register_message_handler(cooperation_add_appeal, state=AppealCooperation.appeal_cooperation1)
     dp.register_message_handler(suggestion, text='Предложить тему для публикации', state=None)
     dp.register_message_handler(suggestion_add_appeal, state=AppealSuggestion.appeal_suggestion1)
 
@@ -764,6 +781,12 @@ def register_handler_client(dp: Dispatcher):
     # dp.register_message_handler(about_me_telegram, text='Моя группа в Telegram')
     # dp.register_message_handler(about_me_instagram, text='Мой Instagram')
     # dp.register_message_handler(about_me_vk, text='Мой VK')
+
+    # Регистраторы меню сотрудничества
+
+    dp.register_message_handler(cooperation, text='Сотрудничество', state=None)
+    dp.register_message_handler(cooperation_phone_processing, content_types=['contact', 'text'], state=AppealCooperation.appeal_cooperation1)
+    dp.register_message_handler(cooperation_add_appeal, state=AppealCooperation.appeal_cooperation2)
 
     # Регистраторы генератора документов
 

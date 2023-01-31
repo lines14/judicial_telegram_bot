@@ -122,11 +122,14 @@ feedback_keyboard.add(b7)
 feedback_keyboard_abort = ReplyKeyboardMarkup(resize_keyboard=True)
 feedback_keyboard_abort.add(b8)
 
-cooperation_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-cooperation_keyboard.add(b7)
+cooperation_keyboard_in_only_telegram = ReplyKeyboardMarkup(resize_keyboard=True)
+cooperation_keyboard_in_only_telegram.add(b24).insert(b8)
 
-cooperation_keyboard_abort = ReplyKeyboardMarkup(resize_keyboard=True)
-cooperation_keyboard_abort.add(b8)
+cooperation_keyboard_in = ReplyKeyboardMarkup(resize_keyboard=True)
+cooperation_keyboard_in.add(b7)
+
+cooperation_keyboard_in_abort = ReplyKeyboardMarkup(resize_keyboard=True)
+cooperation_keyboard_in_abort.add(b8)
 
 suggestion_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 suggestion_keyboard.add(b7)
