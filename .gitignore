@@ -1,5 +1,6 @@
 .env
 documents/
+modules/.env
 modules/config.py
 modules/template.py
 practice/template_res.py

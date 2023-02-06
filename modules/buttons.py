@@ -31,7 +31,7 @@ b5 = KeyboardButton('Обо мне')
 b6 = KeyboardButton('Генератор судебных документов')
 b7 = KeyboardButton('Главное меню')
 b8 = KeyboardButton('В главное меню')
-b9 = KeyboardButton('Назад')
+# b9 = KeyboardButton('Назад')
 b10 = KeyboardButton('Вернуться назад')
 
 b11 = KeyboardButton('Создать')
@@ -123,7 +123,7 @@ feedback_keyboard_abort = ReplyKeyboardMarkup(resize_keyboard=True)
 feedback_keyboard_abort.add(b8)
 
 cooperation_keyboard_in_only_telegram = ReplyKeyboardMarkup(resize_keyboard=True)
-cooperation_keyboard_in_only_telegram.add(b24).insert(b8)
+cooperation_keyboard_in_only_telegram.add(b24).add(b8)
 
 cooperation_keyboard_in = ReplyKeyboardMarkup(resize_keyboard=True)
 cooperation_keyboard_in.add(b7)
@@ -148,15 +148,3 @@ cancel_generator_keyboard.add(b13)
 
 doc_generator_finish_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 doc_generator_finish_keyboard.add(b11).insert(b14).insert(b7)
-
-# Генератор клавиатур
-
-# # keyboard: Optional[List[List[KeyboardButton]]] = None
-# async def keyboard_generator(key_list):
-#     # key_list = ['1', '2', '3']
-#     tmp_buttons = []
-#     for i in key_list:
-#         tmp_buttons.append([KeyboardButton(i)])
-#     tmp_buttons.append([KeyboardButton('/cancel')])
-#     keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
-#     return keyboard
