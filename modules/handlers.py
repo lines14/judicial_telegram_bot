@@ -170,8 +170,8 @@ async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.
 
 async def start_inline_keyboard_callback_migration(message: types.Message):
     await InlineAppealMigration.inline_appeal_migration1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_phone_keeper)
-    await bot.send_message(chat_id = message.from_user.id, text='В следующем сообщении я попрошу вас написать ваш вопрос, а сразу после отправки вашего вопроса, вы получите от меня в подарок чек-лист "Переезд из России: деньги и документы"', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами.\n\nВ следующем сообщении я попрошу вас написать ваш вопрос, а сразу после отправки вашего вопроса, вы получите от меня в подарок чек-лист "Переезд из России: деньги и документы"', reply_markup=consultation_inline_keyboard_missclick)
 
 async def start_inline_keyboard_callback_migration_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:

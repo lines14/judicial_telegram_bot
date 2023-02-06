@@ -22,14 +22,14 @@ async def sql_add_appeal(state):
 
 async def sql_all_get_sorted_by_time_desc():
     key_list = []
-    response = cur.execute("SELECT section FROM bank_of_appeals WHERE section = 'Мобилизация' AND section = 'Миграция' AND section = 'Трудовые споры' AND section = 'Защита прав потребителей' ORDER BY datetime DESC;").fetchall()
+    response = cur.execute("SELECT section FROM bank_of_appeals WHERE section = 'Мобилизация' OR section = 'Миграция' OR section = 'Трудовые споры' OR section = 'Защита прав потребителей' ORDER BY datetime DESC;").fetchall()
     for i in response:
         key_list.append(str(*i))
     return key_list
 
 async def sql_all_get_sorted_by_time_asc():
     key_list = []
-    response = cur.execute("SELECT section FROM bank_of_appeals WHERE section = 'Мобилизация' AND section = 'Миграция' AND section = 'Трудовые споры' AND section = 'Защита прав потребителей' ORDER BY datetime;").fetchall()
+    response = cur.execute("SELECT section FROM bank_of_appeals WHERE section = 'Мобилизация' OR section = 'Миграция' OR section = 'Трудовые споры' OR section = 'Защита прав потребителей' ORDER BY datetime;").fetchall()
     for i in response:
         key_list.append(str(*i))
     return key_list
