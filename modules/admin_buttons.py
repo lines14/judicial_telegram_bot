@@ -2,7 +2,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMar
 
 a1 = KeyboardButton('Заявки на консультации')
 a2 = KeyboardButton('Предложения сотрудничества')
-a3 = KeyboardButton('Предложения тем для постов')
+a3 = KeyboardButton('Предложения тем для публикаций')
 a4 = KeyboardButton('Отзывы')
 a5 = KeyboardButton('Главное меню')
 a6 = KeyboardButton('Админ меню')

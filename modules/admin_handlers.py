@@ -27,6 +27,12 @@ class AdminCooperation(StatesGroup):
     admin_cooperation1 = State()
     admin_cooperation2 = State()
 
+class AdminSuggestion(StatesGroup):
+    admin_suggestion1 = State()
+
+class AdminFeedback(StatesGroup):
+    admin_feedback1 = State()
+
 async def start_admin_command(message: types.Message):
     if message.from_user.id == ADMIN:
         await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id) # chat_id = message.from_user.id
@@ -211,6 +217,26 @@ async def cooperation_get_sorted_by_time_asc(message: types.Message, state: FSMC
 
 
 
+async def admin_suggestion_get_sorted_by_time_desc(message: types.Message):
+    if message.from_user.id == ADMIN:
+        await AdminSuggestion.admin_suggestion1.set()
+        key_list = await data_base.sql_suggestion_get_sorted_by_time_desc()
+        await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 3))
+
+async def admin_feedback_get_sorted_by_time_desc(message: types.Message):
+    if message.from_user.id == ADMIN:
+        await AdminFeedback.admin_feedback1.set()
+        key_list = await data_base.sql_feedback_get_sorted_by_time_desc()
+        await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 3))
+
+
+
+
+
+
+
+
+
 
 
 
@@ -274,4 +300,8 @@ def register_handler_admin(dp: Dispatcher):
     dp.register_message_handler(admin_cooperation, text='Предложения сотрудничества', state=None)
     dp.register_callback_query_handler(cooperation_get_sorted_by_time_desc, text='cooperation_new', state=AdminCooperation.admin_cooperation1)
     dp.register_callback_query_handler(cooperation_get_sorted_by_time_asc, text='cooperation_old', state=AdminCooperation.admin_cooperation1)
+
+
+    dp.register_message_handler(admin_suggestion_get_sorted_by_time_desc, text='Предложения тем для публикаций', state=None)
+    dp.register_message_handler(admin_feedback_get_sorted_by_time_desc, text='Отзывы', state=None)
 
