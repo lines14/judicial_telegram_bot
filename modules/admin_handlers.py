@@ -116,10 +116,19 @@ async def back_to_admin_consultations_sections(message: types.Message, state: FS
         await AdminConsultations.admin_consultations2.set()
         await message.reply('Выберите тематику:', reply_markup=admin_menu_in_consultations_sections_keyboard)
 
-async def back_to_admin_consultations_sections_categories(message: types.Message, state: FSMContext):
+async def back_to_admin_consultations_sections_categories_or_query_delivery(message: types.Message, state: FSMContext):
     if message.from_user.id == ADMIN:
-        await AdminConsultations.admin_consultations2.set()
-        await message.reply('Выберите тематику:', reply_markup=admin_menu_in_consultations_sections_keyboard)
+        if message.text == '<<':
+            await AdminConsultations.admin_consultations2.set()
+            await message.reply('Выберите тематику:', reply_markup=admin_menu_in_consultations_sections_keyboard)
+        else:
+            if len(message.text) > 11 and message.text[11] == '|':
+                info = await data_base.sql_get_info(message.text)
+                generalize = f'Способ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
+                await bot.send_message(chat_id = message.from_user.id, text=generalize)
+            else:
+                await AdminConsultations.admin_consultations2.set()
+                await message.reply('Выберите тематику:', reply_markup=admin_menu_in_consultations_sections_keyboard)
 
 # Мобилизация
 
@@ -221,6 +230,20 @@ async def cooperation_get_sorted_by_time_asc(message: types.Message, state: FSMC
         key_list = await data_base.sql_cooperation_get_sorted_by_time_asc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 3))
 
+async def back_from_cooperation_to_admin_menu_or_query_delivery(message: types.Message, state: FSMContext):
+    if message.from_user.id == ADMIN:
+        if message.text == 'Админ меню':
+            await restart_command_for_all_FSM_admin_menu(message, state)
+            await message.reply('Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
+        else:
+            if len(message.text) > 11 and message.text[11] == '|':
+                info = await data_base.sql_get_info(message.text)
+                generalize = f'Способ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
+                await bot.send_message(chat_id = message.from_user.id, text=generalize)
+            else:
+                await restart_command_for_all_FSM_admin_menu(message, state)
+                await message.reply('Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
+
 # Меню предложений тем для публикаций и отзывов
 
 async def admin_suggestion_get_sorted_by_time_desc(message: types.Message):
@@ -234,6 +257,20 @@ async def admin_feedback_get_sorted_by_time_desc(message: types.Message):
         await AdminFeedback.admin_feedback1.set()
         key_list = await data_base.sql_feedback_get_sorted_by_time_desc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 3))
+
+async def back_from_suggestion_or_feedback_to_admin_menu_or_query_delivery(message: types.Message, state: FSMContext):
+    if message.from_user.id == ADMIN:
+        if message.text == 'Админ меню':
+            await restart_command_for_all_FSM_admin_menu(message, state)
+            await message.reply('Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
+        else:
+            if len(message.text) > 11 and message.text[11] == '|':
+                info = await data_base.sql_get_info(message.text)
+                generalize = f'Способ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
+                await bot.send_message(chat_id = message.from_user.id, text=generalize)
+            else:
+                await restart_command_for_all_FSM_admin_menu(message, state)
+                await message.reply('Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
 
 # Регистратура хэндлеров бота
 
@@ -254,7 +291,7 @@ def register_handler_admin(dp: Dispatcher):
     dp.register_message_handler(admin_consultations_sections, text='По тематике', state=AdminConsultations.admin_consultations1)
     dp.register_message_handler(forward_to_admin_consultations_sections_categories_or_back_to_admin_consultations_or_query_delivery, state=AdminConsultations.admin_consultations2)
     dp.register_message_handler(back_to_admin_consultations_sections, text='<<', state=AdminConsultations.admin_consultations3)
-    dp.register_message_handler(back_to_admin_consultations_sections_categories, text='<<', state=AdminConsultations.admin_consultations4)
+    dp.register_message_handler(back_to_admin_consultations_sections_categories_or_query_delivery, state=AdminConsultations.admin_consultations4)
 
     # Мобилизация
 
@@ -285,9 +322,12 @@ def register_handler_admin(dp: Dispatcher):
     dp.register_message_handler(admin_cooperation, text='Предложения сотрудничества', state=None)
     dp.register_callback_query_handler(cooperation_get_sorted_by_time_desc, text='cooperation_new', state=AdminCooperation.admin_cooperation1)
     dp.register_callback_query_handler(cooperation_get_sorted_by_time_asc, text='cooperation_old', state=AdminCooperation.admin_cooperation1)
+    dp.register_message_handler(back_from_cooperation_to_admin_menu_or_query_delivery, state=AdminCooperation.admin_cooperation2)
 
     # Регистраторы меню предложений тем для публикаций и отзывов
 
     dp.register_message_handler(admin_suggestion_get_sorted_by_time_desc, text='Предложения тем для публикаций', state=None)
+    dp.register_message_handler(back_from_suggestion_or_feedback_to_admin_menu_or_query_delivery, state=AdminSuggestion.admin_suggestion1)
     dp.register_message_handler(admin_feedback_get_sorted_by_time_desc, text='Отзывы', state=None)
+    dp.register_message_handler(back_from_suggestion_or_feedback_to_admin_menu_or_query_delivery, state=AdminFeedback.admin_feedback1)
 
