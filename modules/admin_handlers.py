@@ -6,7 +6,9 @@ from modules import data_base
 from modules.admin_buttons import admin_menu_keyboard, admin_menu_in_consultations_keyboard, admin_menu_in_consultations_sections_keyboard, admin_menu_in_consultations_mobilization_keyboard, admin_menu_in_consultations_migration_keyboard, admin_menu_in_consultations_employment_keyboard, admin_menu_in_consultations_consumer_keyboard, inline_admin_menu_in_consultations_mobilization_keyboard, inline_admin_menu_in_consultations_migration_keyboard, inline_admin_menu_in_consultations_employment_keyboard, inline_admin_menu_in_consultations_consumer_keyboard, admin_menu_in_cooperation_keyboard, inline_admin_menu_in_cooperation_keyboard
 from modules.buttons import main_menu_keyboard
 from modules.admin_buttons import keyboard_generator
-from modules.token import ADMIN
+from modules.token import ID
+
+ADMIN = ID
 
 # Машины состояний бота
 
@@ -30,15 +32,18 @@ class AdminFeedback(StatesGroup):
 # Меню администратора
 
 async def start_admin_command(message: types.Message):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id) # chat_id = message.from_user.id
         await bot.send_message(chat_id = message.from_user.id, text='Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
 
 async def restart_command(message: types.Message):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await bot.send_message(chat_id = message.from_user.id, text='Выберите то, что вас интересует:', reply_markup=main_menu_keyboard)
 
 async def restart_command_for_all_FSM_admin_menu(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         current_state = await state.get_state()
         if current_state is None:
@@ -47,6 +52,7 @@ async def restart_command_for_all_FSM_admin_menu(message: types.Message, state: 
         await message.reply('Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
 
 async def restart_command_for_all_FSM_main_menu(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         current_state = await state.get_state()
         if current_state is None:
@@ -57,28 +63,33 @@ async def restart_command_for_all_FSM_main_menu(message: types.Message, state: F
 # Меню заявок на консультации
 
 async def admin_consultations(message: types.Message):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.admin_consultations1.set()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите способ сортировки:', reply_markup=admin_menu_in_consultations_keyboard)
 
 async def all_get_sorted_by_time_desc(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         key_list = await data_base.sql_all_get_sorted_by_time_desc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 1))
 
 async def all_get_sorted_by_time_asc(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         key_list = await data_base.sql_all_get_sorted_by_time_asc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 1))
 
 async def admin_consultations_sections(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите тематику:', reply_markup=admin_menu_in_consultations_sections_keyboard)
 
 async def forward_to_admin_consultations_sections_categories_or_back_to_admin_consultations_or_query_delivery(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         if message.text == '<<<':
             await AdminConsultations.admin_consultations1.set()
@@ -105,11 +116,13 @@ async def forward_to_admin_consultations_sections_categories_or_back_to_admin_co
                 await message.reply('Выберите способ сортировки:', reply_markup=admin_menu_in_consultations_keyboard)
 
 async def back_to_admin_consultations_sections(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.admin_consultations2.set()
         await message.reply('Выберите тематику:', reply_markup=admin_menu_in_consultations_sections_keyboard)
 
 async def back_to_admin_consultations_sections_categories_or_query_delivery(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         if message.text == '<<':
             await AdminConsultations.admin_consultations2.set()
@@ -126,18 +139,21 @@ async def back_to_admin_consultations_sections_categories_or_query_delivery(mess
 # Мобилизация
 
 async def admin_consultations_mobilization(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_consultations_mobilization_keyboard)
         await bot.send_message(chat_id = message.from_user.id, text='Выберите способ сортировки:', reply_markup=inline_admin_menu_in_consultations_mobilization_keyboard)
 
 async def mobilization_get_sorted_by_time_desc(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         key_list = await data_base.sql_mobilization_get_sorted_by_time_desc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 2))
 
 async def mobilization_get_sorted_by_time_asc(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         key_list = await data_base.sql_mobilization_get_sorted_by_time_asc()
@@ -146,18 +162,21 @@ async def mobilization_get_sorted_by_time_asc(message: types.Message, state: FSM
 # Миграция
 
 async def admin_consultations_migration(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_consultations_migration_keyboard)
         await bot.send_message(chat_id = message.from_user.id, text='Выберите способ сортировки:', reply_markup=inline_admin_menu_in_consultations_migration_keyboard)
 
 async def migration_get_sorted_by_time_desc(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         key_list = await data_base.sql_migration_get_sorted_by_time_desc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 2))
 
 async def migration_get_sorted_by_time_asc(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         key_list = await data_base.sql_migration_get_sorted_by_time_asc()
@@ -166,18 +185,21 @@ async def migration_get_sorted_by_time_asc(message: types.Message, state: FSMCon
 # Трудовые споры
 
 async def admin_consultations_employment(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_consultations_employment_keyboard)
         await bot.send_message(chat_id = message.from_user.id, text='Выберите способ сортировки:', reply_markup=inline_admin_menu_in_consultations_employment_keyboard)
 
 async def employment_get_sorted_by_time_desc(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         key_list = await data_base.sql_employment_get_sorted_by_time_desc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 2))
 
 async def employment_get_sorted_by_time_asc(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         key_list = await data_base.sql_employment_get_sorted_by_time_asc()
@@ -186,18 +208,21 @@ async def employment_get_sorted_by_time_asc(message: types.Message, state: FSMCo
 # Защита прав потребителей
 
 async def admin_consultations_consumer(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_consultations_consumer_keyboard)
         await bot.send_message(chat_id = message.from_user.id, text='Выберите способ сортировки:', reply_markup=inline_admin_menu_in_consultations_consumer_keyboard)
 
 async def consumer_get_sorted_by_time_desc(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         key_list = await data_base.sql_consumer_get_sorted_by_time_desc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 2))
 
 async def consumer_get_sorted_by_time_asc(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         key_list = await data_base.sql_consumer_get_sorted_by_time_asc()
@@ -206,24 +231,28 @@ async def consumer_get_sorted_by_time_asc(message: types.Message, state: FSMCont
 # Меню сотрудничества
 
 async def admin_cooperation(message: types.Message):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminCooperation.admin_cooperation1.set()
         await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_cooperation_keyboard)
         await bot.send_message(chat_id = message.from_user.id, text='Выберите способ сортировки:', reply_markup=inline_admin_menu_in_cooperation_keyboard)
 
 async def cooperation_get_sorted_by_time_desc(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminCooperation.next()
         key_list = await data_base.sql_cooperation_get_sorted_by_time_desc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 3))
 
 async def cooperation_get_sorted_by_time_asc(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminCooperation.next()
         key_list = await data_base.sql_cooperation_get_sorted_by_time_asc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 3))
 
 async def back_from_cooperation_to_admin_menu_or_query_delivery(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         if message.text == 'Админ меню':
             await restart_command_for_all_FSM_admin_menu(message, state)
@@ -240,18 +269,21 @@ async def back_from_cooperation_to_admin_menu_or_query_delivery(message: types.M
 # Меню предложений тем для публикаций и отзывов
 
 async def admin_suggestion_get_sorted_by_time_desc(message: types.Message):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminSuggestion.admin_suggestion1.set()
         key_list = await data_base.sql_suggestion_get_sorted_by_time_desc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 3))
 
 async def admin_feedback_get_sorted_by_time_desc(message: types.Message):
+    global ADMIN
     if message.from_user.id == ADMIN:
         await AdminFeedback.admin_feedback1.set()
         key_list = await data_base.sql_feedback_get_sorted_by_time_desc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 3))
 
 async def back_from_suggestion_or_feedback_to_admin_menu_or_query_delivery(message: types.Message, state: FSMContext):
+    global ADMIN
     if message.from_user.id == ADMIN:
         if message.text == 'Админ меню':
             await restart_command_for_all_FSM_admin_menu(message, state)
