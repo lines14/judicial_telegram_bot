@@ -6,14 +6,7 @@ from modules import data_base
 from modules.admin_buttons import admin_menu_keyboard, admin_menu_in_consultations_keyboard, admin_menu_in_consultations_sections_keyboard, admin_menu_in_consultations_mobilization_keyboard, admin_menu_in_consultations_migration_keyboard, admin_menu_in_consultations_employment_keyboard, admin_menu_in_consultations_consumer_keyboard, inline_admin_menu_in_consultations_mobilization_keyboard, inline_admin_menu_in_consultations_migration_keyboard, inline_admin_menu_in_consultations_employment_keyboard, inline_admin_menu_in_consultations_consumer_keyboard, admin_menu_in_cooperation_keyboard, inline_admin_menu_in_cooperation_keyboard
 from modules.buttons import main_menu_keyboard
 from modules.admin_buttons import keyboard_generator
-import os
-import dotenv
-
-# loading created .env file from Python PATH with login variables:
-dotenv.load_dotenv()
-
-# get() в случае отсутствия входящих данных выводит None вместо ошибки:
-ADMIN = int(os.environ.get('ADMIN'))
+from modules.token import ADMIN
 
 # Машины состояний бота
 

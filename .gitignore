@@ -1,4 +1,4 @@
-.env
+modules/token.py
 documents/
 modules/.env
 modules/config.py
