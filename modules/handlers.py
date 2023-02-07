@@ -119,7 +119,7 @@ async def restart_inline_keyboard_callback_pick(message: types.Message, state: F
 
 async def recomendations_after_inline(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже')
-    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/480', reply_markup=consultation_keyboard_in_after_inline_recomendations)
+    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/1087', reply_markup=consultation_keyboard_in_after_inline_recomendations)
 
 # Мобилизация
 
@@ -319,7 +319,7 @@ async def consultation_back_for_consultation_FSM(message: types.Message, state: 
 
 async def recomendations_after(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже')
-    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/480', reply_markup=consultation_keyboard_in_after_recomendations)
+    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/1087', reply_markup=consultation_keyboard_in_after_recomendations)
 
 # Мобилизация
 
@@ -515,7 +515,7 @@ async def feedback_add_appeal(message: types.Message, state: FSMContext):
 async def suggestion(message: types.Message):
     await AppealSuggestion.appeal_suggestion1.set()
     await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на юридические темы, используя хэштеги по ссылке ниже, и если они пока-что не затронули сферу ваших интересов, можете обратиться ко мне за индивидуальной консультацией из главного меню или предложить тему для нового поста ответным сообщением ниже', reply_markup=suggestion_keyboard_abort)
-    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/480')
+    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/1087')
 
 async def suggestion_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
