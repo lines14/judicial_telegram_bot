@@ -80,46 +80,36 @@ async def all_get_sorted_by_time_asc(message: types.Message, state: FSMContext):
         key_list = await data_base.sql_all_get_sorted_by_time_asc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 1))
 
-async def back_to_admin_consultations_and_query_delivery(message: types.Message, state: FSMContext):
-    if message.from_user.id == ADMIN:
-        if message.text == '<<<' or message.text == '/start':
-            await AdminConsultations.admin_consultations1.set()
-            await message.reply('Выберите способ сортировки:', reply_markup=admin_menu_in_consultations_keyboard)
-        else:
-            info = await data_base.sql_get_info(message.text)
-            generalize = f'Способ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
-            await bot.send_message(chat_id = message.from_user.id, text=generalize)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 async def admin_consultations_sections(message: types.Message, state: FSMContext):
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите тематику:', reply_markup=admin_menu_in_consultations_sections_keyboard)
+
+async def forward_to_admin_consultations_sections_categories_or_back_to_admin_consultations_or_query_delivery(message: types.Message, state: FSMContext):
+    if message.from_user.id == ADMIN:
+        if message.text == '<<<':
+            await AdminConsultations.admin_consultations1.set()
+            await message.reply('Выберите способ сортировки:', reply_markup=admin_menu_in_consultations_keyboard)
+        elif message.text == 'Мобилизация':
+            await admin_consultations_mobilization(message, state)
+        elif message.text == 'Миграция':
+            await admin_consultations_migration(message, state)
+        elif message.text == 'Трудовые споры':
+            await admin_consultations_employment(message, state)
+        elif message.text == 'Защита прав потребителей':
+            await admin_consultations_consumer(message, state)
+        elif message.text == 'Админ меню':
+            await restart_command_for_all_FSM_admin_menu(message, state)
+        elif message.text == 'Главное меню':
+            await restart_command_for_all_FSM_main_menu(message, state)
+        else:
+            if len(message.text) > 11 and message.text[11] == '|':
+                info = await data_base.sql_get_info(message.text)
+                generalize = f'Способ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
+                await bot.send_message(chat_id = message.from_user.id, text=generalize)
+            else:
+                await AdminConsultations.admin_consultations1.set()
+                await message.reply('Выберите способ сортировки:', reply_markup=admin_menu_in_consultations_keyboard)
 
 async def back_to_admin_consultations_sections(message: types.Message, state: FSMContext):
     if message.from_user.id == ADMIN:
@@ -261,17 +251,8 @@ def register_handler_admin(dp: Dispatcher):
     dp.register_message_handler(admin_consultations, text='Заявки на консультации', state=None)
     dp.register_message_handler(all_get_sorted_by_time_desc, text='Самые новые', state=AdminConsultations.admin_consultations1)
     dp.register_message_handler(all_get_sorted_by_time_asc, text='Долго ждут', state=AdminConsultations.admin_consultations1)
-    dp.register_message_handler(back_to_admin_consultations_and_query_delivery, state=AdminConsultations.admin_consultations2)
-
-
-
-
-
-
-
-
-
     dp.register_message_handler(admin_consultations_sections, text='По тематике', state=AdminConsultations.admin_consultations1)
+    dp.register_message_handler(forward_to_admin_consultations_sections_categories_or_back_to_admin_consultations_or_query_delivery, state=AdminConsultations.admin_consultations2)
     dp.register_message_handler(back_to_admin_consultations_sections, text='<<', state=AdminConsultations.admin_consultations3)
     dp.register_message_handler(back_to_admin_consultations_sections_categories, text='<<', state=AdminConsultations.admin_consultations4)
 

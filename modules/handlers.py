@@ -713,7 +713,7 @@ def register_handler_client(dp: Dispatcher):
     dp.register_callback_query_handler(restart_command_inline, text=['To main menu', 'Thank you'])
     dp.register_message_handler(recomendations_after, text=['Хочу почитать посты на тему мобилизации', 'Хочу почитать посты на тему миграции', 'Хочу почитать посты на тему трудовых споров', 'Хочу почитать посты на тему защиты прав потребителей'])
     dp.register_callback_query_handler(recomendations_after_inline, text=['Read mobilization', 'Read migration', 'Read employment', 'Read consumer'])
-    dp.register_message_handler(restart_command_for_all_FSM, state='*', text='В главное меню')
+    dp.register_message_handler(restart_command_for_all_FSM, state='*', text=['В главное меню', '/start'])
     dp.register_message_handler(consultation_start_command, text='Получить консультацию')
     # dp.register_message_handler(generator_start_command, text='Генератор судебных документов')
     dp.register_message_handler(about_me_start_command, text='Обо мне')
