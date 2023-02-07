@@ -18,158 +18,187 @@ async def sql_add_appeal(state):
         cur.execute("INSERT INTO bank_of_appeals VALUES (?, ?, ?, ?, ?, ?, ?, ?)", tuple(data.values()))
         base.commit()       
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Чтение обращений из базы данных
 
 async def sql_all_get_sorted_by_time_desc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Мобилизация' OR section = 'Миграция' OR section = 'Трудовые споры' OR section = 'Защита прав потребителей' ORDER BY datetime DESC;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
 
 async def sql_all_get_sorted_by_time_asc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Мобилизация' OR section = 'Миграция' OR section = 'Трудовые споры' OR section = 'Защита прав потребителей' ORDER BY datetime;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
 
 async def sql_mobilization_get_sorted_by_time_desc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Мобилизация' ORDER BY datetime DESC;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
 
 async def sql_mobilization_get_sorted_by_time_asc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Мобилизация' ORDER BY datetime;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
 
 async def sql_migration_get_sorted_by_time_desc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Миграция' ORDER BY datetime DESC;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
 
 async def sql_migration_get_sorted_by_time_asc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Миграция' ORDER BY datetime;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
 
 async def sql_employment_get_sorted_by_time_desc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Трудовые споры' ORDER BY datetime DESC;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
 
 async def sql_employment_get_sorted_by_time_asc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Трудовые споры' ORDER BY datetime;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
 
 async def sql_consumer_get_sorted_by_time_desc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Защита прав потребителей' ORDER BY datetime DESC;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
 
 async def sql_consumer_get_sorted_by_time_asc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Защита прав потребителей' ORDER BY datetime;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
 
 async def sql_cooperation_get_sorted_by_time_desc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Сотрудничество' ORDER BY datetime DESC;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
 
 async def sql_cooperation_get_sorted_by_time_asc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Сотрудничество' ORDER BY datetime;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
 
 async def sql_suggestion_get_sorted_by_time_desc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Предложения тем для публикаций' ORDER BY datetime DESC;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
 
 async def sql_feedback_get_sorted_by_time_desc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Отзывы' ORDER BY datetime DESC;").fetchall()
     for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
         b = a.split('-')
         b.reverse()
-        c = '-'.join(b)
-        key_list.append(c+' '+i[1])
+        c = '.'.join(b)
+        key_list.append(c+' | '+j+' | '+i[1])
     return key_list
