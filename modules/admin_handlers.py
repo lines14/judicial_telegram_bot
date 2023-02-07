@@ -82,7 +82,7 @@ async def all_get_sorted_by_time_asc(message: types.Message, state: FSMContext):
 
 async def back_to_admin_consultations_and_query_delivery(message: types.Message, state: FSMContext):
     if message.from_user.id == ADMIN:
-        if message.text == '<<<':
+        if message.text == '<<<' or message.text == '/start':
             await AdminConsultations.admin_consultations1.set()
             await message.reply('Выберите способ сортировки:', reply_markup=admin_menu_in_consultations_keyboard)
         else:
