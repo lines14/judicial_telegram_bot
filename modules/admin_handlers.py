@@ -33,6 +33,9 @@ class AdminSuggestion(StatesGroup):
 class AdminFeedback(StatesGroup):
     admin_feedback1 = State()
 
+# Хэндлеры бота
+# Меню администратора
+
 async def start_admin_command(message: types.Message):
     if message.from_user.id == ADMIN:
         await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id) # chat_id = message.from_user.id
@@ -43,26 +46,22 @@ async def restart_command(message: types.Message):
         await bot.send_message(chat_id = message.from_user.id, text='Выберите то, что вас интересует:', reply_markup=main_menu_keyboard)
 
 async def restart_command_for_all_FSM_admin_menu(message: types.Message, state: FSMContext):
-    current_state = await state.get_state()
-    if current_state is None:
-        return
-    await state.finish()
-    await message.reply('Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
+    if message.from_user.id == ADMIN:
+        current_state = await state.get_state()
+        if current_state is None:
+            return
+        await state.finish()
+        await message.reply('Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
 
 async def restart_command_for_all_FSM_main_menu(message: types.Message, state: FSMContext):
-    current_state = await state.get_state()
-    if current_state is None:
-        return
-    await state.finish()
-    await message.reply('Выберите то, что вас интересует:', reply_markup=main_menu_keyboard)
+    if message.from_user.id == ADMIN:
+        current_state = await state.get_state()
+        if current_state is None:
+            return
+        await state.finish()
+        await message.reply('Выберите то, что вас интересует:', reply_markup=main_menu_keyboard)
 
-
-
-
-
-
-
-
+# Меню заявок на консультации
 
 async def admin_consultations(message: types.Message):
     if message.from_user.id == ADMIN:
@@ -81,10 +80,40 @@ async def all_get_sorted_by_time_asc(message: types.Message, state: FSMContext):
         key_list = await data_base.sql_all_get_sorted_by_time_asc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 1))
 
-async def back_to_admin_consultations(message: types.Message, state: FSMContext):
+async def back_to_admin_consultations_and_query_delivery(message: types.Message, state: FSMContext):
     if message.from_user.id == ADMIN:
-        await AdminConsultations.admin_consultations1.set()
-        await message.reply('Выберите способ сортировки:', reply_markup=admin_menu_in_consultations_keyboard)
+        if message.text == '<<<':
+            await AdminConsultations.admin_consultations1.set()
+            await message.reply('Выберите способ сортировки:', reply_markup=admin_menu_in_consultations_keyboard)
+        else:
+            info = await data_base.sql_get_info(message.text)
+            await bot.send_message(chat_id = message.from_user.id, text=info)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 async def admin_consultations_sections(message: types.Message, state: FSMContext):
     if message.from_user.id == ADMIN:
@@ -96,17 +125,12 @@ async def back_to_admin_consultations_sections(message: types.Message, state: FS
         await AdminConsultations.admin_consultations2.set()
         await message.reply('Выберите тематику:', reply_markup=admin_menu_in_consultations_sections_keyboard)
 
+async def back_to_admin_consultations_sections_categories(message: types.Message, state: FSMContext):
+    if message.from_user.id == ADMIN:
+        await AdminConsultations.admin_consultations2.set()
+        await message.reply('Выберите тематику:', reply_markup=admin_menu_in_consultations_sections_keyboard)
 
-
-
-
-
-
-
-
-
-
-
+# Мобилизация
 
 async def admin_consultations_mobilization(message: types.Message, state: FSMContext):
     if message.from_user.id == ADMIN:
@@ -126,6 +150,8 @@ async def mobilization_get_sorted_by_time_asc(message: types.Message, state: FSM
         key_list = await data_base.sql_mobilization_get_sorted_by_time_asc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 2))
 
+# Миграция
+
 async def admin_consultations_migration(message: types.Message, state: FSMContext):
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
@@ -143,6 +169,8 @@ async def migration_get_sorted_by_time_asc(message: types.Message, state: FSMCon
         await AdminConsultations.next()
         key_list = await data_base.sql_migration_get_sorted_by_time_asc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 2))
+
+# Трудовые споры
 
 async def admin_consultations_employment(message: types.Message, state: FSMContext):
     if message.from_user.id == ADMIN:
@@ -162,6 +190,8 @@ async def employment_get_sorted_by_time_asc(message: types.Message, state: FSMCo
         key_list = await data_base.sql_employment_get_sorted_by_time_asc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 2))
 
+# Защита прав потребителей
+
 async def admin_consultations_consumer(message: types.Message, state: FSMContext):
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
@@ -180,16 +210,7 @@ async def consumer_get_sorted_by_time_asc(message: types.Message, state: FSMCont
         key_list = await data_base.sql_consumer_get_sorted_by_time_asc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 2))
 
-async def back_to_admin_consultations_sections_categories(message: types.Message, state: FSMContext):
-    if message.from_user.id == ADMIN:
-        await AdminConsultations.admin_consultations2.set()
-        await message.reply('Выберите тематику:', reply_markup=admin_menu_in_consultations_sections_keyboard)
-
-
-
-
-
-
+# Меню сотрудничества
 
 async def admin_cooperation(message: types.Message):
     if message.from_user.id == ADMIN:
@@ -209,13 +230,7 @@ async def cooperation_get_sorted_by_time_asc(message: types.Message, state: FSMC
         key_list = await data_base.sql_cooperation_get_sorted_by_time_asc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 3))
 
-
-
-
-
-
-
-
+# Меню предложений тем для публикаций и отзывов
 
 async def admin_suggestion_get_sorted_by_time_desc(message: types.Message):
     if message.from_user.id == ADMIN:
@@ -229,78 +244,67 @@ async def admin_feedback_get_sorted_by_time_desc(message: types.Message):
         key_list = await data_base.sql_feedback_get_sorted_by_time_desc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 3))
 
-
-
-
-
-
-
-
-
-
-
-
+# Регистратура хэндлеров бота
 
 def register_handler_admin(dp: Dispatcher):
+
+    # Регистраторы меню администратора
+
     dp.register_message_handler(start_admin_command, commands=['1959'])
     dp.register_message_handler(restart_command, text='Главное меню')
     dp.register_message_handler(restart_command_for_all_FSM_admin_menu, state='*', text='Админ меню') # is_chat_admin = True
     dp.register_message_handler(restart_command_for_all_FSM_main_menu, state='*', text='Главное меню') # is_chat_admin = True
 
-
-
-
+    # Регистраторы меню заявок на консультации
 
     dp.register_message_handler(admin_consultations, text='Заявки на консультации', state=None)
     dp.register_message_handler(all_get_sorted_by_time_desc, text='Самые новые', state=AdminConsultations.admin_consultations1)
     dp.register_message_handler(all_get_sorted_by_time_asc, text='Долго ждут', state=AdminConsultations.admin_consultations1)
-    dp.register_message_handler(back_to_admin_consultations, text='<<<', state=AdminConsultations.admin_consultations2)
+    dp.register_message_handler(back_to_admin_consultations_and_query_delivery, state=AdminConsultations.admin_consultations2)
+
+
+
+
+
+
+
+
+
     dp.register_message_handler(admin_consultations_sections, text='По тематике', state=AdminConsultations.admin_consultations1)
     dp.register_message_handler(back_to_admin_consultations_sections, text='<<', state=AdminConsultations.admin_consultations3)
+    dp.register_message_handler(back_to_admin_consultations_sections_categories, text='<<', state=AdminConsultations.admin_consultations4)
 
-
-
-
-
+    # Мобилизация
 
     dp.register_message_handler(admin_consultations_mobilization, text='Мобилизация', state=AdminConsultations.admin_consultations2)
     dp.register_callback_query_handler(mobilization_get_sorted_by_time_desc, text='mobilization_new', state=AdminConsultations.admin_consultations3)
     dp.register_callback_query_handler(mobilization_get_sorted_by_time_asc, text='mobilization_old', state=AdminConsultations.admin_consultations3)
 
-
-
+    # Миграция
 
     dp.register_message_handler(admin_consultations_migration, text='Миграция', state=AdminConsultations.admin_consultations2)
     dp.register_callback_query_handler(migration_get_sorted_by_time_desc, text='migration_new', state=AdminConsultations.admin_consultations3)
     dp.register_callback_query_handler(migration_get_sorted_by_time_asc, text='migration_old', state=AdminConsultations.admin_consultations3)
 
-
-
+    # Трудовые споры
 
     dp.register_message_handler(admin_consultations_employment, text='Трудовые споры', state=AdminConsultations.admin_consultations2)
     dp.register_callback_query_handler(employment_get_sorted_by_time_desc, text='employment_new', state=AdminConsultations.admin_consultations3)
     dp.register_callback_query_handler(employment_get_sorted_by_time_asc, text='employment_old', state=AdminConsultations.admin_consultations3)
 
-
-
-
-
+    # Защита прав потребителей
 
     dp.register_message_handler(admin_consultations_consumer, text='Защита прав потребителей', state=AdminConsultations.admin_consultations2)
     dp.register_callback_query_handler(consumer_get_sorted_by_time_desc, text='consumer_new', state=AdminConsultations.admin_consultations3)
     dp.register_callback_query_handler(consumer_get_sorted_by_time_asc, text='consumer_old', state=AdminConsultations.admin_consultations3)
 
-    dp.register_message_handler(back_to_admin_consultations_sections_categories, text='<<', state=AdminConsultations.admin_consultations4)
-
-
-
-
-
+    # Регистраторы меню сотрудничества
 
     dp.register_message_handler(admin_cooperation, text='Предложения сотрудничества', state=None)
     dp.register_callback_query_handler(cooperation_get_sorted_by_time_desc, text='cooperation_new', state=AdminCooperation.admin_cooperation1)
     dp.register_callback_query_handler(cooperation_get_sorted_by_time_asc, text='cooperation_old', state=AdminCooperation.admin_cooperation1)
 
+    # Регистраторы меню предложений тем для публикаций и отзывов
 
     dp.register_message_handler(admin_suggestion_get_sorted_by_time_desc, text='Предложения тем для публикаций', state=None)
     dp.register_message_handler(admin_feedback_get_sorted_by_time_desc, text='Отзывы', state=None)

@@ -202,3 +202,11 @@ async def sql_feedback_get_sorted_by_time_desc():
         c = '.'.join(b)
         key_list.append(c+' | '+j+' | '+i[1])
     return key_list
+
+async def sql_get_info(inbound_key):
+    splitted_key = inbound_key.split(' | ')
+    splitted_substr = splitted_key[0].split('.')
+    splitted_substr.reverse()
+    outbound_key = '-'.join(splitted_substr)+' '+splitted_key[1]
+    response = cur.execute(f"SELECT status, phone, nickname, fullname, appeal FROM bank_of_appeals WHERE datetime = '{outbound_key}';").fetchall()
+    return response
