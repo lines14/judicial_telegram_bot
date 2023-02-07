@@ -89,3 +89,17 @@ async def sql_consumer_get_sorted_by_time_asc():
     for i in response:
         key_list.append(str(*i))
     return key_list
+
+async def sql_cooperation_get_sorted_by_time_desc():
+    key_list = []
+    response = cur.execute("SELECT section FROM bank_of_appeals WHERE section = 'Сотрудничество' ORDER BY datetime DESC;").fetchall()
+    for i in response:
+        key_list.append(str(*i))
+    return key_list
+
+async def sql_cooperation_get_sorted_by_time_asc():
+    key_list = []
+    response = cur.execute("SELECT section FROM bank_of_appeals WHERE section = 'Сотрудничество' ORDER BY datetime;").fetchall()
+    for i in response:
+        key_list.append(str(*i))
+    return key_list
