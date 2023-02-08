@@ -7,7 +7,7 @@ def sql_start():
     cur = base.cursor()
     if base:
         print('[ОК] - База данных подключена!')
-    base.execute("CREATE TABLE IF NOT EXISTS bank_of_appeals(status TEXT, phone TEXT, user_id TEXT, nickname TEXT, fullname TEXT, section TEXT, datetime TEXT, appeal TEXT)")
+    base.execute("CREATE TABLE IF NOT EXISTS bank_of_appeals(user_id TEXT, nickname TEXT, fullname TEXT, section TEXT, datetime TEXT, appeal TEXT, status TEXT, phone TEXT)")
     base.commit()
 
 # Добавление обращения в базу данных
@@ -17,21 +17,6 @@ async def sql_add_appeal(state):
         print(tuple(data.values()))
         cur.execute("INSERT INTO bank_of_appeals VALUES (?, ?, ?, ?, ?, ?, ?, ?)", tuple(data.values()))
         base.commit()       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Чтение обращений из базы данных
 

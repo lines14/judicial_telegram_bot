@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_recomendations, cooperation_keyboard_in_only_telegram, to_the_main_menu_keyboard
+from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_missclick_markup, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_recomendations, cooperation_keyboard_in_only_telegram, to_the_main_menu_keyboard
 from modules.judicial_writer_1 import data_print
 from modules import data_base
 from modules.phone_processing import phone_checker
@@ -35,6 +35,7 @@ class DocGenerator(StatesGroup):
 class InlineAppealMobilization(StatesGroup):
     inline_appeal_mobilization1 = State()
     inline_appeal_mobilization2 = State()
+    inline_appeal_mobilization3 = State()
 
 class InlineAppealMigration(StatesGroup):
     inline_appeal_migration1 = State()
@@ -108,7 +109,18 @@ async def restart_command_for_all_FSM(message: types.Message, state: FSMContext)
 async def start_inline_keyboard_callback_pick(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
 
-async def restart_inline_keyboard_callback_pick(message: types.Message, state: FSMContext):
+async def restart_inline_keyboard_callback_pick_without_delete_markup(message: types.Message, state: FSMContext):
+    current_state = await state.get_state()
+    if current_state is None:
+        return
+    await state.finish()
+    await bot.send_message(chat_id = message.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
+
+async def recomendations_after_inline(message: types.Message):
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже')
+    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/1087', reply_markup=consultation_keyboard_in_after_inline_recomendations)
+
+async def restart_inline_keyboard_callback_pick_delete_markup(message: types.Message, state: FSMContext):
     current_state = await state.get_state()
     if current_state is None:
         return
@@ -125,30 +137,7 @@ async def recomendations_after_inline(message: types.Message):
 
 async def start_inline_keyboard_callback_mobilization(message: types.Message):
     await InlineAppealMobilization.inline_appeal_mobilization1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_missclick)
-
-async def start_inline_keyboard_callback_mobilization_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
-    async with state.proxy() as data:
-        if not message.text:
-            data['status'] = 'Свяжитесь со мной в Telegram'
-            data['phone'] = message.contact.phone_number
-            phone_checked = await phone_checker(data['phone'])
-        else:
-            data['status'] = 'Позвоните мне'
-            data['phone'] = message.text
-            phone_checked = await phone_checker(data['phone'])
-        
-        if phone_checked != 'fail':
-            data['phone'] = await phone_checker(data['phone'])
-            await InlineAppealMobilization.inline_appeal_mobilization2.set()
-            msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
-            await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
-            await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
-        else:
-            await InlineAppealMobilization.inline_appeal_mobilization1.set()
-            await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
-            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
 
 async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -162,38 +151,39 @@ async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
-    await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_mobilization)
-    await state.finish()
-
-# Миграция
-
-async def start_inline_keyboard_callback_migration(message: types.Message):
-    await InlineAppealMigration.inline_appeal_migration1.set()
+    await InlineAppealMobilization.next()
     await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами.\n\nВ следующем сообщении я попрошу вас написать ваш вопрос, а сразу после отправки вашего вопроса, вы получите от меня в подарок чек-лист "Переезд из России: деньги и документы"', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_missclick_markup)
 
-async def start_inline_keyboard_callback_migration_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+async def start_inline_keyboard_callback_mobilization_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
         if not message.text:
             data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
             phone_checked = await phone_checker(data['phone'])
+            data['phone'] = await phone_checker(data['phone'])
         else:
             data['status'] = 'Позвоните мне'
             data['phone'] = message.text
             phone_checked = await phone_checker(data['phone'])
-        
-        if phone_checked != 'fail':
             data['phone'] = await phone_checker(data['phone'])
-            await InlineAppealMigration.inline_appeal_migration2.set()
-            msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
-            await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
-            await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
-        else:
-            await InlineAppealMigration.inline_appeal_migration1.set()
-            await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
-            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick)
+        
+    if phone_checked != 'fail':
+        await data_base.sql_add_appeal(state)
+        msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
+        await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
+        await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_mobilization)
+        await state.finish()
+    else:
+        await InlineAppealMobilization.inline_appeal_mobilization2.set()
+        await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
+        await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick_markup)
+
+# Миграция
+
+async def start_inline_keyboard_callback_migration(message: types.Message):
+    await InlineAppealMigration.inline_appeal_migration1.set()
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время.\n\nВ следующем сообщении я попрошу вас оставить контакты, а сразу после вы получите от меня в подарок чек-лист "Переезд из России: деньги и документы"', reply_markup=consultation_inline_keyboard_missclick)
 
 async def start_inline_keyboard_callback_migration_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -207,39 +197,40 @@ async def start_inline_keyboard_callback_migration_add_appeal(message: types.Mes
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
-    await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_migration)
-    await bot.send_message(chat_id = message.from_user.id, text='Помимо этого, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
-    await state.finish()
-
-# Трудовые споры
-
-async def start_inline_keyboard_callback_employment(message: types.Message):
-    await InlineAppealEmployment.inline_appeal_employment1.set()
+    await InlineAppealMigration.next()
     await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_missclick_markup)
 
-async def start_inline_keyboard_callback_employment_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+async def start_inline_keyboard_callback_migration_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
         if not message.text:
             data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
             phone_checked = await phone_checker(data['phone'])
+            data['phone'] = await phone_checker(data['phone'])
         else:
             data['status'] = 'Позвоните мне'
             data['phone'] = message.text
             phone_checked = await phone_checker(data['phone'])
-        
-        if phone_checked != 'fail':
             data['phone'] = await phone_checker(data['phone'])
-            await InlineAppealEmployment.inline_appeal_employment2.set()
-            msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
-            await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
-            await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
-        else:
-            await InlineAppealEmployment.inline_appeal_employment1.set()
-            await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
-            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick)
+        
+    if phone_checked != 'fail':
+        await data_base.sql_add_appeal(state)
+        msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
+        await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
+        await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_migration)
+        await bot.send_message(chat_id = message.from_user.id, text='Помимо этого, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
+        await state.finish()
+    else:
+        await InlineAppealMigration.inline_appeal_migration2.set()
+        await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
+        await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick_markup)
+
+# Трудовые споры
+
+async def start_inline_keyboard_callback_employment(message: types.Message):
+    await InlineAppealEmployment.inline_appeal_employment1.set()
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
 
 async def start_inline_keyboard_callback_employment_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -253,38 +244,39 @@ async def start_inline_keyboard_callback_employment_add_appeal(message: types.Me
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
-    await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_employment)
-    await state.finish()
-
-# Защита прав потребителей
-
-async def start_inline_keyboard_callback_consumer(message: types.Message):
-    await InlineAppealConsumer.inline_appeal_consumer1.set()
+    await InlineAppealEmployment.next()
     await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_missclick_markup)
 
-async def start_inline_keyboard_callback_consumer_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+async def start_inline_keyboard_callback_employment_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
         if not message.text:
             data['status'] = 'Свяжитесь со мной в Telegram'
             data['phone'] = message.contact.phone_number
             phone_checked = await phone_checker(data['phone'])
+            data['phone'] = await phone_checker(data['phone'])
         else:
             data['status'] = 'Позвоните мне'
             data['phone'] = message.text
             phone_checked = await phone_checker(data['phone'])
-        
-        if phone_checked != 'fail':
             data['phone'] = await phone_checker(data['phone'])
-            await InlineAppealConsumer.inline_appeal_consumer2.set()
-            msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
-            await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
-            await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
-        else:
-            await InlineAppealConsumer.inline_appeal_consumer1.set()
-            await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
-            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick)
+        
+    if phone_checked != 'fail':
+        await data_base.sql_add_appeal(state)
+        msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
+        await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
+        await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_employment)
+        await state.finish()
+    else:
+        await InlineAppealEmployment.inline_appeal_employment2.set()
+        await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
+        await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick_markup)
+
+# Защита прав потребителей
+
+async def start_inline_keyboard_callback_consumer(message: types.Message):
+    await InlineAppealConsumer.inline_appeal_consumer1.set()
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
 
 async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -298,9 +290,33 @@ async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Mess
         current_datetime = datetime.now()
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
-    await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_consumer)
-    await state.finish()
+    await InlineAppealConsumer.next()
+    await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_missclick_markup)
+
+async def start_inline_keyboard_callback_consumer_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+    async with state.proxy() as data:
+        if not message.text:
+            data['status'] = 'Свяжитесь со мной в Telegram'
+            data['phone'] = message.contact.phone_number
+            phone_checked = await phone_checker(data['phone'])
+            data['phone'] = await phone_checker(data['phone'])
+        else:
+            data['status'] = 'Позвоните мне'
+            data['phone'] = message.text
+            phone_checked = await phone_checker(data['phone'])
+            data['phone'] = await phone_checker(data['phone'])
+        
+    if phone_checked != 'fail':
+        await data_base.sql_add_appeal(state)
+        msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
+        await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
+        await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_consumer)
+        await state.finish()
+    else:
+        await InlineAppealConsumer.inline_appeal_consumer2.set()
+        await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=consultation_inline_keyboard_phone_keeper)
+        await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=consultation_inline_keyboard_missclick_markup)
 
 # Меню консультации со сборщиками данных
 
@@ -366,7 +382,7 @@ async def consultation_mobilization_add_appeal(message: types.Message, state: FS
 
 async def consultation_migration(message: types.Message):
     await AppealMigration.appeal_migration1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами.\n\nВ следующем сообщении я попрошу вас написать ваш вопрос, а сразу после отправки вашего вопроса, вы получите от меня в подарок чек-лист "Переезд из России: деньги и документы"', reply_markup=consultation_keyboard_in_only_telegram)
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами.\n\nВ следующем сообщении я попрошу вас написать ваш вопрос, а сразу после отправки вашего вопроса вы получите от меня в подарок чек-лист "Переезд из России: деньги и документы"', reply_markup=consultation_keyboard_in_only_telegram)
 
 async def consultation_migration_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     async with state.proxy() as data:
@@ -727,30 +743,34 @@ def register_handler_client(dp: Dispatcher):
     #Мобилизация
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_mobilization, text='mobilization', state=None)
-    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
-    dp.register_message_handler(start_inline_keyboard_callback_mobilization_phone_processing, content_types=['contact', 'text'], state=InlineAppealMobilization.inline_appeal_mobilization1)
-    dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal, state=InlineAppealMobilization.inline_appeal_mobilization2)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick_without_delete_markup, state='*', text='missclick')
+    dp.register_message_handler(start_inline_keyboard_callback_mobilization_add_appeal, state=InlineAppealMobilization.inline_appeal_mobilization1)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick_delete_markup, state='*', text='missclick_markup')
+    dp.register_message_handler(start_inline_keyboard_callback_mobilization_phone_processing, content_types=['contact', 'text'], state=InlineAppealMobilization.inline_appeal_mobilization2)
 
     # Миграция
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_migration, text='migration', state=None)
-    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
-    dp.register_message_handler(start_inline_keyboard_callback_migration_phone_processing, content_types=['contact', 'text'], state=InlineAppealMigration.inline_appeal_migration1)
-    dp.register_message_handler(start_inline_keyboard_callback_migration_add_appeal, state=InlineAppealMigration.inline_appeal_migration2)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick_without_delete_markup, state='*', text='missclick')
+    dp.register_message_handler(start_inline_keyboard_callback_migration_add_appeal, state=InlineAppealMigration.inline_appeal_migration1)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick_delete_markup, state='*', text='missclick_markup')
+    dp.register_message_handler(start_inline_keyboard_callback_migration_phone_processing, content_types=['contact', 'text'], state=InlineAppealMigration.inline_appeal_migration2)
 
     # Трудовые споры
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_employment, text='employment', state=None)
-    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
-    dp.register_message_handler(start_inline_keyboard_callback_employment_phone_processing, content_types=['contact', 'text'], state=InlineAppealEmployment.inline_appeal_employment1)
-    dp.register_message_handler(start_inline_keyboard_callback_employment_add_appeal, state=InlineAppealEmployment.inline_appeal_employment2)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick_without_delete_markup, state='*', text='missclick')
+    dp.register_message_handler(start_inline_keyboard_callback_employment_add_appeal, state=InlineAppealEmployment.inline_appeal_employment1)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick_delete_markup, state='*', text='missclick_markup')
+    dp.register_message_handler(start_inline_keyboard_callback_employment_phone_processing, content_types=['contact', 'text'], state=InlineAppealEmployment.inline_appeal_employment2)
 
     # Защита прав потребителей
 
     dp.register_callback_query_handler(start_inline_keyboard_callback_consumer, text='consumer', state=None)
-    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick, state='*', text='missclick')
-    dp.register_message_handler(start_inline_keyboard_callback_consumer_phone_processing, content_types=['contact', 'text'], state=InlineAppealConsumer.inline_appeal_consumer1)
-    dp.register_message_handler(start_inline_keyboard_callback_consumer_add_appeal, state=InlineAppealConsumer.inline_appeal_consumer2)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick_without_delete_markup, state='*', text='missclick')
+    dp.register_message_handler(start_inline_keyboard_callback_consumer_add_appeal, state=InlineAppealConsumer.inline_appeal_consumer1)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick_delete_markup, state='*', text='missclick_markup')
+    dp.register_message_handler(start_inline_keyboard_callback_consumer_phone_processing, content_types=['contact', 'text'], state=InlineAppealConsumer.inline_appeal_consumer2)
     
     # Регистраторы меню консультаций со сборщиками данных
 
