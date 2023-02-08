@@ -1,6 +1,6 @@
 modules/token.py
 documents/
-modules/.env
+.env
 modules/config.py
 modules/template.py
 practice/template_res.py

@@ -22,8 +22,10 @@ async def on_shutdown(_):
     logging.warning('Bye!')
 
 from modules import handlers
-
 handlers.register_handler_client(dp)
+
+from modules import admin_handlers
+admin_handlers.register_handler_admin(dp)
 
 if __name__ == '__main__':
     start_webhook(dp, WEBHOOK_PATH, skip_updates=True, on_startup=on_startup, on_shutdown=on_shutdown, host=WEBAPP_HOST, port=WEBAPP_PORT, )
