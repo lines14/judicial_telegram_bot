@@ -115,10 +115,6 @@ async def restart_inline_keyboard_callback_pick_without_delete_markup(message: t
     await state.finish()
     await bot.send_message(chat_id = message.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
 
-async def recomendations_after_inline(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже')
-    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/1087', reply_markup=consultation_keyboard_in_after_inline_recomendations)
-
 async def restart_inline_keyboard_callback_pick_delete_markup(message: types.Message, state: FSMContext):
     current_state = await state.get_state()
     if current_state is None:
