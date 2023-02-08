@@ -193,5 +193,5 @@ async def sql_get_info(inbound_key):
     splitted_substr = splitted_key[0].split('.')
     splitted_substr.reverse()
     outbound_key = '-'.join(splitted_substr)+' '+splitted_key[1]
-    response = cur.execute(f"SELECT status, phone, nickname, fullname, appeal FROM bank_of_appeals WHERE datetime = '{outbound_key}';").fetchall()
+    response = cur.execute(f"SELECT status, phone, nickname, fullname, appeal, section FROM bank_of_appeals WHERE datetime = '{outbound_key}';").fetchall()
     return response

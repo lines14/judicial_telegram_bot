@@ -96,7 +96,7 @@ async def forward_to_admin_consultations_sections_categories_or_back_to_admin_co
         else:
             if len(message.text) > 11 and message.text[11] == '|':
                 info = await data_base.sql_get_info(message.text)
-                generalize = f'Способ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
+                generalize = f'Раздел:\n=>\t\t\t{info[0][5]}\nСпособ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
                 await bot.send_message(chat_id = message.from_user.id, text=generalize)
             else:
                 await AdminConsultations.admin_consultations1.set()
@@ -117,7 +117,7 @@ async def back_to_admin_consultations_sections_categories_or_query_delivery(mess
         else:
             if len(message.text) > 11 and message.text[11] == '|':
                 info = await data_base.sql_get_info(message.text)
-                generalize = f'Способ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
+                generalize = f'Раздел:\n=>\t\t\t{info[0][5]}\nСпособ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
                 await bot.send_message(chat_id = message.from_user.id, text=generalize)
             else:
                 await AdminConsultations.admin_consultations2.set()

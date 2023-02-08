@@ -35,7 +35,6 @@ class DocGenerator(StatesGroup):
 class InlineAppealMobilization(StatesGroup):
     inline_appeal_mobilization1 = State()
     inline_appeal_mobilization2 = State()
-    inline_appeal_mobilization3 = State()
 
 class InlineAppealMigration(StatesGroup):
     inline_appeal_migration1 = State()
