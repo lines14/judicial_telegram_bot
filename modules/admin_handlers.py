@@ -3,9 +3,10 @@ from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from modules import data_base
-from modules.admin_buttons import admin_menu_keyboard, admin_menu_in_consultations_keyboard, admin_menu_in_consultations_sections_keyboard, admin_menu_in_consultations_mobilization_keyboard, admin_menu_in_consultations_migration_keyboard, admin_menu_in_consultations_employment_keyboard, admin_menu_in_consultations_consumer_keyboard, inline_admin_menu_in_consultations_mobilization_keyboard, inline_admin_menu_in_consultations_migration_keyboard, inline_admin_menu_in_consultations_employment_keyboard, inline_admin_menu_in_consultations_consumer_keyboard, admin_menu_in_cooperation_keyboard, inline_admin_menu_in_cooperation_keyboard
+from modules.admin_buttons import admin_menu_keyboard, admin_menu_in_consultations_keyboard, admin_menu_in_consultations_sections_keyboard, inline_admin_menu_in_consultations_mobilization_keyboard, inline_admin_menu_in_consultations_migration_keyboard, inline_admin_menu_in_consultations_employment_keyboard, inline_admin_menu_in_consultations_consumer_keyboard, admin_menu_in_cooperation_keyboard, inline_admin_menu_in_cooperation_keyboard, admin_menu_in_consultations_sections_categories_keyboard
 from modules.buttons import main_menu_keyboard
 from modules.admin_buttons import keyboard_generator
+from modules.handlers import restart_command_for_all_FSM
 from modules.token import ID
 
 ADMIN = ID
@@ -37,11 +38,6 @@ async def start_admin_command(message: types.Message):
         await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id) # chat_id = message.from_user.id
         await bot.send_message(chat_id = message.from_user.id, text='Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
 
-async def restart_command(message: types.Message):
-    global ADMIN
-    if message.from_user.id == ADMIN:
-        await bot.send_message(chat_id = message.from_user.id, text='Выберите то, что вас интересует:', reply_markup=main_menu_keyboard)
-
 async def restart_command_for_all_FSM_admin_menu(message: types.Message, state: FSMContext):
     global ADMIN
     if message.from_user.id == ADMIN:
@@ -50,15 +46,6 @@ async def restart_command_for_all_FSM_admin_menu(message: types.Message, state: 
             return
         await state.finish()
         await message.reply('Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
-
-async def restart_command_for_all_FSM_main_menu(message: types.Message, state: FSMContext):
-    global ADMIN
-    if message.from_user.id == ADMIN:
-        current_state = await state.get_state()
-        if current_state is None:
-            return
-        await state.finish()
-        await message.reply('Выберите то, что вас интересует:', reply_markup=main_menu_keyboard)
 
 # Меню заявок на консультации
 
@@ -105,7 +92,7 @@ async def forward_to_admin_consultations_sections_categories_or_back_to_admin_co
         elif message.text == 'Админ меню':
             await restart_command_for_all_FSM_admin_menu(message, state)
         elif message.text == 'Главное меню':
-            await restart_command_for_all_FSM_main_menu(message, state)
+            await restart_command_for_all_FSM(message, state)
         else:
             if len(message.text) > 11 and message.text[11] == '|':
                 info = await data_base.sql_get_info(message.text)
@@ -142,7 +129,7 @@ async def admin_consultations_mobilization(message: types.Message, state: FSMCon
     global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
-        await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_consultations_mobilization_keyboard)
+        await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_consultations_sections_categories_keyboard)
         await bot.send_message(chat_id = message.from_user.id, text='Выберите способ сортировки:', reply_markup=inline_admin_menu_in_consultations_mobilization_keyboard)
 
 async def mobilization_get_sorted_by_time_desc(message: types.Message, state: FSMContext):
@@ -165,7 +152,7 @@ async def admin_consultations_migration(message: types.Message, state: FSMContex
     global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
-        await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_consultations_migration_keyboard)
+        await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_consultations_sections_categories_keyboard)
         await bot.send_message(chat_id = message.from_user.id, text='Выберите способ сортировки:', reply_markup=inline_admin_menu_in_consultations_migration_keyboard)
 
 async def migration_get_sorted_by_time_desc(message: types.Message, state: FSMContext):
@@ -188,7 +175,7 @@ async def admin_consultations_employment(message: types.Message, state: FSMConte
     global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
-        await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_consultations_employment_keyboard)
+        await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_consultations_sections_categories_keyboard)
         await bot.send_message(chat_id = message.from_user.id, text='Выберите способ сортировки:', reply_markup=inline_admin_menu_in_consultations_employment_keyboard)
 
 async def employment_get_sorted_by_time_desc(message: types.Message, state: FSMContext):
@@ -211,7 +198,7 @@ async def admin_consultations_consumer(message: types.Message, state: FSMContext
     global ADMIN
     if message.from_user.id == ADMIN:
         await AdminConsultations.next()
-        await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_consultations_consumer_keyboard)
+        await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_consultations_sections_categories_keyboard)
         await bot.send_message(chat_id = message.from_user.id, text='Выберите способ сортировки:', reply_markup=inline_admin_menu_in_consultations_consumer_keyboard)
 
 async def consumer_get_sorted_by_time_desc(message: types.Message, state: FSMContext):
@@ -304,9 +291,7 @@ def register_handler_admin(dp: Dispatcher):
     # Регистраторы меню администратора
 
     dp.register_message_handler(start_admin_command, commands=['1959'])
-    dp.register_message_handler(restart_command, text='Главное меню')
     dp.register_message_handler(restart_command_for_all_FSM_admin_menu, state='*', text='Админ меню') # is_chat_admin = True
-    dp.register_message_handler(restart_command_for_all_FSM_main_menu, state='*', text='Главное меню') # is_chat_admin = True
 
     # Регистраторы меню заявок на консультации
 

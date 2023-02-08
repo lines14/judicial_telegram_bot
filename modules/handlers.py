@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import dp, bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_recomendations, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_recomendations, feedback_keyboard, cooperation_keyboard_in, cooperation_keyboard_in_abort, cooperation_keyboard_in_only_telegram, suggestion_keyboard, feedback_keyboard_abort, suggestion_keyboard_abort
+from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_recomendations, cooperation_keyboard_in_only_telegram, to_the_main_menu_keyboard
 from modules.judicial_writer_1 import data_print
 from modules import data_base
 from modules.phone_processing import phone_checker
@@ -319,7 +319,7 @@ async def consultation_back_for_consultation_FSM(message: types.Message, state: 
 
 async def recomendations_after(message: types.Message):
     await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже')
-    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/1087', reply_markup=consultation_keyboard_in_after_recomendations)
+    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/1087', reply_markup=to_the_main_menu_keyboard)
 
 # Мобилизация
 
@@ -490,7 +490,7 @@ async def consultation_consumer_add_appeal(message: types.Message, state: FSMCon
 
 async def feedback(message: types.Message):
     await AppealFeedback.appeal_feedback1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Вы можете оставить отзыв о нашем сотрудничестве ответным сообщением, и он обязательно будет опубликован в моих социальных сетях. А если у вас есть замечания или предложения по поводу моих услуг, буду рад принять их к сведению', reply_markup=feedback_keyboard_abort)
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете оставить отзыв о нашем сотрудничестве ответным сообщением, и он обязательно будет опубликован в моих социальных сетях. А если у вас есть замечания или предложения по поводу моих услуг, буду рад принять их к сведению', reply_markup=to_the_main_menu_keyboard)
 
 async def feedback_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -507,14 +507,14 @@ async def feedback_add_appeal(message: types.Message, state: FSMContext):
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Благодарю! Я ценю вашу обратную связь', reply_markup=feedback_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text='Благодарю! Я ценю вашу обратную связь', reply_markup=to_the_main_menu_keyboard)
     await state.finish()
 
 # Меню предложений
 
 async def suggestion(message: types.Message):
     await AppealSuggestion.appeal_suggestion1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на юридические темы, используя хэштеги по ссылке ниже, и если они пока-что не затронули сферу ваших интересов, можете обратиться ко мне за индивидуальной консультацией из главного меню или предложить тему для нового поста ответным сообщением ниже', reply_markup=suggestion_keyboard_abort)
+    await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на юридические темы, используя хэштеги по ссылке ниже, и если они пока-что не затронули сферу ваших интересов, можете обратиться ко мне за индивидуальной консультацией из главного меню или предложить тему для нового поста ответным сообщением ниже', reply_markup=to_the_main_menu_keyboard)
     await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/1087')
 
 async def suggestion_add_appeal(message: types.Message, state: FSMContext):
@@ -532,7 +532,7 @@ async def suggestion_add_appeal(message: types.Message, state: FSMContext):
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Ваше предложение принято, спасибо!', reply_markup=suggestion_keyboard)
+    await bot.send_message(chat_id = message.from_user.id, text='Ваше предложение принято, спасибо!', reply_markup=to_the_main_menu_keyboard)
     await state.finish()
 
 # Меню сотрудничества
@@ -556,7 +556,7 @@ async def cooperation_phone_processing(message: typing.Union[types.Contact, type
         if phone_checked != 'fail':
             data['phone'] = await phone_checker(data['phone'])
             await AppealCooperation.appeal_cooperation2.set()
-            await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваше предложение ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=cooperation_keyboard_in_abort)
+            await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваше предложение ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=to_the_main_menu_keyboard)
         else:
             await AppealCooperation.appeal_cooperation1.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона, пожалуйста повторите, начиная с "+7" (или с другим кодом), без пробелов или тире', reply_markup=cooperation_keyboard_in_only_telegram)
@@ -574,7 +574,7 @@ async def cooperation_add_appeal(message: types.Message, state: FSMContext):
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await data_base.sql_add_appeal(state)
-    await bot.send_message(chat_id = message.from_user.id, text='Я рассмотрю ваше предложение на тему сотрудничества и свяжусь с вами в самое ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=cooperation_keyboard_in)
+    await bot.send_message(chat_id = message.from_user.id, text='Я рассмотрю ваше предложение на тему сотрудничества и свяжусь с вами в самое ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=to_the_main_menu_keyboard)
     await state.finish()
 
 # Обо мне
@@ -713,7 +713,7 @@ def register_handler_client(dp: Dispatcher):
     dp.register_callback_query_handler(restart_command_inline, text=['To main menu', 'Thank you'])
     dp.register_message_handler(recomendations_after, text=['Хочу почитать посты на тему мобилизации', 'Хочу почитать посты на тему миграции', 'Хочу почитать посты на тему трудовых споров', 'Хочу почитать посты на тему защиты прав потребителей'])
     dp.register_callback_query_handler(recomendations_after_inline, text=['Read mobilization', 'Read migration', 'Read employment', 'Read consumer'])
-    dp.register_message_handler(restart_command_for_all_FSM, state='*', text=['В главное меню', '/start'])
+    dp.register_message_handler(restart_command_for_all_FSM, state='*', text=['Главное меню', '/start'])
     dp.register_message_handler(consultation_start_command, text='Получить консультацию')
     # dp.register_message_handler(generator_start_command, text='Генератор судебных документов')
     dp.register_message_handler(about_me_start_command, text='Обо мне')
@@ -755,7 +755,7 @@ def register_handler_client(dp: Dispatcher):
     # Регистраторы меню консультаций со сборщиками данных
 
     # dp.register_message_handler(consultation_back, text='Назад')
-    dp.register_message_handler(consultation_back_for_consultation_FSM, state='*', text='Вернуться назад')
+    dp.register_message_handler(consultation_back_for_consultation_FSM, state='*', text='Назад')
 
     # Мобилизация
 

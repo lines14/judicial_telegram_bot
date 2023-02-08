@@ -38,17 +38,8 @@ admin_menu_in_consultations_keyboard.add(a9).insert(a14).insert(a15).add(a6).ins
 admin_menu_in_consultations_sections_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 admin_menu_in_consultations_sections_keyboard.add(a10).insert(a11).insert(a12).add(a7).insert(a6).insert(a13).add(a5)
 
-admin_menu_in_consultations_mobilization_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-admin_menu_in_consultations_mobilization_keyboard.add(a8).insert(a6).insert(a5)
-
-admin_menu_in_consultations_migration_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-admin_menu_in_consultations_migration_keyboard.add(a8).insert(a6).insert(a5)
-
-admin_menu_in_consultations_employment_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-admin_menu_in_consultations_employment_keyboard.add(a8).insert(a6).insert(a5)
-
-admin_menu_in_consultations_consumer_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-admin_menu_in_consultations_consumer_keyboard.add(a8).insert(a6).insert(a5)
+admin_menu_in_consultations_sections_categories_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+admin_menu_in_consultations_sections_categories_keyboard.add(a8).insert(a6).insert(a5)
 
 inline_admin_menu_in_consultations_mobilization_keyboard = InlineKeyboardMarkup(row_width=1)
 inline_admin_menu_in_consultations_mobilization_keyboard.add(i1).add(i2)
