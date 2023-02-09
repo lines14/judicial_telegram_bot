@@ -7,9 +7,11 @@ from modules.admin_buttons import admin_menu_keyboard, admin_menu_in_consultatio
 from modules.buttons import main_menu_keyboard
 from modules.admin_buttons import keyboard_generator
 from modules.handlers import restart_command_for_all_FSM
-from modules.token import ID
+# from modules.token import ID
 
-ADMIN = ID
+# ADMIN = ID
+
+ADMIN = None
 
 # Машины состояний бота
 
@@ -34,8 +36,9 @@ class AdminFeedback(StatesGroup):
 
 async def start_admin_command(message: types.Message):
     global ADMIN
+    ADMIN = message.from_user.id
     if message.from_user.id == ADMIN:
-        await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id) # chat_id = message.from_user.id
+        # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
         await bot.send_message(chat_id = message.from_user.id, text='Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
 
 async def restart_command_for_all_FSM_admin_menu(message: types.Message, state: FSMContext):
@@ -290,8 +293,8 @@ def register_handler_admin(dp: Dispatcher):
 
     # Регистраторы меню администратора
 
-    dp.register_message_handler(start_admin_command, commands=['1959'])
-    dp.register_message_handler(restart_command_for_all_FSM_admin_menu, state='*', text='Админ меню') # is_chat_admin = True
+    dp.register_message_handler(start_admin_command, commands=['1959'], is_chat_admin = True) # is_chat_admin = True
+    dp.register_message_handler(restart_command_for_all_FSM_admin_menu, state='*', text='Админ меню')
 
     # Регистраторы меню заявок на консультации
 
