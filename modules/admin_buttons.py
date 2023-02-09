@@ -29,6 +29,9 @@ i8 = InlineKeyboardButton(text='Долго ждут', callback_data='consumer_ol
 i9 = InlineKeyboardButton(text='Самые новые', callback_data='cooperation_new')
 i10 = InlineKeyboardButton(text='Долго ждут', callback_data='cooperation_old')
 
+# i11 = InlineKeyboardButton(text='В работе', callback_data='inwork')
+# i12 = InlineKeyboardButton(text='Завершено', callback_data='closed')
+
 admin_menu_keyboard = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboard=True .insert(b6)
 admin_menu_keyboard.add(a1).insert(a2).add(a3).insert(a4).add(a5)
 
@@ -59,6 +62,9 @@ admin_menu_in_cooperation_keyboard.add(a6).insert(a5)
 inline_admin_menu_in_cooperation_keyboard = InlineKeyboardMarkup(row_width=1)
 inline_admin_menu_in_cooperation_keyboard.add(i9).add(i10)
 
+# inline_status_keyboard = InlineKeyboardMarkup(row_width=1)
+# inline_status_keyboard.add(i11).add(i12)
+
 # Генератор клавиатур
 
 # keyboard: Optional[List[List[KeyboardButton]]] = None
@@ -85,3 +91,12 @@ async def keyboard_generator(key_list, kek):
             tmp_buttons.append([KeyboardButton(i)])
         keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
         return keyboard
+
+# Генератор инлайн клавиатур статусов
+
+async def stage_keyboard_generator(identifier):
+    inline_buttons = InlineKeyboardMarkup()
+    inline_buttons.row_width = 1
+    inline_buttons.add(InlineKeyboardButton(text='В работе', callback_data=f'inwork {identifier}'))
+    inline_buttons.add(InlineKeyboardButton(text='Завершено', callback_data=f'closed {identifier}'))
+    return inline_buttons

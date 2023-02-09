@@ -5,6 +5,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from modules import data_base
 from modules.admin_buttons import admin_menu_keyboard, admin_menu_in_consultations_keyboard, admin_menu_in_consultations_sections_keyboard, inline_admin_menu_in_consultations_mobilization_keyboard, inline_admin_menu_in_consultations_migration_keyboard, inline_admin_menu_in_consultations_employment_keyboard, inline_admin_menu_in_consultations_consumer_keyboard, admin_menu_in_cooperation_keyboard, inline_admin_menu_in_cooperation_keyboard, admin_menu_in_consultations_sections_categories_keyboard
 from modules.admin_buttons import keyboard_generator
+from modules.admin_buttons import stage_keyboard_generator
 from modules.handlers import restart_command_for_all_FSM
 # from modules.token import ID
 
@@ -23,12 +24,15 @@ class AdminConsultations(StatesGroup):
 class AdminCooperation(StatesGroup):
     admin_cooperation1 = State()
     admin_cooperation2 = State()
+    admin_cooperation3 = State()
 
 class AdminSuggestion(StatesGroup):
     admin_suggestion1 = State()
+    admin_suggestion2 = State()
 
 class AdminFeedback(StatesGroup):
     admin_feedback1 = State()
+    admin_feedback2 = State()
 
 # Хэндлеры бота
 # Меню администратора
@@ -98,8 +102,8 @@ async def forward_to_admin_consultations_sections_categories_or_back_to_admin_co
         else:
             if len(message.text) > 11 and message.text[11] == '|':
                 info = await data_base.sql_get_info(message.text)
-                generalize = f'Раздел:\n=>\t\t\t{info[0][5]}\nСпособ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
-                await bot.send_message(chat_id = message.from_user.id, text=generalize)
+                generalize = f'Статус:\n=>\t\t\t{info[0][6]}\nРаздел:\n=>\t\t\t{info[0][5]}\nСпособ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
+                await bot.send_message(chat_id = message.from_user.id, text=generalize, reply_markup=await stage_keyboard_generator(info[0][7]))
             else:
                 await AdminConsultations.admin_consultations1.set()
                 await message.reply('Выберите способ сортировки:', reply_markup=admin_menu_in_consultations_keyboard)
@@ -119,8 +123,8 @@ async def back_to_admin_consultations_sections_categories_or_query_delivery(mess
         else:
             if len(message.text) > 11 and message.text[11] == '|':
                 info = await data_base.sql_get_info(message.text)
-                generalize = f'Раздел:\n=>\t\t\t{info[0][5]}\nСпособ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
-                await bot.send_message(chat_id = message.from_user.id, text=generalize)
+                generalize = f'Статус:\n=>\t\t\t{info[0][6]}\nРаздел:\n=>\t\t\t{info[0][5]}\nСпособ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
+                await bot.send_message(chat_id = message.from_user.id, text=generalize, reply_markup=await stage_keyboard_generator(info[0][7]))
             else:
                 await AdminConsultations.admin_consultations2.set()
                 await message.reply('Выберите тематику:', reply_markup=admin_menu_in_consultations_sections_keyboard)
@@ -249,8 +253,8 @@ async def back_from_cooperation_to_admin_menu_or_query_delivery(message: types.M
         else:
             if len(message.text) > 11 and message.text[11] == '|':
                 info = await data_base.sql_get_info(message.text)
-                generalize = f'Способ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
-                await bot.send_message(chat_id = message.from_user.id, text=generalize)
+                generalize = f'Статус:\n=>\t\t\t{info[0][6]}\nСпособ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
+                await bot.send_message(chat_id = message.from_user.id, text=generalize, reply_markup=await stage_keyboard_generator(info[0][7]))
             else:
                 await restart_command_for_all_FSM_admin_menu(message, state)
                 await message.reply('Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
@@ -280,11 +284,27 @@ async def back_from_suggestion_or_feedback_to_admin_menu_or_query_delivery(messa
         else:
             if len(message.text) > 11 and message.text[11] == '|':
                 info = await data_base.sql_get_info(message.text)
-                generalize = f'Никнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nОтзыв:\n=>\t\t\t{info[0][4]}'
-                await bot.send_message(chat_id = message.from_user.id, text=generalize)
+                generalize = f'Статус:\n=>\t\t\t{info[0][6]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nОтзыв:\n=>\t\t\t{info[0][4]}'
+                await bot.send_message(chat_id = message.from_user.id, text=generalize, reply_markup=await stage_keyboard_generator(info[0][7]))
             else:
                 await restart_command_for_all_FSM_admin_menu(message, state)
                 await message.reply('Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
+
+# Смена статуса заявок
+
+async def stage_changer(callback: types.CallbackQuery, state: FSMContext):
+    global ADMIN
+    if callback.from_user.id in ADMIN:
+        callback_exceptions_list = ['yes', 'no', 'To main menu', 'Thank you', 'Read mobilization', 'Read migration', 'Read employment', 'Read consumer', 'mobilization', 'missclick', 'missclick_markup', 'migration', 'employment', 'consumer', 'mobilization_new', 'mobilization_old', 'migration_new', 'migration_old', 'employment_new', 'employment_old', 'consumer_new', 'consumer_old', 'cooperation_new', 'cooperation_old']
+        if callback.data not in callback_exceptions_list:
+            callback_slicer_1 = ''.join(callback.data.split(' ')[slice(1)])
+            callback_slicer_2 = ' '.join(callback.data.split(' ')[slice(1,3)])
+            if callback_slicer_1 == 'inwork':
+                await data_base.sql_stage_changer(callback_slicer_2, 'В работе')
+                await bot.send_message(chat_id = callback.from_user.id, text=f'В работе {callback_slicer_2}')
+            else:
+                await data_base.sql_stage_changer(callback_slicer_2, 'Завершено')
+                await bot.send_message(chat_id = callback.from_user.id, text=f'Завершили {callback_slicer_2}')
 
 # Регистратура хэндлеров бота
 
@@ -294,6 +314,7 @@ def register_handler_admin(dp: Dispatcher):
 
     dp.register_message_handler(start_admin_command, commands=['1959'], is_chat_admin = True) # is_chat_admin = True
     dp.register_message_handler(restart_command_for_all_FSM_admin_menu, state='*', text='Админ меню')
+    dp.register_callback_query_handler(stage_changer, state='*')
 
     # Регистраторы меню заявок на консультации
 
