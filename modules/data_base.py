@@ -28,7 +28,7 @@ async def sql_stage_changer(identifier, stage):
 
 async def sql_all_get_sorted_by_time_desc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Мобилизация' OR section = 'Миграция' OR section = 'Трудовые споры' OR section = 'Защита прав потребителей' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime DESC;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE (section = 'Мобилизация' OR section = 'Миграция' OR section = 'Трудовые споры' OR section = 'Защита прав потребителей') AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime DESC;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
@@ -40,7 +40,7 @@ async def sql_all_get_sorted_by_time_desc():
 
 async def sql_all_get_sorted_by_time_asc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Мобилизация' OR section = 'Миграция' OR section = 'Трудовые споры' OR section = 'Защита прав потребителей' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE (section = 'Мобилизация' OR section = 'Миграция' OR section = 'Трудовые споры' OR section = 'Защита прав потребителей') AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
@@ -52,7 +52,7 @@ async def sql_all_get_sorted_by_time_asc():
 
 async def sql_mobilization_get_sorted_by_time_desc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Мобилизация' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime DESC;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Мобилизация' AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime DESC;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
@@ -64,7 +64,7 @@ async def sql_mobilization_get_sorted_by_time_desc():
 
 async def sql_mobilization_get_sorted_by_time_asc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Мобилизация' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Мобилизация' AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
@@ -76,7 +76,7 @@ async def sql_mobilization_get_sorted_by_time_asc():
 
 async def sql_migration_get_sorted_by_time_desc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Миграция' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime DESC;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Миграция' AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime DESC;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
@@ -88,7 +88,7 @@ async def sql_migration_get_sorted_by_time_desc():
 
 async def sql_migration_get_sorted_by_time_asc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Миграция' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Миграция' AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
@@ -100,7 +100,7 @@ async def sql_migration_get_sorted_by_time_asc():
 
 async def sql_employment_get_sorted_by_time_desc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Трудовые споры' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime DESC;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Трудовые споры' AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime DESC;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
@@ -112,7 +112,7 @@ async def sql_employment_get_sorted_by_time_desc():
 
 async def sql_employment_get_sorted_by_time_asc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Трудовые споры' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Трудовые споры' AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
@@ -124,7 +124,7 @@ async def sql_employment_get_sorted_by_time_asc():
 
 async def sql_consumer_get_sorted_by_time_desc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Защита прав потребителей' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime DESC;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Защита прав потребителей' AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime DESC;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
@@ -136,7 +136,7 @@ async def sql_consumer_get_sorted_by_time_desc():
 
 async def sql_consumer_get_sorted_by_time_asc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Защита прав потребителей' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Защита прав потребителей' AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
@@ -148,7 +148,7 @@ async def sql_consumer_get_sorted_by_time_asc():
 
 async def sql_cooperation_get_sorted_by_time_desc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Сотрудничество' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime DESC;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Сотрудничество' AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime DESC;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
@@ -160,7 +160,7 @@ async def sql_cooperation_get_sorted_by_time_desc():
 
 async def sql_cooperation_get_sorted_by_time_asc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Сотрудничество' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Сотрудничество' AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
@@ -172,7 +172,7 @@ async def sql_cooperation_get_sorted_by_time_asc():
 
 async def sql_suggestion_get_sorted_by_time_desc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Предложения тем для публикаций' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime DESC;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Предложения тем для публикаций' AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime DESC;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
@@ -184,7 +184,7 @@ async def sql_suggestion_get_sorted_by_time_desc():
 
 async def sql_feedback_get_sorted_by_time_desc():
     key_list = []
-    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Отзывы' AND stage = 'Новое' OR stage = 'В работе' ORDER BY datetime DESC;").fetchall()
+    response = cur.execute("SELECT datetime, fullname FROM bank_of_appeals WHERE section = 'Отзывы' AND (stage = 'Новое' OR stage = 'В работе') ORDER BY datetime DESC;").fetchall()
     for i in response:
         j = ''.join(i[0].split(' ')[slice(1, 2)])
         a = ''.join(i[0].split(' ')[slice(0, 1)])
