@@ -314,7 +314,6 @@ def register_handler_admin(dp: Dispatcher):
 
     dp.register_message_handler(start_admin_command, commands=['1959'], is_chat_admin = True) # is_chat_admin = True
     dp.register_message_handler(restart_command_for_all_FSM_admin_menu, state='*', text='Админ меню')
-    dp.register_callback_query_handler(stage_changer, state='*')
 
     # Регистраторы меню заявок на консультации
 
@@ -363,4 +362,6 @@ def register_handler_admin(dp: Dispatcher):
     dp.register_message_handler(back_from_suggestion_or_feedback_to_admin_menu_or_query_delivery, state=AdminSuggestion.admin_suggestion1)
     dp.register_message_handler(admin_feedback_get_sorted_by_time_desc, text='Отзывы', state=None)
     dp.register_message_handler(back_from_suggestion_or_feedback_to_admin_menu_or_query_delivery, state=AdminFeedback.admin_feedback1)
+
+    dp.register_callback_query_handler(stage_changer, state='*')
 
