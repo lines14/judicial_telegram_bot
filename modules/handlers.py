@@ -85,16 +85,18 @@ async def start_command(message: types.Message):
     fullname = message.from_user.full_name
     await bot.send_message(chat_id = message.from_user.id, text=f'Приветствую вас, {fullname}!\nНа связи Ярослав Павлюков. Хотите получить консультацию?', reply_markup=intro_inline_keyboard)
 
-async def start_inline_keyboard_callback_redirect(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Вы можете выбрать интересующий вас раздел в меню ниже:', reply_markup=main_menu_keyboard)
+async def start_inline_keyboard_callback_redirect(callback: types.CallbackQuery):
+    await bot.send_message(chat_id = callback.from_user.id, text='Вы можете выбрать интересующий вас раздел в меню ниже:', reply_markup=main_menu_keyboard)
+    await bot.answer_callback_query(callback.id)
 
 async def restart_command(message: types.Message):
     # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
     await bot.send_message(chat_id = message.from_user.id, text='Выберите то, что вас интересует:', reply_markup=main_menu_keyboard)
 
-async def restart_command_inline(message: types.Message):
+async def restart_command_inline(callback: types.CallbackQuery):
     # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
-    await bot.send_message(chat_id = message.from_user.id, text='Выберите то, что вас интересует:', reply_markup=main_menu_keyboard)
+    await bot.send_message(chat_id = callback.from_user.id, text='Выберите то, что вас интересует:', reply_markup=main_menu_keyboard)
+    await bot.answer_callback_query(callback.id)
 
 async def restart_command_for_all_FSM(message: types.Message, state: FSMContext):
     current_state = await state.get_state()
@@ -105,34 +107,39 @@ async def restart_command_for_all_FSM(message: types.Message, state: FSMContext)
 
 # Стартовый диалог на тему консультации со сборщиками данных
 
-async def start_inline_keyboard_callback_pick(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
+async def start_inline_keyboard_callback_pick(callback: types.CallbackQuery):
+    await bot.send_message(chat_id = callback.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
+    await bot.answer_callback_query(callback.id)
 
-async def restart_inline_keyboard_callback_pick_without_delete_markup(message: types.Message, state: FSMContext):
+async def restart_inline_keyboard_callback_pick_without_delete_markup(callback: types.CallbackQuery, state: FSMContext):
     current_state = await state.get_state()
     if current_state is None:
         return
     await state.finish()
-    await bot.send_message(chat_id = message.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
+    await bot.send_message(chat_id = callback.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
+    await bot.answer_callback_query(callback.id)
 
-async def restart_inline_keyboard_callback_pick_delete_markup(message: types.Message, state: FSMContext):
+async def restart_inline_keyboard_callback_pick_delete_markup(callback: types.CallbackQuery, state: FSMContext):
     current_state = await state.get_state()
     if current_state is None:
         return
     await state.finish()
-    msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
-    await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
-    await bot.send_message(chat_id = message.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
+    msg = await bot.send_message(chat_id = callback.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
+    await bot.delete_message(chat_id = callback.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
+    await bot.send_message(chat_id = callback.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
+    await bot.answer_callback_query(callback.id)
 
-async def recomendations_after_inline(message: types.Message):
-    await bot.send_message(chat_id = message.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже')
-    await bot.send_message(chat_id = message.from_user.id, text='https://t.me/bettercallpavlukov/1087', reply_markup=consultation_keyboard_in_after_inline_recomendations)
+async def recomendations_after_inline(callback: types.CallbackQuery):
+    await bot.send_message(chat_id = callback.from_user.id, text='Вы можете ознакомиться с моими постами на интересующую вас тему, используя хэштеги по ссылке ниже')
+    await bot.send_message(chat_id = callback.from_user.id, text='https://t.me/bettercallpavlukov/1087', reply_markup=consultation_keyboard_in_after_inline_recomendations)
+    await bot.answer_callback_query(callback.id)
 
 # Мобилизация
 
-async def start_inline_keyboard_callback_mobilization(message: types.Message):
+async def start_inline_keyboard_callback_mobilization(callback: types.CallbackQuery):
     await InlineAppealMobilization.inline_appeal_mobilization1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.send_message(chat_id = callback.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.answer_callback_query(callback.id)
 
 async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -200,9 +207,10 @@ async def start_inline_keyboard_callback_mobilization_phone_processing(message: 
 
 # Миграция
 
-async def start_inline_keyboard_callback_migration(message: types.Message):
+async def start_inline_keyboard_callback_migration(callback: types.CallbackQuery):
     await InlineAppealMigration.inline_appeal_migration1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время.\n\nВ следующем сообщении я попрошу вас оставить контакты, а сразу после вы получите от меня в подарок чек-лист "Переезд из России: деньги и документы"', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.send_message(chat_id = callback.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время.\n\nВ следующем сообщении я попрошу вас оставить контакты, а сразу после вы получите от меня в подарок чек-лист "Переезд из России: деньги и документы"', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.answer_callback_query(callback.id)
 
 async def start_inline_keyboard_callback_migration_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -274,9 +282,10 @@ async def start_inline_keyboard_callback_migration_phone_processing(message: typ
 
 # Трудовые споры
 
-async def start_inline_keyboard_callback_employment(message: types.Message):
+async def start_inline_keyboard_callback_employment(callback: types.CallbackQuery):
     await InlineAppealEmployment.inline_appeal_employment1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.send_message(chat_id = callback.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.answer_callback_query(callback.id)
 
 async def start_inline_keyboard_callback_employment_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -346,9 +355,10 @@ async def start_inline_keyboard_callback_employment_phone_processing(message: ty
 
 # Защита прав потребителей
 
-async def start_inline_keyboard_callback_consumer(message: types.Message):
+async def start_inline_keyboard_callback_consumer(callback: types.CallbackQuery):
     await InlineAppealConsumer.inline_appeal_consumer1.set()
-    await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.send_message(chat_id = callback.from_user.id, text='Напишите пожалуйста ваш вопрос ответным сообщением, и я свяжусь с вами в ближайшее время', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.answer_callback_query(callback.id)
 
 async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:

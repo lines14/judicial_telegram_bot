@@ -69,6 +69,7 @@ inline_admin_menu_in_cooperation_keyboard.add(i9).add(i10)
 
 # keyboard: Optional[List[List[KeyboardButton]]] = None
 # key_list = ['1', '2', '3']
+
 async def keyboard_generator(key_list, kek, direction, typo):
     if direction == 'desc':
         if kek == 1:
