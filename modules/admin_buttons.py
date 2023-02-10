@@ -68,29 +68,142 @@ inline_admin_menu_in_cooperation_keyboard.add(i9).add(i10)
 # Генератор клавиатур
 
 # keyboard: Optional[List[List[KeyboardButton]]] = None
-async def keyboard_generator(key_list, kek):
-    # key_list = ['1', '2', '3']
-    if kek == 1:
-        tmp_buttons = []
-        tmp_buttons.append([KeyboardButton('<<<')])
-        for i in key_list:
-            tmp_buttons.append([KeyboardButton(i)])
-        keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
-        return keyboard
-    elif kek ==2:
-        tmp_buttons = []
-        tmp_buttons.append([KeyboardButton('<<')])
-        for i in key_list:
-            tmp_buttons.append([KeyboardButton(i)])
-        keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
-        return keyboard
+# key_list = ['1', '2', '3']
+async def keyboard_generator(key_list, kek, direction, typo):
+    if direction == 'desc':
+        if kek == 1:
+            tmp_buttons = []
+            tmp_buttons.append([KeyboardButton('<<<')])
+            tmp_buttons.append([KeyboardButton('Обновить ⬇️')])
+            for i in key_list:
+                tmp_buttons.append([KeyboardButton(i)])
+            keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+            return keyboard
+        elif kek ==2:
+            if typo == 'mobilization':
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('<<')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬇️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            elif typo == 'migration':
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('<<')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬇️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            elif typo == 'employment':
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('<<')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬇️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            else:
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('<<')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬇️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+        else:
+            if typo == 'cooperation':
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('Админ меню')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬇️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            elif typo == 'suggestion':
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('Админ меню')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬇️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            else:
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('Админ меню')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬇️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
     else:
-        tmp_buttons = []
-        tmp_buttons.append([KeyboardButton('Админ меню')])
-        for i in key_list:
-            tmp_buttons.append([KeyboardButton(i)])
-        keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
-        return keyboard
+        if kek == 1:
+            tmp_buttons = []
+            tmp_buttons.append([KeyboardButton('<<<')])
+            tmp_buttons.append([KeyboardButton('Обновить ⬆️')])
+            for i in key_list:
+                tmp_buttons.append([KeyboardButton(i)])
+            keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+            return keyboard
+        elif kek ==2:
+            if typo == 'mobilization':
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('<<')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬆️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            elif typo == 'migration':
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('<<')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬆️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            elif typo == 'employment':
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('<<')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬆️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            else:
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('<<')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬆️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+        else:
+            if typo == 'cooperation':
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('Админ меню')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬆️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            elif typo == 'suggestion':
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('Админ меню')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬆️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            else:
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('Админ меню')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬆️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
 
 # Генератор инлайн клавиатур статусов
 
