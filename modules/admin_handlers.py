@@ -300,10 +300,10 @@ async def stage_changer(callback: types.CallbackQuery, state: FSMContext):
             callback_slicer_1 = ''.join(callback.data.split(' ')[slice(1)])
             callback_slicer_2 = ' '.join(callback.data.split(' ')[slice(1,3)])
             if callback_slicer_1 == 'inwork':
-                await data_base.sql_stage_changer(callback_slicer_2, 'В работе')
+                await data_base.sql_stage_changer(callback_slicer_2, '🟡В работе')
                 # await bot.send_message(chat_id = callback.from_user.id, text=f'В работе {callback_slicer_2}')
             else:
-                await data_base.sql_stage_changer(callback_slicer_2, 'Завершено')
+                await data_base.sql_stage_changer(callback_slicer_2, '🔴Завершено')
                 # await bot.send_message(chat_id = callback.from_user.id, text=f'Завершили {callback_slicer_2}')
 
 # Регистратура хэндлеров бота

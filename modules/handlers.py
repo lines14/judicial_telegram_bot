@@ -136,7 +136,7 @@ async def start_inline_keyboard_callback_mobilization(message: types.Message):
 
 async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['stage'] = 'Новое'
+        data['stage'] = '🟢Новое'
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
             data['nickname'] = ''
@@ -206,7 +206,7 @@ async def start_inline_keyboard_callback_migration(message: types.Message):
 
 async def start_inline_keyboard_callback_migration_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['stage'] = 'Новое'
+        data['stage'] = '🟢Новое'
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
             data['nickname'] = ''
@@ -280,7 +280,7 @@ async def start_inline_keyboard_callback_employment(message: types.Message):
 
 async def start_inline_keyboard_callback_employment_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['stage'] = 'Новое'
+        data['stage'] = '🟢Новое'
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
             data['nickname'] = ''
@@ -352,7 +352,7 @@ async def start_inline_keyboard_callback_consumer(message: types.Message):
 
 async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['stage'] = 'Новое'
+        data['stage'] = '🟢Новое'
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
             data['nickname'] = ''
@@ -440,7 +440,7 @@ async def consultation_mobilization(message: types.Message):
 
 async def consultation_mobilization_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['stage'] = 'Новое'
+        data['stage'] = '🟢Новое'
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
             data['nickname'] = ''
@@ -505,7 +505,7 @@ async def consultation_migration(message: types.Message):
 
 async def consultation_migration_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['stage'] = 'Новое'
+        data['stage'] = '🟢Новое'
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
             data['nickname'] = ''
@@ -572,7 +572,7 @@ async def consultation_employment(message: types.Message):
 
 async def consultation_employment_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['stage'] = 'Новое'
+        data['stage'] = '🟢Новое'
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
             data['nickname'] = ''
@@ -637,7 +637,7 @@ async def consultation_consumer(message: types.Message):
 
 async def consultation_consumer_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['stage'] = 'Новое'
+        data['stage'] = '🟢Новое'
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
             data['nickname'] = ''
@@ -702,7 +702,7 @@ async def feedback(message: types.Message):
 
 async def feedback_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['stage'] = 'Новое'
+        data['stage'] = '🟢Новое'
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
             data['nickname'] = ''
@@ -728,7 +728,7 @@ async def suggestion(message: types.Message):
 
 async def suggestion_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['stage'] = 'Новое'
+        data['stage'] = '🟢Новое'
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
             data['nickname'] = ''
@@ -753,7 +753,7 @@ async def cooperation(message: types.Message):
 
 async def cooperation_add_appeal(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['stage'] = 'Новое'
+        data['stage'] = '🟢Новое'
         data['user_id'] = message.chat.id
         if message.from_user.username == None:
             data['nickname'] = ''
