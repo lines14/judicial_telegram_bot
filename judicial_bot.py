@@ -5,6 +5,9 @@ from modules.config import WEBHOOK_PATH, WEBHOOK_URL, WEBAPP_HOST, WEBAPP_PORT
 from modules.bot_base import bot
 from modules.bot_base import dp
 from modules import data_base
+from modules import handlers
+from modules import admin_handlers
+import aioschedule
 
 logging.basicConfig(level=logging.INFO)
 dp.middleware.setup(LoggingMiddleware())
@@ -12,6 +15,7 @@ dp.middleware.setup(LoggingMiddleware())
 async def on_startup(_):
     await bot.set_webhook(WEBHOOK_URL, drop_pending_updates=True) #certificate=CERT
     data_base.sql_start()
+    aioschedule.every().day.at("12:00").do(handlers.reminder)
     print('Бот успешно запущен!')
 
 async def on_shutdown(_):
@@ -21,10 +25,7 @@ async def on_shutdown(_):
     await dp.storage.wait_closed()
     logging.warning('Bye!')
 
-from modules import handlers
 handlers.register_handler_client(dp)
-
-from modules import admin_handlers
 admin_handlers.register_handler_admin(dp)
 
 if __name__ == '__main__':
