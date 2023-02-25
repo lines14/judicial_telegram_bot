@@ -12,6 +12,8 @@ from aiogram.types import ReplyKeyboardRemove
 import asyncio
 import aioschedule
 
+# Base aioschedule's reminder state
+
 reminder_state = 0
 
 # Машины состояний бота

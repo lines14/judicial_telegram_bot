@@ -106,7 +106,7 @@ async def forward_to_admin_consultations_sections_categories_or_back_to_admin_co
             await all_get_sorted_by_time_asc(message, state)
             await AdminConsultations.admin_consultations2.set()
         else:
-            if len(message.text) > 11 and message.text[11] == '|':
+            if (len(message.text) > 7 and message.text[7] == '|') or (len(message.text) > 10 and message.text[10] == '|'):
                 info = await data_base.sql_get_info(message.text)
                 generalize = f'Статус:\n=>\t\t\t{info[0][6]}\nРаздел:\n=>\t\t\t{info[0][5]}\nСпособ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
                 await bot.send_message(chat_id = message.from_user.id, text=generalize, reply_markup=await stage_keyboard_generator(info[0][7]))
@@ -151,7 +151,7 @@ async def back_to_admin_consultations_sections_categories_or_query_delivery(mess
             await consumer_get_sorted_by_time_asc(message, state)
             await AdminConsultations.admin_consultations4.set()
         else:
-            if len(message.text) > 11 and message.text[11] == '|':
+            if (len(message.text) > 7 and message.text[7] == '|') or (len(message.text) > 10 and message.text[10] == '|'):
                 info = await data_base.sql_get_info(message.text)
                 generalize = f'Статус:\n=>\t\t\t{info[0][6]}\nРаздел:\n=>\t\t\t{info[0][5]}\nСпособ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
                 await bot.send_message(chat_id = message.from_user.id, text=generalize, reply_markup=await stage_keyboard_generator(info[0][7]))
@@ -287,7 +287,7 @@ async def back_from_cooperation_to_admin_menu_or_query_delivery(message: types.M
             await cooperation_get_sorted_by_time_asc(message, state)
             await AdminCooperation.admin_cooperation2.set()
         else:
-            if len(message.text) > 11 and message.text[11] == '|':
+            if (len(message.text) > 7 and message.text[7] == '|') or (len(message.text) > 10 and message.text[10] == '|'):
                 info = await data_base.sql_get_info(message.text)
                 generalize = f'Статус:\n=>\t\t\t{info[0][6]}\nСпособ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
                 await bot.send_message(chat_id = message.from_user.id, text=generalize, reply_markup=await stage_keyboard_generator(info[0][7]))
@@ -324,7 +324,7 @@ async def back_from_suggestion_or_feedback_to_admin_menu_or_query_delivery(messa
             await admin_feedback_get_sorted_by_time_desc(message)
             await AdminFeedback.admin_feedback1.set()
         else:
-            if len(message.text) > 11 and message.text[11] == '|':
+            if (len(message.text) > 7 and message.text[7] == '|') or (len(message.text) > 10 and message.text[10] == '|'):
                 info = await data_base.sql_get_info(message.text)
                 generalize = f'Статус:\n=>\t\t\t{info[0][6]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nОтзыв:\n=>\t\t\t{info[0][4]}'
                 await bot.send_message(chat_id = message.from_user.id, text=generalize, reply_markup=await stage_keyboard_generator(info[0][7]))

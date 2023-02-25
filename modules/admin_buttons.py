@@ -70,9 +70,9 @@ inline_admin_menu_in_cooperation_keyboard.add(i9).add(i10)
 # keyboard: Optional[List[List[KeyboardButton]]] = None
 # key_list = ['1', '2', '3']
 
-async def keyboard_generator(key_list, kek, direction, typo):
+async def keyboard_generator(key_list, menu_section, direction, typo):
     if direction == 'desc':
-        if kek == 1:
+        if menu_section == 1:
             tmp_buttons = []
             tmp_buttons.append([KeyboardButton('<<<')])
             tmp_buttons.append([KeyboardButton('Обновить ⬇️')])
@@ -80,7 +80,7 @@ async def keyboard_generator(key_list, kek, direction, typo):
                 tmp_buttons.append([KeyboardButton(i)])
             keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
             return keyboard
-        elif kek ==2:
+        elif menu_section ==2:
             if typo == 'mobilization':
                 tmp_buttons = []
                 tmp_buttons.append([KeyboardButton('<<')])
@@ -139,7 +139,7 @@ async def keyboard_generator(key_list, kek, direction, typo):
                 keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
                 return keyboard
     else:
-        if kek == 1:
+        if menu_section == 1:
             tmp_buttons = []
             tmp_buttons.append([KeyboardButton('<<<')])
             tmp_buttons.append([KeyboardButton('Обновить ⬆️')])
@@ -147,7 +147,7 @@ async def keyboard_generator(key_list, kek, direction, typo):
                 tmp_buttons.append([KeyboardButton(i)])
             keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
             return keyboard
-        elif kek ==2:
+        elif menu_section ==2:
             if typo == 'mobilization':
                 tmp_buttons = []
                 tmp_buttons.append([KeyboardButton('<<')])
