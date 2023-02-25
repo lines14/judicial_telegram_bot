@@ -1030,7 +1030,7 @@ def register_handler_client(dp: Dispatcher):
 
     dp.register_message_handler(start_command, commands=['start'])
     dp.register_callback_query_handler(start_inline_keyboard_callback_pick, text='yes')
-    dp.register_callback_query_handler(start_inline_keyboard_callback_redirect, text='no')
+    dp.register_callback_query_handler(start_inline_keyboard_callback_redirect, text=['no', 'nope'])
     dp.register_message_handler(restart_command, text=['Главное меню', 'Спасибо, буду ждать'])
     dp.register_callback_query_handler(restart_command_inline, text=['To main menu', 'Thank you'])
     dp.register_message_handler(recomendations_after, text=['Хочу почитать посты на тему мобилизации', 'Хочу почитать посты на тему миграции', 'Хочу почитать посты на тему трудовых споров', 'Хочу почитать посты на тему защиты прав потребителей'])
