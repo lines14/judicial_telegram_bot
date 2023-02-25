@@ -12,6 +12,8 @@ from aiogram.types import ReplyKeyboardRemove
 import asyncio
 import aioschedule
 
+reminder_state = 0
+
 # Машины состояний бота
 
 # Машина состояний генератора документов
@@ -110,10 +112,13 @@ async def restart_command_for_all_FSM(message: types.Message, state: FSMContext)
 # Стартовый диалог на тему консультации со сборщиками данных
 
 async def start_inline_keyboard_callback_pick(callback: types.CallbackQuery):
+    global reminder_state
     global aioschedule_task
     global reminder_id
     reminder_id = callback.from_user.id
-    aioschedule_task = asyncio.create_task(scheduler())
+    if reminder_state == 0:
+        aioschedule_task = asyncio.create_task(scheduler())
+        reminder_state = 1
     await bot.send_message(chat_id = callback.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_inline_keyboard)
     await bot.answer_callback_query(callback.id)
 
@@ -165,6 +170,7 @@ async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_missclick_markup)
 
 async def start_inline_keyboard_callback_mobilization_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+    global reminder_state
     global aioschedule_task
     if not message.text:
         async with state.proxy() as data:
@@ -185,6 +191,7 @@ async def start_inline_keyboard_callback_mobilization_phone_processing(message: 
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог связаться с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_mobilization)
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await InlineAppealMobilization.inline_appeal_mobilization2.set()
@@ -208,6 +215,7 @@ async def start_inline_keyboard_callback_mobilization_phone_processing(message: 
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_mobilization)
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await InlineAppealMobilization.inline_appeal_mobilization2.set()
@@ -239,6 +247,7 @@ async def start_inline_keyboard_callback_migration_add_appeal(message: types.Mes
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_missclick_markup)
 
 async def start_inline_keyboard_callback_migration_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+    global reminder_state
     global aioschedule_task
     if not message.text:
         async with state.proxy() as data:
@@ -261,6 +270,7 @@ async def start_inline_keyboard_callback_migration_phone_processing(message: typ
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог связаться с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_migration)
             await bot.send_message(chat_id = message.from_user.id, text='Как и обещал, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await InlineAppealMigration.inline_appeal_migration2.set()
@@ -286,6 +296,7 @@ async def start_inline_keyboard_callback_migration_phone_processing(message: typ
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_migration)
             await bot.send_message(chat_id = message.from_user.id, text='Помимо этого, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await InlineAppealMigration.inline_appeal_migration2.set()
@@ -317,6 +328,7 @@ async def start_inline_keyboard_callback_employment_add_appeal(message: types.Me
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_missclick_markup)
 
 async def start_inline_keyboard_callback_employment_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+    global reminder_state
     global aioschedule_task
     if not message.text:
         async with state.proxy() as data:
@@ -338,6 +350,7 @@ async def start_inline_keyboard_callback_employment_phone_processing(message: ty
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог связаться с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_employment)
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await InlineAppealEmployment.inline_appeal_employment2.set()
@@ -362,6 +375,7 @@ async def start_inline_keyboard_callback_employment_phone_processing(message: ty
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_employment)
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await InlineAppealEmployment.inline_appeal_employment2.set()
@@ -393,6 +407,7 @@ async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Mess
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_inline_keyboard_missclick_markup)
 
 async def start_inline_keyboard_callback_consumer_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+    global reminder_state
     global aioschedule_task
     if not message.text:
         async with state.proxy() as data:
@@ -414,6 +429,7 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: typi
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог связаться с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_consumer)
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await InlineAppealConsumer.inline_appeal_consumer2.set()
@@ -438,6 +454,7 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: typi
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_after_inline_consumer)
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await InlineAppealConsumer.inline_appeal_consumer2.set()
@@ -447,10 +464,13 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: typi
 # Меню консультации со сборщиками данных
 
 async def consultation_start_command(message: types.Message):
+    global reminder_state
     global aioschedule_task
     global reminder_id
     reminder_id = message.from_user.id
-    aioschedule_task = asyncio.create_task(scheduler())
+    if reminder_state == 0:
+        aioschedule_task = asyncio.create_task(scheduler())
+        reminder_state = 1
     await bot.send_message(chat_id = message.from_user.id, text='В каком направлении вы хотите получить консультацию?', reply_markup=consultation_keyboard)
 
 async def consultation_back_for_consultation_FSM(message: types.Message, state: FSMContext):
@@ -487,6 +507,7 @@ async def consultation_mobilization_add_appeal(message: types.Message, state: FS
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
 
 async def consultation_mobilization_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+    global reminder_state
     global aioschedule_task
     if not message.text:
         async with state.proxy() as data:
@@ -506,6 +527,7 @@ async def consultation_mobilization_phone_processing(message: typing.Union[types
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог связаться с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_mobilization)
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await AppealMobilization.appeal_mobilization2.set()
@@ -527,6 +549,7 @@ async def consultation_mobilization_phone_processing(message: typing.Union[types
             await data_base.sql_add_appeal(state)
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_mobilization)
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await AppealMobilization.appeal_mobilization2.set()
@@ -555,6 +578,7 @@ async def consultation_migration_add_appeal(message: types.Message, state: FSMCo
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
 
 async def consultation_migration_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+    global reminder_state
     global aioschedule_task
     if not message.text:
         async with state.proxy() as data:
@@ -575,6 +599,7 @@ async def consultation_migration_phone_processing(message: typing.Union[types.Co
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог связаться с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_migration)
             await bot.send_message(chat_id = message.from_user.id, text='Как и обещал, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await AppealMigration.appeal_migration2.set()
@@ -597,6 +622,7 @@ async def consultation_migration_phone_processing(message: typing.Union[types.Co
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_migration)
             await bot.send_message(chat_id = message.from_user.id, text='Помимо этого, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await AppealMigration.appeal_migration2.set()
@@ -625,6 +651,7 @@ async def consultation_employment_add_appeal(message: types.Message, state: FSMC
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
 
 async def consultation_employment_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+    global reminder_state
     global aioschedule_task
     if not message.text:
         async with state.proxy() as data:
@@ -644,6 +671,7 @@ async def consultation_employment_phone_processing(message: typing.Union[types.C
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог связаться с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_employment)
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await AppealEmployment.appeal_employment2.set()
@@ -665,6 +693,7 @@ async def consultation_employment_phone_processing(message: typing.Union[types.C
             await data_base.sql_add_appeal(state)
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_employment)
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await AppealEmployment.appeal_employment2.set()
@@ -693,6 +722,7 @@ async def consultation_consumer_add_appeal(message: types.Message, state: FSMCon
     await bot.send_message(chat_id = message.from_user.id, text='Напишите пожалуйста ответным сообщением ваш номер телефона в международном формате с "+7" (или с другим кодом), без пробелов или тире, чтобы я мог связаться с вами', reply_markup=consultation_keyboard_in_only_telegram)
 
 async def consultation_consumer_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+    global reminder_state
     global aioschedule_task
     if not message.text:
         async with state.proxy() as data:
@@ -712,6 +742,7 @@ async def consultation_consumer_phone_processing(message: typing.Union[types.Con
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог связаться с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_consumer)
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await AppealConsumer.appeal_consumer2.set()
@@ -733,6 +764,7 @@ async def consultation_consumer_phone_processing(message: typing.Union[types.Con
             await data_base.sql_add_appeal(state)
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Я свяжусь с вами в ближайшее время. Мы работаем с 10:00 до 20:00 (МСК) по будням, в выходные мы отдыхаем', reply_markup=consultation_keyboard_in_consumer)
             aioschedule_task.cancel()
+            reminder_state = 0
             await state.finish()
         else:
             await AppealConsumer.appeal_consumer2.set()

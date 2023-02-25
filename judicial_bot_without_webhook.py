@@ -7,7 +7,7 @@ import aioschedule
 
 async def on_startup(_):
     data_base.sql_start()
-    aioschedule.every().day.at("12:00").do(handlers.reminder)
+    aioschedule.every(3).days.at("12:00").do(handlers.reminder)
     print('Бот успешно запущен!')
 
 handlers.register_handler_client(dp)
