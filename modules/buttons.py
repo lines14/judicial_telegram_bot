@@ -1,7 +1,7 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
-k1 = InlineKeyboardButton(text='Хочу получить консультацию', callback_data='yes')
-k2 = InlineKeyboardButton(text='Хочу обратиться не за консультацией', callback_data='no')
+k1 = InlineKeyboardButton(text='Да', callback_data='yes')
+k2 = InlineKeyboardButton(text='Нет, у меня другой вопрос', callback_data='no')
 
 k3 = InlineKeyboardButton(text='Мобилизация', callback_data='mobilization')
 k4 = InlineKeyboardButton(text='Миграция', callback_data='migration')
