@@ -194,6 +194,18 @@ async def sql_feedback_get_sorted_by_time_desc():
         key_list.append(i[2]+' | '+c+' | '+j+' | '+i[1])
     return key_list
 
+async def sql_archive_get_sorted_by_time_desc():
+    key_list = []
+    response = cur.execute("SELECT datetime, fullname, stage FROM bank_of_appeals WHERE stage = '🔴Завершено' ORDER BY datetime DESC;").fetchall()
+    for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
+        a = ''.join(i[0].split(' ')[slice(0, 1)])
+        b = a.split('-')
+        b.reverse()
+        c = '.'.join(b)
+        key_list.append(i[2]+' | '+c+' | '+j+' | '+i[1])
+    return key_list
+
 async def sql_get_info(inbound_key):
     splitted_key = inbound_key.split(' | ')
     splitted_substr = splitted_key[1].split('.')

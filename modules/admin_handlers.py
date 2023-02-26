@@ -34,6 +34,10 @@ class AdminFeedback(StatesGroup):
     admin_feedback1 = State()
     admin_feedback2 = State()
 
+class AdminArchive(StatesGroup):
+    admin_archive1 = State()
+    admin_archive2 = State()
+
 # Хэндлеры бота
 # Меню администратора
 
@@ -289,7 +293,7 @@ async def back_from_cooperation_to_admin_menu_or_query_delivery(message: types.M
         else:
             if (len(message.text) > 7 and message.text[7] == '|') or (len(message.text) > 10 and message.text[10] == '|'):
                 info = await data_base.sql_get_info(message.text)
-                generalize = f'Статус:\n=>\t\t\t{info[0][6]}\nСпособ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
+                generalize = f'Статус:\n=>\t\t\t{info[0][6]}\nРаздел:\n=>\t\t\t{info[0][5]}\nСпособ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
                 await bot.send_message(chat_id = message.from_user.id, text=generalize, reply_markup=await stage_keyboard_generator(info[0][7]))
             else:
                 await restart_command_for_all_FSM_admin_menu(message, state)
@@ -311,7 +315,14 @@ async def admin_feedback_get_sorted_by_time_desc(message: types.Message):
         key_list = await data_base.sql_feedback_get_sorted_by_time_desc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 3, 'desc', 'feedback'))
 
-async def back_from_suggestion_or_feedback_to_admin_menu_or_query_delivery(message: types.Message, state: FSMContext):
+async def admin_archive_get_sorted_by_time_desc(message: types.Message):
+    global ADMIN
+    if message.from_user.id in ADMIN:
+        await AdminArchive.admin_archive1.set()
+        key_list = await data_base.sql_archive_get_sorted_by_time_desc()
+        await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 3, 'desc', 'archive'))
+
+async def back_from_suggestion_or_feedback_or_archive_to_admin_menu_or_query_delivery(message: types.Message, state: FSMContext):
     global ADMIN
     if message.from_user.id in ADMIN:
         if message.text == 'Админ меню':
@@ -323,10 +334,13 @@ async def back_from_suggestion_or_feedback_to_admin_menu_or_query_delivery(messa
         elif message.text == 'Обновить ⬇️':
             await admin_feedback_get_sorted_by_time_desc(message)
             await AdminFeedback.admin_feedback1.set()
+        elif message.text == 'Обновить ⬇️':
+            await admin_archive_get_sorted_by_time_desc(message)
+            await AdminArchive.admin_archive1.set()
         else:
-            if (len(message.text) > 7 and message.text[7] == '|') or (len(message.text) > 10 and message.text[10] == '|'):
+            if (len(message.text) > 7 and message.text[7] == '|') or (len(message.text) > 10 and message.text[10] == '|') or (len(message.text) > 11 and message.text[11] == '|'):
                 info = await data_base.sql_get_info(message.text)
-                generalize = f'Статус:\n=>\t\t\t{info[0][6]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nОтзыв:\n=>\t\t\t{info[0][4]}'
+                generalize = f'Статус:\n=>\t\t\t{info[0][6]}\nРаздел:\n=>\t\t\t{info[0][5]}\nСпособ связи:\n=>\t\t\t{info[0][0]}\nНомер телефона:\n=>\t\t\t{info[0][1]}\nНикнейм в Telegram:\n=>\t\t\t@{info[0][2]}\nИнициалы:\n=>\t\t\t{info[0][3]}\nДоп. ссылка (может потребоваться добавить в контакты):\n=>\t\t\thttps://t.me/{info[0][1]}\nОбращение:\n=>\t\t\t{info[0][4]}'
                 await bot.send_message(chat_id = message.from_user.id, text=generalize, reply_markup=await stage_keyboard_generator(info[0][7]))
             else:
                 await restart_command_for_all_FSM_admin_menu(message, state)
@@ -403,11 +417,12 @@ def register_handler_admin(dp: Dispatcher):
     # Регистраторы меню предложений тем для публикаций и отзывов
 
     dp.register_message_handler(admin_suggestion_get_sorted_by_time_desc, text='Предложения тем для публикаций', state=None)
-    dp.register_message_handler(back_from_suggestion_or_feedback_to_admin_menu_or_query_delivery, state=AdminSuggestion.admin_suggestion1)
+    dp.register_message_handler(back_from_suggestion_or_feedback_or_archive_to_admin_menu_or_query_delivery, state=AdminSuggestion.admin_suggestion1)
     dp.register_message_handler(admin_feedback_get_sorted_by_time_desc, text='Отзывы', state=None)
-    dp.register_message_handler(back_from_suggestion_or_feedback_to_admin_menu_or_query_delivery, state=AdminFeedback.admin_feedback1)
+    dp.register_message_handler(back_from_suggestion_or_feedback_or_archive_to_admin_menu_or_query_delivery, state=AdminFeedback.admin_feedback1)
+    dp.register_message_handler(admin_archive_get_sorted_by_time_desc, text='Архив', state=None)
+    dp.register_message_handler(back_from_suggestion_or_feedback_or_archive_to_admin_menu_or_query_delivery, state=AdminArchive.admin_archive1)
 
     # Ловец смены статусов карточек чата
 
     dp.register_callback_query_handler(stage_changer, state='*')
-
