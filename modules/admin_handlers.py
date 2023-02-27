@@ -299,7 +299,7 @@ async def back_from_cooperation_to_admin_menu_or_query_delivery(message: types.M
                 await restart_command_for_all_FSM_admin_menu(message, state)
                 await message.reply('Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
 
-# Меню предложений тем для публикаций и отзывов
+# Меню предложений тем для публикаций, отзывов и архива
 
 async def admin_suggestion_get_sorted_by_time_desc(message: types.Message):
     global ADMIN
@@ -364,6 +364,23 @@ async def stage_changer(callback: types.CallbackQuery, state: FSMContext):
                 await bot.answer_callback_query(callback.id)
                 # await bot.send_message(chat_id = callback.from_user.id, text=f'Завершили {callback_slicer_2}')
 
+# Генератор статистики
+
+async def stats_generator(message: types.Message, state: FSMContext):
+    global ADMIN
+    if message.from_user.id in ADMIN:
+        all_stats = await data_base.sql_get_all_stats()
+        consultations_stats = await data_base.sql_get_all_consultations_stats()
+        mobilization_stats = await data_base.sql_get_mobilization_stats()
+        migration_stats = await data_base.sql_get_migration_stats()
+        employment_stats = await data_base.sql_get_employment_stats()
+        consumer_stats = await data_base.sql_get_consumer_stats()
+        cooperation_stats = await data_base.sql_get_cooperation_stats()
+        suggestion_stats = await data_base.sql_get_suggestion_stats()
+        feedback_stats = await data_base.sql_get_feedback_stats()
+        generalize_stats = f'Заявок обработано всего:\n=>\t\t\t{all_stats[0][0]}\n------------------------------------------------\nКонсультаций:\n=>\t\t\t{consultations_stats[0][0]}\nВ том числе:\n      |По мобилизации:\n      |=>\t\t\t{mobilization_stats[0][0]}\n      |По миграции:\n      |=>\t\t\t{migration_stats[0][0]}\n      |По трудовым спорам:\n      |=>\t\t\t{employment_stats[0][0]}\n      |По защите прав потребителей:\n      |=>\t\t\t{consumer_stats[0][0]}\n------------------------------------------------\nПредложений сотрудничества:\n=>\t\t\t{cooperation_stats[0][0]}\n------------------------------------------------\nПредложений тем для публикаций:\n=>\t\t\t{suggestion_stats[0][0]}\n------------------------------------------------\nОтзывов:\n=>\t\t\t{feedback_stats[0][0]}'
+        await bot.send_message(chat_id = message.from_user.id, text=generalize_stats)
+
 # Регистратура хэндлеров бота
 
 def register_handler_admin(dp: Dispatcher):
@@ -426,3 +443,7 @@ def register_handler_admin(dp: Dispatcher):
     # Ловец смены статусов карточек чата
 
     dp.register_callback_query_handler(stage_changer, state='*')
+
+    # Генератор статистики
+
+    dp.register_message_handler(stats_generator, text='Статистика')

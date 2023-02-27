@@ -26,6 +26,8 @@ async def sql_stage_changer(identifier, stage):
 
 # Чтение обращений из базы данных
 
+# Выборки по различным критериям
+
 async def sql_all_get_sorted_by_time_desc():
     key_list = []
     response = cur.execute("SELECT datetime, fullname, stage FROM bank_of_appeals WHERE (section = 'Мобилизация' OR section = 'Миграция' OR section = 'Трудовые споры' OR section = 'Защита прав потребителей') AND (stage = '🟢Новое' OR stage = '🟡В работе') ORDER BY datetime DESC;").fetchall()
@@ -206,6 +208,8 @@ async def sql_archive_get_sorted_by_time_desc():
         key_list.append(i[2]+' | '+c+' | '+j+' | '+i[1])
     return key_list
 
+# Формирование карточки
+
 async def sql_get_info(inbound_key):
     splitted_key = inbound_key.split(' | ')
     splitted_substr = splitted_key[1].split('.')
@@ -213,3 +217,41 @@ async def sql_get_info(inbound_key):
     outbound_key = '-'.join(splitted_substr)+' '+splitted_key[2]
     response = cur.execute(f"SELECT status, phone, nickname, fullname, appeal, section, stage, datetime FROM bank_of_appeals WHERE datetime = '{outbound_key}';").fetchall()
     return response
+
+# Статистические выборки
+
+async def sql_get_all_stats():
+    stats = cur.execute("SELECT COUNT(*) FROM bank_of_appeals WHERE stage = '🔴Завершено';").fetchall()
+    return stats
+
+async def sql_get_all_consultations_stats():
+    stats = cur.execute("SELECT COUNT(*) FROM bank_of_appeals WHERE (section = 'Мобилизация' OR section = 'Миграция' OR section = 'Трудовые споры' OR section = 'Защита прав потребителей') AND stage = '🔴Завершено';").fetchall()
+    return stats
+
+async def sql_get_mobilization_stats():
+    stats = cur.execute("SELECT COUNT(*) FROM bank_of_appeals WHERE section = 'Мобилизация' AND stage = '🔴Завершено';").fetchall()
+    return stats
+
+async def sql_get_migration_stats():
+    stats = cur.execute("SELECT COUNT(*) FROM bank_of_appeals WHERE section = 'Миграция' AND stage = '🔴Завершено';").fetchall()
+    return stats
+
+async def sql_get_employment_stats():
+    stats = cur.execute("SELECT COUNT(*) FROM bank_of_appeals WHERE section = 'Трудовые споры' AND stage = '🔴Завершено';").fetchall()
+    return stats
+
+async def sql_get_consumer_stats():
+    stats = cur.execute("SELECT COUNT(*) FROM bank_of_appeals WHERE section = 'Защита прав потребителей' AND stage = '🔴Завершено';").fetchall()
+    return stats
+
+async def sql_get_cooperation_stats():
+    stats = cur.execute("SELECT COUNT(*) FROM bank_of_appeals WHERE section = 'Сотрудничество' AND stage = '🔴Завершено';").fetchall()
+    return stats
+
+async def sql_get_suggestion_stats():
+    stats = cur.execute("SELECT COUNT(*) FROM bank_of_appeals WHERE section = 'Предложения тем для публикаций' AND stage = '🔴Завершено';").fetchall()
+    return stats
+
+async def sql_get_feedback_stats():
+    stats = cur.execute("SELECT COUNT(*) FROM bank_of_appeals WHERE section = 'Отзывы' AND stage = '🔴Завершено';").fetchall()
+    return stats
