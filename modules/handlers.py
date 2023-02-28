@@ -1,9 +1,8 @@
 from aiogram import types, Dispatcher
-from modules.bot_base import dp, bot
+from modules.bot_base import bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_missclick_markup, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_recomendations, cooperation_keyboard_in_only_telegram, to_the_main_menu_keyboard
-from modules.judicial_writer_1 import data_print
 from modules import data_base
 from modules.phone_processing import phone_checker
 from datetime import datetime
@@ -11,6 +10,7 @@ import typing
 from aiogram.types import ReplyKeyboardRemove
 import asyncio
 import aioschedule
+# from modules.judicial_writer_1 import data_print
 
 # Base aioschedule's reminder state
 
@@ -190,7 +190,7 @@ async def start_inline_keyboard_callback_mobilization_phone_processing(message: 
             await data_base.sql_add_appeal(state)
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_mobilization)
             aioschedule_task.cancel()
             reminder_state = 0
@@ -268,7 +268,7 @@ async def start_inline_keyboard_callback_migration_phone_processing(message: typ
             await data_base.sql_add_appeal(state)
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_migration)
             await bot.send_message(chat_id = message.from_user.id, text='Как и обещал, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
             aioschedule_task.cancel()
@@ -349,7 +349,7 @@ async def start_inline_keyboard_callback_employment_phone_processing(message: ty
             await data_base.sql_add_appeal(state)
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_employment)
             aioschedule_task.cancel()
             reminder_state = 0
@@ -428,7 +428,7 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: typi
             await data_base.sql_add_appeal(state)
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_consumer)
             aioschedule_task.cancel()
             reminder_state = 0
@@ -526,7 +526,7 @@ async def consultation_mobilization_phone_processing(message: typing.Union[types
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_mobilization)
             aioschedule_task.cancel()
             reminder_state = 0
@@ -597,7 +597,7 @@ async def consultation_migration_phone_processing(message: typing.Union[types.Co
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_migration)
             await bot.send_message(chat_id = message.from_user.id, text='Как и обещал, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
             aioschedule_task.cancel()
@@ -670,7 +670,7 @@ async def consultation_employment_phone_processing(message: typing.Union[types.C
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_employment)
             aioschedule_task.cancel()
             reminder_state = 0
@@ -741,7 +741,7 @@ async def consultation_consumer_phone_processing(message: typing.Union[types.Con
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_consumer)
             aioschedule_task.cancel()
             reminder_state = 0
@@ -861,7 +861,7 @@ async def cooperation_phone_processing(message: typing.Union[types.Contact, type
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79055337303', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Я рассмотрю ваше предложение на тему сотрудничества.\nДобавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=to_the_main_menu_keyboard)
             await state.finish()
         else:
