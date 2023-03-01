@@ -10,6 +10,7 @@ import typing
 from aiogram.types import ReplyKeyboardRemove
 import asyncio
 import aioschedule
+from aiogram.utils import exceptions
 # from modules.judicial_writer_1 import data_print
 
 # Base aioschedule's reminder state
@@ -915,6 +916,12 @@ async def reminder():
     global reminder_id
     await bot.send_message(chat_id = reminder_id, text='Вы хотели получить консультацию? Буду рад помочь вам!')
 
+# Антифлуд
+
+async def exception_handler(update: types.Update, exception: exceptions.RetryAfter):
+    await bot.send_message(chat_id = update.message.from_user.id, text='Попробуйте позже, сервера Telegram перегружены')
+    return True
+
 # Меню генератора документов:
 
 # async def generator_start_command(message: types.Message):
@@ -1138,3 +1145,7 @@ def register_handler_client(dp: Dispatcher):
     # dp.register_message_handler(doc_generator13, state=DocGenerator.doc_generator13)
     # dp.register_message_handler(doc_generator14, state=DocGenerator.doc_generator14)
     # dp.register_message_handler(get_file, text='Получить')
+
+    # Антифлуд
+
+    dp.register_errors_handler(exception_handler, exception=exceptions.RetryAfter)
