@@ -192,7 +192,7 @@ async def start_inline_keyboard_callback_mobilization_phone_processing(message: 
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_mobilization)
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_mobilization)
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
@@ -270,7 +270,7 @@ async def start_inline_keyboard_callback_migration_phone_processing(message: typ
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_migration)
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_migration)
             await bot.send_message(chat_id = message.from_user.id, text='Как и обещал, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
             aioschedule_task.cancel()
             reminder_state = 0
@@ -351,7 +351,7 @@ async def start_inline_keyboard_callback_employment_phone_processing(message: ty
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_employment)
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_employment)
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
@@ -430,7 +430,7 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: typi
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_consumer)
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_consumer)
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
@@ -528,7 +528,7 @@ async def consultation_mobilization_phone_processing(message: typing.Union[types
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_mobilization)
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_mobilization)
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
@@ -599,7 +599,7 @@ async def consultation_migration_phone_processing(message: typing.Union[types.Co
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_migration)
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_migration)
             await bot.send_message(chat_id = message.from_user.id, text='Как и обещал, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
             aioschedule_task.cancel()
             reminder_state = 0
@@ -672,7 +672,7 @@ async def consultation_employment_phone_processing(message: typing.Union[types.C
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_employment)
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_employment)
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
@@ -743,7 +743,7 @@ async def consultation_consumer_phone_processing(message: typing.Union[types.Con
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_consumer)
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_consumer)
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
@@ -863,7 +863,7 @@ async def cooperation_phone_processing(message: typing.Union[types.Contact, type
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Я рассмотрю ваше предложение на тему сотрудничества.\nДобавьте меня в контакты Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=to_the_main_menu_keyboard)
+            await bot.send_message(chat_id = message.from_user.id, text='Я рассмотрю ваше предложение на тему сотрудничества.\nДобавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=to_the_main_menu_keyboard)
             await state.finish()
         else:
             await AppealCooperation.appeal_cooperation2.set()
