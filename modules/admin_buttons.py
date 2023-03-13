@@ -15,12 +15,13 @@ a10 = KeyboardButton('Мобилизация')
 a11 = KeyboardButton('Миграция')
 a12 = KeyboardButton('Трудовые споры')
 a13 = KeyboardButton('Защита прав потребителей')
+a14 = KeyboardButton('Другие темы')
 
-a14 = KeyboardButton('Самые новые')
-a15 = KeyboardButton('Долго ждут')
+a15 = KeyboardButton('Самые новые')
+a16 = KeyboardButton('Долго ждут')
 
-a16 = KeyboardButton('Архив')
-a17 = KeyboardButton('Статистика')
+a17 = KeyboardButton('Архив')
+a18 = KeyboardButton('Статистика')
 
 i1 = InlineKeyboardButton(text='Самые новые', callback_data='mobilization_new')
 i2 = InlineKeyboardButton(text='Долго ждут', callback_data='mobilization_old')
@@ -32,18 +33,20 @@ i7 = InlineKeyboardButton(text='Самые новые', callback_data='consumer_
 i8 = InlineKeyboardButton(text='Долго ждут', callback_data='consumer_old')
 i9 = InlineKeyboardButton(text='Самые новые', callback_data='cooperation_new')
 i10 = InlineKeyboardButton(text='Долго ждут', callback_data='cooperation_old')
+i11 = InlineKeyboardButton(text='Самые новые', callback_data='another_new')
+i12 = InlineKeyboardButton(text='Долго ждут', callback_data='another_old')
 
-# i11 = InlineKeyboardButton(text='В работе', callback_data='inwork')
-# i12 = InlineKeyboardButton(text='Завершено', callback_data='closed')
+# i13 = InlineKeyboardButton(text='В работе', callback_data='inwork')
+# i14 = InlineKeyboardButton(text='Завершено', callback_data='closed')
 
 admin_menu_keyboard = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboard=True .insert(b6)
-admin_menu_keyboard.add(a0).insert(a1).add(a2).insert(a3).add(a4).insert(a16).add(a17).insert(a5)
+admin_menu_keyboard.add(a0).insert(a1).add(a2).insert(a3).add(a4).insert(a17).add(a18).insert(a5)
 
 admin_menu_in_consultations_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-admin_menu_in_consultations_keyboard.add(a9).insert(a14).insert(a15).add(a6).insert(a5)
+admin_menu_in_consultations_keyboard.add(a9).insert(a15).insert(a16).add(a6).insert(a5)
 
 admin_menu_in_consultations_sections_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-admin_menu_in_consultations_sections_keyboard.add(a10).insert(a11).insert(a12).add(a7).insert(a6).insert(a13).add(a5)
+admin_menu_in_consultations_sections_keyboard.add(a10).insert(a11).insert(a12).add(a7).insert(a13).insert(a14).add(a6).insert(a5)
 
 admin_menu_in_consultations_sections_categories_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 admin_menu_in_consultations_sections_categories_keyboard.add(a8).insert(a6).insert(a5)
@@ -60,6 +63,9 @@ inline_admin_menu_in_consultations_employment_keyboard.add(i5).add(i6)
 inline_admin_menu_in_consultations_consumer_keyboard = InlineKeyboardMarkup(row_width=1)
 inline_admin_menu_in_consultations_consumer_keyboard.add(i7).add(i8)
 
+inline_admin_menu_in_consultations_another_keyboard = InlineKeyboardMarkup(row_width=1)
+inline_admin_menu_in_consultations_another_keyboard.add(i11).add(i12)
+
 admin_menu_in_cooperation_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 admin_menu_in_cooperation_keyboard.add(a6).insert(a5)
 
@@ -67,7 +73,7 @@ inline_admin_menu_in_cooperation_keyboard = InlineKeyboardMarkup(row_width=1)
 inline_admin_menu_in_cooperation_keyboard.add(i9).add(i10)
 
 # inline_status_keyboard = InlineKeyboardMarkup(row_width=1)
-# inline_status_keyboard.add(i11).add(i12)
+# inline_status_keyboard.add(i13).add(i14)
 
 # Генератор клавиатур
 
@@ -109,10 +115,18 @@ async def keyboard_generator(key_list, menu_section, direction, typo):
                     tmp_buttons.append([KeyboardButton(i)])
                 keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
                 return keyboard
-            else:
+            elif typo == 'consumer':
                 tmp_buttons = []
                 tmp_buttons.append([KeyboardButton('<<')])
                 tmp_buttons.append([KeyboardButton('Обновить ⬇️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            else:
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('<<')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬇️')])
                 for i in key_list:
                     tmp_buttons.append([KeyboardButton(i)])
                 keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
@@ -192,10 +206,18 @@ async def keyboard_generator(key_list, menu_section, direction, typo):
                     tmp_buttons.append([KeyboardButton(i)])
                 keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
                 return keyboard
-            else:
+            elif typo == 'consumer':
                 tmp_buttons = []
                 tmp_buttons.append([KeyboardButton('<<')])
                 tmp_buttons.append([KeyboardButton('Обновить ⬆️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            else:
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('<<')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬆️')])
                 for i in key_list:
                     tmp_buttons.append([KeyboardButton(i)])
                 keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)

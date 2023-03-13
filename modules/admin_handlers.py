@@ -3,7 +3,7 @@ from modules.bot_base import bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from modules import data_base
-from modules.admin_buttons import admin_menu_keyboard, admin_menu_in_consultations_keyboard, admin_menu_in_consultations_sections_keyboard, inline_admin_menu_in_consultations_mobilization_keyboard, inline_admin_menu_in_consultations_migration_keyboard, inline_admin_menu_in_consultations_employment_keyboard, inline_admin_menu_in_consultations_consumer_keyboard, admin_menu_in_cooperation_keyboard, inline_admin_menu_in_cooperation_keyboard, admin_menu_in_consultations_sections_categories_keyboard
+from modules.admin_buttons import admin_menu_keyboard, admin_menu_in_consultations_keyboard, admin_menu_in_consultations_sections_keyboard, inline_admin_menu_in_consultations_mobilization_keyboard, inline_admin_menu_in_consultations_migration_keyboard, inline_admin_menu_in_consultations_employment_keyboard, inline_admin_menu_in_consultations_consumer_keyboard, inline_admin_menu_in_consultations_another_keyboard, admin_menu_in_cooperation_keyboard, inline_admin_menu_in_cooperation_keyboard, admin_menu_in_consultations_sections_categories_keyboard
 from modules.admin_buttons import keyboard_generator
 from modules.admin_buttons import stage_keyboard_generator
 from modules.handlers import restart_command_for_all_FSM
@@ -106,6 +106,8 @@ async def forward_to_admin_consultations_sections_categories_or_back_to_admin_co
             await admin_consultations_employment(message, state)
         elif message.text == 'Защита прав потребителей':
             await admin_consultations_consumer(message, state)
+        elif message.text == 'Другие темы':
+            await admin_consultations_another(message, state)
         elif message.text == 'Админ меню':
             await restart_command_for_all_FSM_admin_menu(message, state)
         elif message.text == 'Главное меню':
@@ -160,6 +162,12 @@ async def back_to_admin_consultations_sections_categories_or_query_delivery(mess
             await AdminConsultations.admin_consultations4.set()
         elif message.text == 'Обновить ⬆️':
             await consumer_get_sorted_by_time_asc(message, state)
+            await AdminConsultations.admin_consultations4.set()
+        elif message.text == 'Обновить ⬇️':
+            await another_get_sorted_by_time_desc(message, state)
+            await AdminConsultations.admin_consultations4.set()
+        elif message.text == 'Обновить ⬆️':
+            await another_get_sorted_by_time_asc(message, state)
             await AdminConsultations.admin_consultations4.set()
         else:
             if (len(message.text) > 7 and message.text[7] == '|') or (len(message.text) > 10 and message.text[10] == '|'):
@@ -262,6 +270,29 @@ async def consumer_get_sorted_by_time_asc(message: types.Message, state: FSMCont
         key_list = await data_base.sql_consumer_get_sorted_by_time_asc()
         await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 2, 'asc', 'consumer'))
 
+# Другие темы
+
+async def admin_consultations_another(message: types.Message, state: FSMContext):
+    global ADMIN
+    if message.from_user.id in ADMIN:
+        await AdminConsultations.next()
+        await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=admin_menu_in_consultations_sections_categories_keyboard)
+        await bot.send_message(chat_id = message.from_user.id, text='Выберите способ сортировки:', reply_markup=inline_admin_menu_in_consultations_another_keyboard)
+
+async def another_get_sorted_by_time_desc(message: types.Message, state: FSMContext):
+    global ADMIN
+    if message.from_user.id in ADMIN:
+        await AdminConsultations.next()
+        key_list = await data_base.sql_another_get_sorted_by_time_desc()
+        await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 2, 'desc', 'another'))
+
+async def another_get_sorted_by_time_asc(message: types.Message, state: FSMContext):
+    global ADMIN
+    if message.from_user.id in ADMIN:
+        await AdminConsultations.next()
+        key_list = await data_base.sql_another_get_sorted_by_time_asc()
+        await bot.send_message(chat_id = message.from_user.id, text='Выберите заявку:', reply_markup=await keyboard_generator(key_list, 2, 'asc', 'another'))
+
 # Меню сотрудничества
 
 async def admin_cooperation(message: types.Message):
@@ -306,7 +337,7 @@ async def back_from_cooperation_to_admin_menu_or_query_delivery(message: types.M
                 await restart_command_for_all_FSM_admin_menu(message, state)
                 await message.reply('Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
 
-# Меню предложений тем для публикаций, отзывов и архива
+# Меню всех заявок, предложений тем для публикаций, отзывов и архива
 
 async def admin_suggestion_get_sorted_by_time_desc(message: types.Message):
     global ADMIN
@@ -368,7 +399,7 @@ async def back_from_suggestion_or_feedback_or_archive_or_parse_to_admin_menu_or_
 async def stage_changer(callback: types.CallbackQuery, state: FSMContext):
     global ADMIN
     if callback.from_user.id in ADMIN:
-        callback_exceptions_list = ['yes', 'no', 'To main menu', 'Thank you', 'Read mobilization', 'Read migration', 'Read employment', 'Read consumer', 'Read another', 'mobilization', 'missclick', 'missclick_markup', 'migration', 'employment', 'consumer', 'mobilization_new', 'mobilization_old', 'migration_new', 'migration_old', 'employment_new', 'employment_old', 'consumer_new', 'consumer_old', 'cooperation_new', 'cooperation_old']
+        callback_exceptions_list = ['another', 'nope', 'yes', 'no', 'To main menu', 'Thank you', 'Read mobilization', 'Read migration', 'Read employment', 'Read consumer', 'Read another', 'mobilization', 'missclick', 'missclick_markup', 'migration', 'employment', 'consumer', 'mobilization_new', 'mobilization_old', 'migration_new', 'migration_old', 'employment_new', 'employment_old', 'consumer_new', 'consumer_old', 'cooperation_new', 'cooperation_old', 'another_new', 'another_old']
         if callback.data not in callback_exceptions_list:
             callback_slicer_1 = ''.join(callback.data.split(' ')[slice(1)])
             callback_slicer_2 = ' '.join(callback.data.split(' ')[slice(1,3)])
@@ -442,6 +473,12 @@ def register_handler_admin(dp: Dispatcher):
     dp.register_callback_query_handler(consumer_get_sorted_by_time_desc, text='consumer_new', state=AdminConsultations.admin_consultations3)
     dp.register_callback_query_handler(consumer_get_sorted_by_time_asc, text='consumer_old', state=AdminConsultations.admin_consultations3)
 
+    # Другие темы
+
+    dp.register_message_handler(admin_consultations_another, text='Другие темы', state=AdminConsultations.admin_consultations2)
+    dp.register_callback_query_handler(another_get_sorted_by_time_desc, text='another_new', state=AdminConsultations.admin_consultations3)
+    dp.register_callback_query_handler(another_get_sorted_by_time_asc, text='another_old', state=AdminConsultations.admin_consultations3)
+
     # Регистраторы меню сотрудничества
 
     dp.register_message_handler(admin_cooperation, text='Предложения сотрудничества', state=None)
@@ -449,7 +486,7 @@ def register_handler_admin(dp: Dispatcher):
     dp.register_callback_query_handler(cooperation_get_sorted_by_time_asc, text='cooperation_old', state=AdminCooperation.admin_cooperation1)
     dp.register_message_handler(back_from_cooperation_to_admin_menu_or_query_delivery, state=AdminCooperation.admin_cooperation2)
 
-    # Регистраторы меню предложений тем для публикаций и отзывов
+    # Регистраторы меню всех заявок, предложений тем для публикаций, отзывов и архива
 
     dp.register_message_handler(admin_suggestion_get_sorted_by_time_desc, text='Предложения тем для публикаций', state=None)
     dp.register_message_handler(back_from_suggestion_or_feedback_or_archive_or_parse_to_admin_menu_or_query_delivery, state=AdminSuggestion.admin_suggestion1)
