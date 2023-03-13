@@ -67,7 +67,7 @@ consultation_inline_keyboard_missclick_markup = InlineKeyboardMarkup(row_width=1
 consultation_inline_keyboard_missclick_markup.add(k8)
 
 consultation_inline_keyboard_missclick = InlineKeyboardMarkup(row_width=1)
-consultation_inline_keyboard_missclick.add(k8)
+consultation_inline_keyboard_missclick.add(k9)
 
 socials_inline_keyboard = InlineKeyboardMarkup(row_width=1)
 socials_inline_keyboard.add(k10).add(k11).add(k12)
