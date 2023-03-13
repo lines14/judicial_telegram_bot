@@ -170,7 +170,7 @@ async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.
         data['appeal'] = message.text
     await InlineAppealMobilization.next()
     await bot.send_message(chat_id = message.from_user.id, text='Чтобы я мог связаться с вами, оставьте ваш номер телефона без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
-    await bot.send_message(chat_id = message.from_user.id, text='Или можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+    await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
 
 async def start_inline_keyboard_callback_mobilization_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     global reminder_state
@@ -202,7 +202,7 @@ async def start_inline_keyboard_callback_mobilization_phone_processing(message: 
         else:
             await InlineAppealMobilization.inline_appeal_mobilization2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
-            await bot.send_message(chat_id = message.from_user.id, text='Или можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+            await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
     else:
         async with state.proxy() as data:
             if not message.text:
@@ -229,7 +229,7 @@ async def start_inline_keyboard_callback_mobilization_phone_processing(message: 
         else:
             await InlineAppealMobilization.inline_appeal_mobilization2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
-            await bot.send_message(chat_id = message.from_user.id, text='Или можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+            await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
 
 # Миграция
 
@@ -253,7 +253,7 @@ async def start_inline_keyboard_callback_migration_add_appeal(message: types.Mes
         data['appeal'] = message.text
     await InlineAppealMigration.next()
     await bot.send_message(chat_id = message.from_user.id, text='Чтобы я мог связаться с вами, оставьте ваш номер телефона без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
-    await bot.send_message(chat_id = message.from_user.id, text='Или можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+    await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
 
 async def start_inline_keyboard_callback_migration_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     global reminder_state
@@ -287,7 +287,7 @@ async def start_inline_keyboard_callback_migration_phone_processing(message: typ
         else:
             await InlineAppealMigration.inline_appeal_migration2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
-            await bot.send_message(chat_id = message.from_user.id, text='Или можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+            await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
     else:
         async with state.proxy() as data:
             if not message.text:
@@ -316,7 +316,7 @@ async def start_inline_keyboard_callback_migration_phone_processing(message: typ
         else:
             await InlineAppealMigration.inline_appeal_migration2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
-            await bot.send_message(chat_id = message.from_user.id, text='Или можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+            await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
 
 # Трудовые споры
 
@@ -340,7 +340,7 @@ async def start_inline_keyboard_callback_employment_add_appeal(message: types.Me
         data['appeal'] = message.text
     await InlineAppealEmployment.next()
     await bot.send_message(chat_id = message.from_user.id, text='Чтобы я мог связаться с вами, оставьте ваш номер телефона без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
-    await bot.send_message(chat_id = message.from_user.id, text='Или можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+    await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
 
 async def start_inline_keyboard_callback_employment_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     global reminder_state
@@ -373,7 +373,7 @@ async def start_inline_keyboard_callback_employment_phone_processing(message: ty
         else:
             await InlineAppealEmployment.inline_appeal_employment2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
-            await bot.send_message(chat_id = message.from_user.id, text='Или можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+            await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
     else:
         async with state.proxy() as data:
             if not message.text:
@@ -401,7 +401,7 @@ async def start_inline_keyboard_callback_employment_phone_processing(message: ty
         else:
             await InlineAppealEmployment.inline_appeal_employment2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
-            await bot.send_message(chat_id = message.from_user.id, text='Или можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+            await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
 
 # Защита прав потребителей
 
@@ -425,7 +425,7 @@ async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Mess
         data['appeal'] = message.text
     await InlineAppealConsumer.next()
     await bot.send_message(chat_id = message.from_user.id, text='Чтобы я мог связаться с вами, оставьте ваш номер телефона без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
-    await bot.send_message(chat_id = message.from_user.id, text='Или можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+    await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
 
 async def start_inline_keyboard_callback_consumer_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
     global reminder_state
@@ -458,7 +458,7 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: typi
         else:
             await InlineAppealConsumer.inline_appeal_consumer2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
-            await bot.send_message(chat_id = message.from_user.id, text='Или можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+            await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
     else:
         async with state.proxy() as data:
             if not message.text:
@@ -486,7 +486,7 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: typi
         else:
             await InlineAppealConsumer.inline_appeal_consumer2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
-            await bot.send_message(chat_id = message.from_user.id, text='Или можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+            await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
 
 # Меню консультации со сборщиками данных
 
@@ -982,7 +982,7 @@ async def exception_handler(update: types.Update, exception: exceptions.RetryAft
     await bot.send_message(chat_id = update.message.from_user.id, text='Извините, в данный момент сервера Telegram перегружены. Напишите, пожалуйста, свой номер телефона ответным сообщением')
     admins_list = await data_base.sql_get_admin()
     for id in admins_list:
-        await bot.send_message(chat_id = int(id), text='В связи со сменой способа связи, заявка была перезаписана:')
+        await bot.send_message(chat_id = int(id), text='Так как клиент сменил предпочитаемый способ связи, прошлое уведомление стало не актуально, а заявка была перезаписана:')
     return True
 
 # Меню генератора документов:
