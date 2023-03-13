@@ -19,7 +19,7 @@ async def sql_add_admin(state):
         cur.execute("INSERT OR REPLACE INTO bank_of_admins VALUES (?)", tuple(data.values()))
         base.commit()
 
-# Чтение админов из базы данных
+# Чтение админов из базы данных для уведомлений о заявках
 
 async def sql_get_admin():
     response = cur.execute("SELECT admin_id FROM bank_of_admins;").fetchall()
@@ -46,6 +46,18 @@ async def sql_stage_changer(identifier, stage):
 # Чтение обращений из базы данных
 
 # Выборки по различным критериям
+
+async def sql_parse_all_sorted_by_time_desc():
+    key_list = []
+    response = cur.execute("SELECT datetime, fullname, stage FROM bank_of_appeals WHERE (stage = '🟢Новое' OR stage = '🟡В работе') ORDER BY datetime DESC;").fetchall()
+    for i in response:
+        j = ''.join(i[0].split(' ')[slice(1, 2)])
+        a = ''.join(i[0].split(' ')[slice(0, 1)])
+        b = a.split('-')
+        b.reverse()
+        c = '.'.join(b)
+        key_list.append(i[2]+' | '+c+' | '+j+' | '+i[1])
+    return key_list
 
 async def sql_all_get_sorted_by_time_desc():
     key_list = []

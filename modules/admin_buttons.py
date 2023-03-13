@@ -1,5 +1,6 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
+a0 = KeyboardButton('Все заявки')
 a1 = KeyboardButton('Заявки на консультации')
 a2 = KeyboardButton('Предложения сотрудничества')
 a3 = KeyboardButton('Предложения тем для публикаций')
@@ -36,7 +37,7 @@ i10 = InlineKeyboardButton(text='Долго ждут', callback_data='cooperatio
 # i12 = InlineKeyboardButton(text='Завершено', callback_data='closed')
 
 admin_menu_keyboard = ReplyKeyboardMarkup(resize_keyboard=True) # one_time_keyboard=True .insert(b6)
-admin_menu_keyboard.add(a1).insert(a2).add(a3).insert(a4).add(a16).insert(a17).add(a5)
+admin_menu_keyboard.add(a0).insert(a1).add(a2).insert(a3).add(a4).insert(a16).add(a17).insert(a5)
 
 admin_menu_in_consultations_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 admin_menu_in_consultations_keyboard.add(a9).insert(a14).insert(a15).add(a6).insert(a5)
@@ -141,10 +142,18 @@ async def keyboard_generator(key_list, menu_section, direction, typo):
                     tmp_buttons.append([KeyboardButton(i)])
                 keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
                 return keyboard
-            else:
+            elif typo == 'archive':
                 tmp_buttons = []
                 tmp_buttons.append([KeyboardButton('Админ меню')])
                 tmp_buttons.append([KeyboardButton('Обновить ⬇️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            else:
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('Админ меню')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬇️')])
                 for i in key_list:
                     tmp_buttons.append([KeyboardButton(i)])
                 keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
@@ -216,10 +225,18 @@ async def keyboard_generator(key_list, menu_section, direction, typo):
                     tmp_buttons.append([KeyboardButton(i)])
                 keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
                 return keyboard
-            else:
+            elif typo == 'archive':
                 tmp_buttons = []
                 tmp_buttons.append([KeyboardButton('Админ меню')])
                 tmp_buttons.append([KeyboardButton('Обновить ⬆️')])
+                for i in key_list:
+                    tmp_buttons.append([KeyboardButton(i)])
+                keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
+                return keyboard
+            else:
+                tmp_buttons = []
+                tmp_buttons.append([KeyboardButton('Админ меню')])
+                tmp_buttons.append([KeyboardButton('Обновить ⬆️')])
                 for i in key_list:
                     tmp_buttons.append([KeyboardButton(i)])
                 keyboard = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=tmp_buttons)
