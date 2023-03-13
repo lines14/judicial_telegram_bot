@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from modules.bot_base import bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_missclick_markup, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_recomendations, cooperation_keyboard_in_only_telegram, to_the_main_menu_keyboard
+from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_missclick_markup, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_another, consultation_keyboard_in_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_another, consultation_keyboard_in_after_inline_recomendations, cooperation_keyboard_in_only_telegram, to_the_main_menu_keyboard
 from modules import data_base
 from modules.phone_processing import phone_checker
 from datetime import datetime
@@ -54,6 +54,10 @@ class InlineAppealEmployment(StatesGroup):
 class InlineAppealConsumer(StatesGroup):
     inline_appeal_consumer1 = State()
     inline_appeal_consumer2 = State()
+
+class InlineAppealAnother(StatesGroup):
+    inline_appeal_another1 = State()
+    inline_appeal_another2 = State()
 
 # Машины состояний обращений за консультациями через основное меню
 
@@ -194,11 +198,11 @@ async def start_inline_keyboard_callback_mobilization_phone_processing(message: 
                 await bot.send_message(chat_id = int(id), text='Поступила заявка на консультацию по теме мобилизации. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_mobilization)
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_mobilization)
         else:
             await InlineAppealMobilization.inline_appeal_mobilization2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
@@ -278,12 +282,12 @@ async def start_inline_keyboard_callback_migration_phone_processing(message: typ
                 await bot.send_message(chat_id = int(id), text='Поступила заявка на консультацию по теме миграции. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_migration)
             await bot.send_message(chat_id = message.from_user.id, text='Как и обещал, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_migration)
         else:
             await InlineAppealMigration.inline_appeal_migration2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
@@ -365,11 +369,11 @@ async def start_inline_keyboard_callback_employment_phone_processing(message: ty
                 await bot.send_message(chat_id = int(id), text='Поступила заявка на консультацию по теме трудовых споров. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_employment)
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_employment)
         else:
             await InlineAppealEmployment.inline_appeal_employment2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
@@ -450,11 +454,11 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: typi
                 await bot.send_message(chat_id = int(id), text='Поступила заявка на консультацию по теме защиты прав потребителей. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_consumer)
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_consumer)
         else:
             await InlineAppealConsumer.inline_appeal_consumer2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
@@ -485,6 +489,91 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: typi
             await state.finish()
         else:
             await InlineAppealConsumer.inline_appeal_consumer2.set()
+            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
+            await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+
+# Другая тема
+
+async def start_inline_keyboard_callback_another(callback: types.CallbackQuery):
+    await InlineAppealAnother.inline_appeal_another1.set()
+    await bot.send_message(chat_id = callback.from_user.id, text='Напишите, пожалуйста, ваш вопрос', reply_markup=consultation_inline_keyboard_missclick)
+    await bot.answer_callback_query(callback.id)
+
+async def start_inline_keyboard_callback_another_add_appeal(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['stage'] = '🟢Новое'
+        data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
+        data['section'] = 'Другая тема'
+        current_datetime = datetime.now()
+        data['datetime'] = str(current_datetime)[0:-7]
+        data['appeal'] = message.text
+    await InlineAppealAnother.next()
+    await bot.send_message(chat_id = message.from_user.id, text='Чтобы я мог связаться с вами, оставьте ваш номер телефона без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
+    await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+
+async def start_inline_keyboard_callback_another_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+    global reminder_state
+    global aioschedule_task
+    if not message.text:
+        async with state.proxy() as data:
+            if not message.text:
+                data['status'] = 'Свяжитесь со мной в Telegram'
+                data['phone'] = message.contact.phone_number
+                phone_checked = await phone_checker(data['phone'])
+                data['phone'] = await phone_checker(data['phone'])
+            else:
+                data['status'] = 'Позвоните мне'
+                data['phone'] = message.text
+                phone_checked = await phone_checker(data['phone'])
+                data['phone'] = await phone_checker(data['phone'])
+            
+        if phone_checked != 'fail':
+            await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text='Поступила заявка на консультацию по произвольной теме. Авторизуйтесь в админ-панели бота, чтобы её проверить')
+            msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
+            await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
+            aioschedule_task.cancel()
+            reminder_state = 0
+            await state.finish()
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные.\nВы также можете почитать мои посты на различные юридические темы:', reply_markup=consultation_keyboard_in_after_inline_another)
+        else:
+            await InlineAppealAnother.inline_appeal_another2.set()
+            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
+            await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
+    else:
+        async with state.proxy() as data:
+            if not message.text:
+                data['status'] = 'Свяжитесь со мной в Telegram'
+                data['phone'] = message.contact.phone_number
+                phone_checked = await phone_checker(data['phone'])
+                data['phone'] = await phone_checker(data['phone'])
+            else:
+                data['status'] = 'Позвоните мне'
+                data['phone'] = message.text
+                phone_checked = await phone_checker(data['phone'])
+                data['phone'] = await phone_checker(data['phone'])
+            
+        if phone_checked != 'fail':
+            await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text='Поступила заявка на консультацию по произвольной теме. Авторизуйтесь в админ-панели бота, чтобы её проверить')
+            msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
+            await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение, я скоро вам отвечу!\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные.\nВы можете почитать мои посты на различные юридические темы:', reply_markup=consultation_keyboard_in_after_inline_another)
+            aioschedule_task.cancel()
+            reminder_state = 0
+            await state.finish()
+        else:
+            await InlineAppealAnother.inline_appeal_another2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире.', reply_markup=consultation_inline_keyboard_phone_keeper)
             await bot.send_message(chat_id = message.from_user.id, text='Вы также можете отправить свой контакт Telegram, нажав кнопку внизу', reply_markup=consultation_inline_keyboard_missclick_markup)
 
@@ -554,11 +643,11 @@ async def consultation_mobilization_phone_processing(message: typing.Union[types
             admins_list = await data_base.sql_get_admin()
             for id in admins_list:
                 await bot.send_message(chat_id = int(id), text='Поступила заявка на консультацию по теме мобилизации. Авторизуйтесь в админ-панели бота, чтобы её проверить')
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_mobilization)
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_mobilization)
         else:
             await AppealMobilization.appeal_mobilization2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире', reply_markup=consultation_keyboard_in_only_telegram)
@@ -631,12 +720,12 @@ async def consultation_migration_phone_processing(message: typing.Union[types.Co
             admins_list = await data_base.sql_get_admin()
             for id in admins_list:
                 await bot.send_message(chat_id = int(id), text='Поступила заявка на консультацию по теме миграции. Авторизуйтесь в админ-панели бота, чтобы её проверить')
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_migration)
-            await bot.send_message(chat_id = message.from_user.id, text='Как и обещал, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
+            await bot.send_message(chat_id = message.from_user.id, text='Как и обещал, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_migration)
         else:
             await AppealMigration.appeal_migration2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире', reply_markup=consultation_keyboard_in_only_telegram)
@@ -710,11 +799,11 @@ async def consultation_employment_phone_processing(message: typing.Union[types.C
             admins_list = await data_base.sql_get_admin()
             for id in admins_list:
                 await bot.send_message(chat_id = int(id), text='Поступила заявка на консультацию по теме трудовых споров. Авторизуйтесь в админ-панели бота, чтобы её проверить')
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_employment)
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_employment)
         else:
             await AppealEmployment.appeal_employment2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире', reply_markup=consultation_keyboard_in_only_telegram)
@@ -787,11 +876,11 @@ async def consultation_consumer_phone_processing(message: typing.Union[types.Con
             admins_list = await data_base.sql_get_admin()
             for id in admins_list:
                 await bot.send_message(chat_id = int(id), text='Поступила заявка на консультацию по теме защиты прав потребителей. Авторизуйтесь в админ-панели бота, чтобы её проверить')
-            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
-            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_consumer)
             aioschedule_task.cancel()
             reminder_state = 0
             await state.finish()
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_consumer)
         else:
             await AppealConsumer.appeal_consumer2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире', reply_markup=consultation_keyboard_in_only_telegram)
@@ -919,9 +1008,9 @@ async def cooperation_phone_processing(message: typing.Union[types.Contact, type
             admins_list = await data_base.sql_get_admin()
             for id in admins_list:
                 await bot.send_message(chat_id = int(id), text='Поступила заявка на тему сотрудничества. Авторизуйтесь в админ-панели бота, чтобы её проверить')
+            await state.finish()
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Я рассмотрю ваше предложение на тему сотрудничества.\nДобавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=to_the_main_menu_keyboard)
-            await state.finish()
         else:
             await AppealCooperation.appeal_cooperation2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире', reply_markup=cooperation_keyboard_in_only_telegram)
@@ -979,10 +1068,7 @@ async def reminder():
 # Антифлуд
 
 async def exception_handler(update: types.Update, exception: exceptions.RetryAfter):
-    await bot.send_message(chat_id = update.message.from_user.id, text='Извините, в данный момент сервера Telegram перегружены. Напишите, пожалуйста, свой номер телефона ответным сообщением')
-    admins_list = await data_base.sql_get_admin()
-    for id in admins_list:
-        await bot.send_message(chat_id = int(id), text='Так как клиент сменил предпочитаемый способ связи, прошлое уведомление стало не актуально, а заявка была перезаписана:')
+    await bot.send_message(chat_id = update.message.from_user.id, text='Спасибо за ваше обращение, я скоро вам отвечу!\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные.\nВы можете почитать мои посты на различные юридические темы:', reply_markup=consultation_keyboard_in_another)
     return True
 
 # Меню генератора документов:
@@ -1103,8 +1189,8 @@ def register_handler_client(dp: Dispatcher):
     dp.register_callback_query_handler(start_inline_keyboard_callback_redirect, text=['no', 'nope'])
     dp.register_message_handler(restart_command, text=['Главное меню', 'Спасибо, буду ждать'])
     dp.register_callback_query_handler(restart_command_inline, text=['To main menu', 'Thank you'])
-    dp.register_message_handler(recomendations_after, text=['Хочу почитать посты на тему мобилизации', 'Хочу почитать посты на тему миграции', 'Хочу почитать посты на тему трудовых споров', 'Хочу почитать посты на тему защиты прав потребителей'])
-    dp.register_callback_query_handler(recomendations_after_inline, text=['Read mobilization', 'Read migration', 'Read employment', 'Read consumer'])
+    dp.register_message_handler(recomendations_after, text=['Хочу почитать посты на тему мобилизации', 'Хочу почитать посты на тему миграции', 'Хочу почитать посты на тему трудовых споров', 'Хочу почитать посты на тему защиты прав потребителей', 'Хочу почитать посты'])
+    dp.register_callback_query_handler(recomendations_after_inline, text=['Read mobilization', 'Read migration', 'Read employment', 'Read consumer', 'Read another'])
     dp.register_message_handler(restart_command_for_all_FSM, state='*', text=['Главное меню', '/start'])
     dp.register_message_handler(consultation_start_command, text='Получить консультацию')
     # dp.register_message_handler(generator_start_command, text='Генератор судебных документов')
@@ -1147,6 +1233,14 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(start_inline_keyboard_callback_consumer_add_appeal, state=InlineAppealConsumer.inline_appeal_consumer1)
     dp.register_callback_query_handler(restart_inline_keyboard_callback_pick_delete_markup, state='*', text='missclick_markup')
     dp.register_message_handler(start_inline_keyboard_callback_consumer_phone_processing, content_types=['contact', 'text'], state=InlineAppealConsumer.inline_appeal_consumer2)
+
+    # Другая тема
+
+    dp.register_callback_query_handler(start_inline_keyboard_callback_another, text='another', state=None)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick_without_delete_markup, state='*', text='missclick')
+    dp.register_message_handler(start_inline_keyboard_callback_another_add_appeal, state=InlineAppealAnother.inline_appeal_another1)
+    dp.register_callback_query_handler(restart_inline_keyboard_callback_pick_delete_markup, state='*', text='missclick_markup')
+    dp.register_message_handler(start_inline_keyboard_callback_another_phone_processing, content_types=['contact', 'text'], state=InlineAppealAnother.inline_appeal_another2)
     
     # Регистраторы меню консультаций со сборщиками данных
 

@@ -368,7 +368,7 @@ async def back_from_suggestion_or_feedback_or_archive_or_parse_to_admin_menu_or_
 async def stage_changer(callback: types.CallbackQuery, state: FSMContext):
     global ADMIN
     if callback.from_user.id in ADMIN:
-        callback_exceptions_list = ['yes', 'no', 'To main menu', 'Thank you', 'Read mobilization', 'Read migration', 'Read employment', 'Read consumer', 'mobilization', 'missclick', 'missclick_markup', 'migration', 'employment', 'consumer', 'mobilization_new', 'mobilization_old', 'migration_new', 'migration_old', 'employment_new', 'employment_old', 'consumer_new', 'consumer_old', 'cooperation_new', 'cooperation_old']
+        callback_exceptions_list = ['yes', 'no', 'To main menu', 'Thank you', 'Read mobilization', 'Read migration', 'Read employment', 'Read consumer', 'Read another', 'mobilization', 'missclick', 'missclick_markup', 'migration', 'employment', 'consumer', 'mobilization_new', 'mobilization_old', 'migration_new', 'migration_old', 'employment_new', 'employment_old', 'consumer_new', 'consumer_old', 'cooperation_new', 'cooperation_old']
         if callback.data not in callback_exceptions_list:
             callback_slicer_1 = ''.join(callback.data.split(' ')[slice(1)])
             callback_slicer_2 = ' '.join(callback.data.split(' ')[slice(1,3)])
