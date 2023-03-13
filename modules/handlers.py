@@ -189,6 +189,9 @@ async def start_inline_keyboard_callback_mobilization_phone_processing(message: 
                 data['phone'] = await phone_checker(data['phone'])
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме мобилизации. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
@@ -214,6 +217,9 @@ async def start_inline_keyboard_callback_mobilization_phone_processing(message: 
                 data['phone'] = await phone_checker(data['phone'])
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме мобилизации. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение, я скоро вам отвечу!\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_mobilization)
@@ -267,6 +273,9 @@ async def start_inline_keyboard_callback_migration_phone_processing(message: typ
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме миграции. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
@@ -294,6 +303,9 @@ async def start_inline_keyboard_callback_migration_phone_processing(message: typ
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме миграции. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение, я скоро вам отвечу!\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_migration)
@@ -348,6 +360,9 @@ async def start_inline_keyboard_callback_employment_phone_processing(message: ty
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме трудовых споров. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
@@ -374,6 +389,9 @@ async def start_inline_keyboard_callback_employment_phone_processing(message: ty
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме трудовых споров. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение, я скоро вам отвечу!\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_employment)
@@ -427,6 +445,9 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: typi
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме защиты прав потребителей. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
@@ -453,6 +474,9 @@ async def start_inline_keyboard_callback_consumer_phone_processing(message: typi
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме защиты прав потребителей. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             msg = await bot.send_message(chat_id = message.from_user.id, text='ㅤ', reply_markup=ReplyKeyboardRemove())
             await bot.delete_message(chat_id = message.from_user.id, message_id=msg["message_id"]) # chat_id = message.from_user.id
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение, я скоро вам отвечу!\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_after_inline_consumer)
@@ -527,6 +551,9 @@ async def consultation_mobilization_phone_processing(message: typing.Union[types
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме мобилизации. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_mobilization)
             aioschedule_task.cancel()
@@ -550,6 +577,9 @@ async def consultation_mobilization_phone_processing(message: typing.Union[types
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме мобилизации. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение, я скоро вам отвечу!\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_mobilization)
             aioschedule_task.cancel()
             reminder_state = 0
@@ -598,6 +628,9 @@ async def consultation_migration_phone_processing(message: typing.Union[types.Co
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме миграции. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_migration)
             await bot.send_message(chat_id = message.from_user.id, text='Как и обещал, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
@@ -622,6 +655,9 @@ async def consultation_migration_phone_processing(message: typing.Union[types.Co
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме миграции. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение, я скоро вам отвечу!\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_migration)
             await bot.send_message(chat_id = message.from_user.id, text='Помимо этого, рад презентовать вам свой чек-лист "Переезд из России: деньги и документы" по ссылке ниже:\nhttps://drive.google.com/file/d/1Y2rMo_GcgpF3ck2NzU0JPbQU2of3VQpT/view')
             aioschedule_task.cancel()
@@ -671,6 +707,9 @@ async def consultation_employment_phone_processing(message: typing.Union[types.C
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме трудовых споров. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_employment)
             aioschedule_task.cancel()
@@ -694,6 +733,9 @@ async def consultation_employment_phone_processing(message: typing.Union[types.C
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме трудовых споров. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение, я скоро вам отвечу!\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_employment)
             aioschedule_task.cancel()
             reminder_state = 0
@@ -742,6 +784,9 @@ async def consultation_consumer_phone_processing(message: typing.Union[types.Con
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме защиты прав потребителей. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_consumer)
             aioschedule_task.cancel()
@@ -765,6 +810,9 @@ async def consultation_consumer_phone_processing(message: typing.Union[types.Con
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на консультацию по теме защиты прав потребителей. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение, я скоро вам отвечу!\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=consultation_keyboard_in_consumer)
             aioschedule_task.cancel()
             reminder_state = 0
@@ -795,6 +843,9 @@ async def feedback_add_appeal(message: types.Message, state: FSMContext):
         data['status'] = ''
         data['phone'] = ''
     await data_base.sql_add_appeal(state)
+    admins_list = await data_base.sql_get_admin()
+    for id in admins_list:
+        await bot.send_message(chat_id = int(id), text=f'Поступил отзыв. Авторизуйтесь в админ-панели бота, чтобы его проверить')
     await bot.send_message(chat_id = message.from_user.id, text='Спасибо! Я ценю вашу обратную связь', reply_markup=to_the_main_menu_keyboard)
     await state.finish()
 
@@ -821,6 +872,9 @@ async def suggestion_add_appeal(message: types.Message, state: FSMContext):
         data['status'] = ''
         data['phone'] = ''
     await data_base.sql_add_appeal(state)
+    admins_list = await data_base.sql_get_admin()
+    for id in admins_list:
+        await bot.send_message(chat_id = int(id), text=f'Поступило предложение темы для публикации. Авторизуйтесь в админ-панели бота, чтобы его проверить')
     await bot.send_message(chat_id = message.from_user.id, text='Ваше предложение принято, спасибо!', reply_markup=to_the_main_menu_keyboard)
     await state.finish()
 
@@ -862,6 +916,9 @@ async def cooperation_phone_processing(message: typing.Union[types.Contact, type
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на тему сотрудничества. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
             await bot.send_message(chat_id = message.from_user.id, text='Я рассмотрю ваше предложение на тему сотрудничества.\nДобавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=to_the_main_menu_keyboard)
             await state.finish()
@@ -883,6 +940,9 @@ async def cooperation_phone_processing(message: typing.Union[types.Contact, type
             
         if phone_checked != 'fail':
             await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text=f'Поступила заявка на тему сотрудничества. Авторизуйтесь в админ-панели бота, чтобы её проверить')
             await bot.send_message(chat_id = message.from_user.id, text='Я рассмотрю ваше предложение на тему сотрудничества.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные', reply_markup=to_the_main_menu_keyboard)
             await state.finish()
         else:

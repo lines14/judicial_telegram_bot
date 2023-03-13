@@ -8,7 +8,26 @@ def sql_start():
     if base:
         print('[ОК] - База данных подключена!')
     base.execute("CREATE TABLE IF NOT EXISTS bank_of_appeals(stage TEXT, user_id TEXT, nickname TEXT, fullname TEXT, section TEXT, datetime TEXT, appeal TEXT, status TEXT, phone TEXT)")
+    base.execute("CREATE TABLE IF NOT EXISTS bank_of_admins(admin_id TEXT PRIMARY KEY)")
     base.commit()
+
+# Добавление админа в базу данных
+
+async def sql_add_admin(state):
+    async with state.proxy() as data:
+        print(tuple(data.values()))
+        cur.execute("INSERT OR REPLACE INTO bank_of_admins VALUES (?)", tuple(data.values()))
+        base.commit()
+
+# Чтение админов из базы данных
+
+async def sql_get_admin():
+    response = cur.execute("SELECT admin_id FROM bank_of_admins;").fetchall()
+    admins_list = []
+    for i in response:
+        for id in i:
+            admins_list.append(id)
+    return admins_list
 
 # Добавление обращения в базу данных
 

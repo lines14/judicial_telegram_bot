@@ -41,9 +41,12 @@ class AdminArchive(StatesGroup):
 # Хэндлеры бота
 # Меню администратора
 
-async def start_admin_command(message: types.Message):
+async def start_admin_command(message: types.Message, state: FSMContext):
     global ADMIN
     ADMIN.add(message.from_user.id)
+    async with state.proxy() as data:
+        data['admin_id'] = message.from_user.id
+    await data_base.sql_add_admin(state)
     if message.from_user.id in ADMIN:
         # await bot.delete_message(chat_id = message.from_user.id, message_id=message.message_id)
         await bot.send_message(chat_id = message.from_user.id, text='Выберите раздел из меню администратора:', reply_markup=admin_menu_keyboard)
