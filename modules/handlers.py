@@ -77,6 +77,10 @@ class AppealConsumer(StatesGroup):
     appeal_consumer1 = State()
     appeal_consumer2 = State()
 
+class AppealAnother(StatesGroup):
+    appeal_another1 = State()
+    appeal_another2 = State()
+
 # Машины состояний отзывов, предложений сотрудничества и предложений тем для публикаций
 
 class AppealFeedback(StatesGroup):
@@ -910,6 +914,83 @@ async def consultation_consumer_phone_processing(message: typing.Union[types.Con
             await AppealConsumer.appeal_consumer2.set()
             await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире', reply_markup=consultation_keyboard_in_only_telegram)
 
+# Другая тема
+
+async def consultation_another(message: types.Message):
+    await AppealAnother.appeal_another1.set()
+    await bot.send_message(chat_id = message.from_user.id, text='Напишите, пожалуйста, ваш вопрос', reply_markup=consultation_keyboard_in_abort)
+
+async def consultation_another_add_appeal(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['stage'] = '🟢Новое'
+        data['user_id'] = message.chat.id
+        if message.from_user.username == None:
+            data['nickname'] = ''
+        else:
+            data['nickname'] = message.from_user.username
+        data['fullname'] = message.from_user.full_name
+        data['section'] = 'Другая тема'
+        current_datetime = datetime.now()
+        data['datetime'] = str(current_datetime)[0:-7]
+        data['appeal'] = message.text
+    await AppealAnother.next()
+    await bot.send_message(chat_id = message.from_user.id, text='Чтобы я мог связаться с вами, оставьте ваш номер телефона без пробелов и тире', reply_markup=consultation_keyboard_in_only_telegram)
+
+async def consultation_another_phone_processing(message: typing.Union[types.Contact, types.Message], state: FSMContext):
+    global reminder_state
+    global aioschedule_task
+    if not message.text:
+        async with state.proxy() as data:
+            if not message.text:
+                data['status'] = 'Свяжитесь со мной в Telegram'
+                data['phone'] = message.contact.phone_number
+                phone_checked = await phone_checker(data['phone'])
+                data['phone'] = await phone_checker(data['phone'])
+            else:
+                data['status'] = 'Позвоните мне'
+                data['phone'] = message.text
+                phone_checked = await phone_checker(data['phone'])
+                data['phone'] = await phone_checker(data['phone'])
+            
+        if phone_checked != 'fail':
+            await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text='Поступила заявка на консультацию по произвольной теме. Авторизуйтесь в админ-панели бота, чтобы её проверить')
+            aioschedule_task.cancel()
+            reminder_state = 0
+            await state.finish()
+            await bot.send_contact(chat_id = message.from_user.id, phone_number = '+79933393746', first_name = 'Ярослав', last_name = 'Павлюков')
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение! Добавьте меня в контакты в Telegram, чтобы я смог с вами связаться.\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные.\nВы также можете почитать мои посты на различные юридические темы:', reply_markup=consultation_keyboard_in_another)
+        else:
+            await AppealAnother.appeal_another2.set()
+            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире', reply_markup=consultation_keyboard_in_only_telegram)
+    else:
+        async with state.proxy() as data:
+            if not message.text:
+                data['status'] = 'Свяжитесь со мной в Telegram'
+                data['phone'] = message.contact.phone_number
+                phone_checked = await phone_checker(data['phone'])
+                data['phone'] = await phone_checker(data['phone'])
+            else:
+                data['status'] = 'Позвоните мне'
+                data['phone'] = message.text
+                phone_checked = await phone_checker(data['phone'])
+                data['phone'] = await phone_checker(data['phone'])
+            
+        if phone_checked != 'fail':
+            await data_base.sql_add_appeal(state)
+            admins_list = await data_base.sql_get_admin()
+            for id in admins_list:
+                await bot.send_message(chat_id = int(id), text='Поступила заявка на консультацию по произвольной теме. Авторизуйтесь в админ-панели бота, чтобы её проверить')
+            await bot.send_message(chat_id = message.from_user.id, text='Спасибо за ваше обращение, я скоро вам отвечу!\nМы работаем по будням с 10:00 до 20:00 (МСК). Сб и Вс - выходные.\nВы можете почитать мои посты на различные юридические темы:', reply_markup=consultation_keyboard_in_another)
+            aioschedule_task.cancel()
+            reminder_state = 0
+            await state.finish()
+        else:
+            await AppealAnother.appeal_another2.set()
+            await bot.send_message(chat_id = message.from_user.id, text='Некорректно введён номер телефона. Пожалуйста, введите его ещё раз без пробелов и тире', reply_markup=consultation_keyboard_in_only_telegram)
+
 # Меню отзывов
 
 async def feedback(message: types.Message):
@@ -1269,6 +1350,12 @@ def register_handler_client(dp: Dispatcher):
     dp.register_message_handler(consultation_consumer, text='Защита прав потребителей', state=None)
     dp.register_message_handler(consultation_consumer_add_appeal, state=AppealConsumer.appeal_consumer1)
     dp.register_message_handler(consultation_consumer_phone_processing, content_types=['contact', 'text'], state=AppealConsumer.appeal_consumer2)
+
+    # Другая тема
+
+    dp.register_message_handler(consultation_another, text='Другая тема', state=None)
+    dp.register_message_handler(consultation_another_add_appeal, state=AppealAnother.appeal_another1)
+    dp.register_message_handler(consultation_another_phone_processing, content_types=['contact', 'text'], state=AppealAnother.appeal_another2)
 
     # Регистраторы меню обо мне
 

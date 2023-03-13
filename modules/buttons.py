@@ -25,6 +25,7 @@ k18 = InlineKeyboardButton(text='Хочу почитать посты', callback
 
 k19 = InlineKeyboardButton(text='Главное меню', callback_data='To main menu')
 
+b0 = KeyboardButton('Другая тема')
 b1 = KeyboardButton('Получить консультацию')
 b2 = KeyboardButton('Оставить отзыв или замечание')
 b3 = KeyboardButton('Сотрудничество')
@@ -82,7 +83,7 @@ to_the_main_menu_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 to_the_main_menu_keyboard.add(b7)
 
 consultation_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-consultation_keyboard.add(b13).insert(b14).insert(b15).add(b16).insert(b7)
+consultation_keyboard.add(b13).insert(b14).insert(b15).add(b16).insert(b0).insert(b7)
 
 consultation_keyboard_in_mobilization = ReplyKeyboardMarkup(resize_keyboard=True)
 consultation_keyboard_in_mobilization.add(b17).insert(b18)
