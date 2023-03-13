@@ -3,9 +3,27 @@ async def phone_checker(phone):
         phonelist = []
         for i in phone:
             phonelist.append(i)
-        phonelist.reverse()
-        phonelist.append('+')
-        phonelist.reverse()
+        phonelist.insert(0, '+')
+        phone = ''.join(phonelist)
+
+        if phone[0] == '+':
+            slicer = slice(1, len(phone))
+            phone_to_check = phone[slicer]
+            for i in phone_to_check:
+                if i.isdecimal():
+                    continue
+                else:
+                    return 'fail'
+            return phone
+        else:
+            return 'fail'
+    elif phone[0] == '8':
+        phonelist = []
+        for i in phone:
+            phonelist.append(i)
+        phonelist.remove('8')
+        phonelist.insert(0, '7')
+        phonelist.insert(0, '+')
         phone = ''.join(phonelist)
 
         if phone[0] == '+':
@@ -31,39 +49,6 @@ async def phone_checker(phone):
             return phone
         else:
             return 'fail'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # import re
 
