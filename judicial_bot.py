@@ -15,7 +15,7 @@ dp.middleware.setup(LoggingMiddleware())
 async def on_startup(_):
     await bot.set_webhook(WEBHOOK_URL, drop_pending_updates=True) #certificate=CERT
     data_base.sql_start()
-    aioschedule.every(72).hours.at(":10").do(handlers.reminder)
+    aioschedule.every(48).hours.at(":10").do(handlers.reminder)
     print('Бот успешно запущен!')
 
 async def on_shutdown(_):

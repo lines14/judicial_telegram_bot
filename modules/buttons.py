@@ -1,9 +1,9 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
-k0 = InlineKeyboardButton(text='Другая тема', callback_data='another')
+k0 = InlineKeyboardButton(text='Задать вопрос', callback_data='another')
 k1 = InlineKeyboardButton(text='Да', callback_data='yes')
 k2 = InlineKeyboardButton(text='Нет, у меня другой вопрос', callback_data='no')
-k3 = InlineKeyboardButton(text='Другой вопрос', callback_data='nope')
+k3 = InlineKeyboardButton(text='В главное меню', callback_data='nope')
 
 k4 = InlineKeyboardButton(text='Мобилизация', callback_data='mobilization')
 k5 = InlineKeyboardButton(text='Миграция', callback_data='migration')
@@ -25,7 +25,7 @@ k18 = InlineKeyboardButton(text='Хочу почитать посты', callback
 
 k19 = InlineKeyboardButton(text='Главное меню', callback_data='To main menu')
 
-b0 = KeyboardButton('Другая тема')
+b0 = KeyboardButton('Задать вопрос')
 b1 = KeyboardButton('Получить консультацию')
 b2 = KeyboardButton('Оставить отзыв или замечание')
 b3 = KeyboardButton('Сотрудничество')

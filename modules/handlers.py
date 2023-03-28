@@ -1353,7 +1353,7 @@ def register_handler_client(dp: Dispatcher):
 
     # Другая тема
 
-    dp.register_message_handler(consultation_another, text='Другая тема', state=None)
+    dp.register_message_handler(consultation_another, text='Задать вопрос', state=None)
     dp.register_message_handler(consultation_another_add_appeal, state=AppealAnother.appeal_another1)
     dp.register_message_handler(consultation_another_phone_processing, content_types=['contact', 'text'], state=AppealAnother.appeal_another2)
 
