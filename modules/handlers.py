@@ -6,7 +6,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from modules.buttons import intro_inline_keyboard, consultation_inline_keyboard, consultation_inline_keyboard_missclick, consultation_inline_keyboard_missclick_markup, consultation_inline_keyboard_phone_keeper, socials_inline_keyboard, main_menu_keyboard, doc_generator_start_keyboard, cancel_generator_keyboard, doc_generator_finish_keyboard, consultation_keyboard, consultation_keyboard_in_mobilization, consultation_keyboard_in_migration, consultation_keyboard_in_employment, consultation_keyboard_in_consumer, consultation_keyboard_in_another, consultation_keyboard_in_only_telegram, consultation_keyboard_in_abort, consultation_keyboard_in_after_inline_mobilization, consultation_keyboard_in_after_inline_migration, consultation_keyboard_in_after_inline_employment, consultation_keyboard_in_after_inline_consumer, consultation_keyboard_in_after_inline_another, consultation_keyboard_in_after_inline_recomendations, cooperation_keyboard_in_only_telegram, to_the_main_menu_keyboard
 from modules import data_base
 from modules.phone_processing import phone_checker
-from datetime import datetime
+from datetime import datetime, timedelta
 import typing
 from aiogram.types import ReplyKeyboardRemove
 import asyncio
@@ -175,7 +175,7 @@ async def start_inline_keyboard_callback_mobilization_add_appeal(message: types.
             data['nickname'] = message.from_user.username
         data['fullname'] = message.from_user.full_name
         data['section'] = 'Мобилизация'
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow() + timedelta(hours=3)
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await InlineAppealMobilization.next()
@@ -258,7 +258,7 @@ async def start_inline_keyboard_callback_migration_add_appeal(message: types.Mes
             data['nickname'] = message.from_user.username
         data['fullname'] = message.from_user.full_name
         data['section'] = 'Миграция'
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow() + timedelta(hours=3)
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await InlineAppealMigration.next()
@@ -345,7 +345,7 @@ async def start_inline_keyboard_callback_employment_add_appeal(message: types.Me
             data['nickname'] = message.from_user.username
         data['fullname'] = message.from_user.full_name
         data['section'] = 'Трудовые споры'
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow() + timedelta(hours=3)
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await InlineAppealEmployment.next()
@@ -430,7 +430,7 @@ async def start_inline_keyboard_callback_consumer_add_appeal(message: types.Mess
             data['nickname'] = message.from_user.username
         data['fullname'] = message.from_user.full_name
         data['section'] = 'Защита прав потребителей'
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow() + timedelta(hours=3)
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await InlineAppealConsumer.next()
@@ -515,7 +515,7 @@ async def start_inline_keyboard_callback_another_add_appeal(message: types.Messa
             data['nickname'] = message.from_user.username
         data['fullname'] = message.from_user.full_name
         data['section'] = 'Другая тема'
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow() + timedelta(hours=3)
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await InlineAppealAnother.next()
@@ -622,7 +622,7 @@ async def consultation_mobilization_add_appeal(message: types.Message, state: FS
             data['nickname'] = message.from_user.username
         data['fullname'] = message.from_user.full_name
         data['section'] = 'Мобилизация'
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow() + timedelta(hours=3)
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await AppealMobilization.next()
@@ -699,7 +699,7 @@ async def consultation_migration_add_appeal(message: types.Message, state: FSMCo
             data['nickname'] = message.from_user.username
         data['fullname'] = message.from_user.full_name
         data['section'] = 'Миграция'
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow() + timedelta(hours=3)
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await AppealMigration.next()
@@ -778,7 +778,7 @@ async def consultation_employment_add_appeal(message: types.Message, state: FSMC
             data['nickname'] = message.from_user.username
         data['fullname'] = message.from_user.full_name
         data['section'] = 'Трудовые споры'
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow() + timedelta(hours=3)
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await AppealEmployment.next()
@@ -855,7 +855,7 @@ async def consultation_consumer_add_appeal(message: types.Message, state: FSMCon
             data['nickname'] = message.from_user.username
         data['fullname'] = message.from_user.full_name
         data['section'] = 'Защита прав потребителей'
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow() + timedelta(hours=3)
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await AppealConsumer.next()
@@ -932,7 +932,7 @@ async def consultation_another_add_appeal(message: types.Message, state: FSMCont
             data['nickname'] = message.from_user.username
         data['fullname'] = message.from_user.full_name
         data['section'] = 'Другая тема'
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow() + timedelta(hours=3)
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await AppealAnother.next()
@@ -1009,7 +1009,7 @@ async def feedback_add_appeal(message: types.Message, state: FSMContext):
             data['nickname'] = message.from_user.username
         data['fullname'] = message.from_user.full_name
         data['section'] = 'Отзывы'
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow() + timedelta(hours=3)
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
         data['status'] = ''
@@ -1038,7 +1038,7 @@ async def suggestion_add_appeal(message: types.Message, state: FSMContext):
             data['nickname'] = message.from_user.username
         data['fullname'] = message.from_user.full_name
         data['section'] = 'Предложения тем для публикаций'
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow() + timedelta(hours=3)
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
         data['status'] = ''
@@ -1066,7 +1066,7 @@ async def cooperation_add_appeal(message: types.Message, state: FSMContext):
             data['nickname'] = message.from_user.username
         data['fullname'] = message.from_user.full_name
         data['section'] = 'Сотрудничество'
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow() + timedelta(hours=3)
         data['datetime'] = str(current_datetime)[0:-7]
         data['appeal'] = message.text
     await AppealCooperation.next()
