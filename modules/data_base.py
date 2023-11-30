@@ -1,9 +1,11 @@
 import sqlite3 as sq
+from pathlib import Path
 from modules.bot_base import bot
+destination = Path(__file__).resolve().parent.parent
 
 def sql_start():
     global base, cur
-    base = sq.connect('/home/lines14/projects/judicial_telegram_bot/documents/database.db')
+    base = sq.connect(f'{destination}/documents/database.db')
     cur = base.cursor()
     if base:
         print('[ОК] - База данных подключена!')

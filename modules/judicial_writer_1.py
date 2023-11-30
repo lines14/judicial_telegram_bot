@@ -1,12 +1,14 @@
 # document 1:
 # petition for familiarization with the case materials
 
+from pathlib import Path
 from docx import Document
 from docx.shared import Pt
 from docx.shared import Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_ROW_HEIGHT_RULE
 from modules import template
+destination = Path(__file__).resolve().parent.parent
 
 async def data_print(state):
     async with state.proxy() as data:
@@ -119,4 +121,4 @@ async def data_print(state):
     await make_table_rows_bold(table.rows[1])
     await make_table_columns_align_right(table.columns[1])
 
-    document.save('/home/lines14/projects/judicial_telegram_bot/documents/your_document.docx')
+    document.save(f'{destination}/documents/your_document.docx')

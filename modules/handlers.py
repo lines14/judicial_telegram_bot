@@ -1,3 +1,4 @@
+from pathlib import Path
 from aiogram import types, Dispatcher
 from modules.bot_base import bot
 from aiogram.dispatcher import FSMContext
@@ -11,6 +12,7 @@ from aiogram.types import ReplyKeyboardRemove
 import asyncio
 import aioschedule
 from aiogram.utils import exceptions
+destination = Path(__file__).resolve().parent.parent
 # from modules.judicial_writer_1 import data_print
 
 # Base aioschedule's reminder state
@@ -1122,7 +1124,7 @@ async def cooperation_phone_processing(message: typing.Union[types.Contact, type
 # Обо мне
 
 async def about_me_start_command(message: types.Message):
-    await bot.send_photo(chat_id=message.chat.id, photo=open('/home/lines14/projects/judicial_telegram_bot/documents/about_me.jpg', 'rb'))
+    await bot.send_photo(chat_id=message.chat.id, photo=open(f'{destination}/documents/about_me.jpg', 'rb'))
     await bot.send_message(chat_id = message.from_user.id, text='Обо мне:\n\nОбразование: Бакалавриат МГУ им. Ломоносова (2015) и магистратура ВШЭ (2017)\n\nСпециализация: трудовое и миграционное право, поддержка бизнеса, защита прав потребителей, судебные споры\n\nОпыт: 5 лет судебной практики, более 120 дел\n\n95% успешных кейсов\n\nВзыскал более 4 млн рублей для обратившихся ко мне физлиц\nОтменил более 15 выговоров\nПомог вернуться на работу десяткам клиентов\n\nБолее подробную информацию можете посмотреть на моём сайте:\nhttp://yaroslaw.org')
     await bot.send_message(chat_id = message.from_user.id, text='Подписывайтесь на мои социальные сети, чтобы быть в курсе всех юридических новостей:', reply_markup=socials_inline_keyboard)
 
