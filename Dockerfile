@@ -1,14 +1,14 @@
 # temp stage
-FROM python:3-alpine as builder
+FROM python:3.10-alpine AS builder
 
 # Sets directory
 WORKDIR /app
 
 # Keeps Python from generating .pyc files in the container
-ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONDONTWRITEBYTECODE=1
 
 # Turns off buffering for easier container logging
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 
 # Updates all Alpine packages
 RUN apk update && \
@@ -27,7 +27,7 @@ RUN pip install --upgrade pip
 
 
 # final stage
-FROM python:3-alpine
+FROM python:3.10-alpine
 
 # Sets directory
 WORKDIR /app
