@@ -5,7 +5,7 @@ destination = Path(__file__).resolve().parent.parent
 
 def sql_start():
     global base, cur
-    base = sq.connect(f'{destination}/documents/database.db')
+    base = sq.connect(database=f'{destination}/documents/database.db', check_same_thread=False)
     cur = base.cursor()
     if base:
         print('[ОК] - База данных подключена!')
