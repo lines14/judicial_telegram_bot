@@ -1,5 +1,4 @@
 modules/token.py
-documents/
 .env
 modules/config.py
 modules/template.py
