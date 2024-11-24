@@ -1,6 +1,6 @@
 import docx
 from pathlib import Path
-destination = Path(__file__).resolve().parent.parent
+path = Path(__file__).resolve().parent.parent
 
 doc = docx.Document()
 
@@ -9,4 +9,4 @@ p.add_run('bold').bold = True
 p.add_run(' and some ')
 p.add_run('italic.').italic = True
 
-doc.save(f'{destination}/documents/practice.docx')
+doc.save(f'{path}/documents/practice.docx')

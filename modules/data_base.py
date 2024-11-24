@@ -1,11 +1,12 @@
 import sqlite3 as sq
 from pathlib import Path
 from modules.bot_base import bot
-destination = Path(__file__).resolve().parent.parent
+from modules.config import DB_PATH
+path = Path(__file__).resolve().parent.parent
 
 def sql_start():
     global base, cur
-    base = sq.connect(database=f'{destination}/documents/database.db', check_same_thread=False)
+    base = sq.connect(database=f'{path}{DB_PATH}', check_same_thread=False)
     cur = base.cursor()
     if base:
         print('[ОК] - База данных подключена!')

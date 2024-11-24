@@ -7,9 +7,9 @@ from modules.admin_buttons import admin_menu_keyboard, admin_menu_in_consultatio
 from modules.admin_buttons import keyboard_generator
 from modules.admin_buttons import stage_keyboard_generator
 from modules.handlers import restart_command_for_all_FSM
-# from modules.token import ID
+# from modules.config import ADMIN_ID
 
-# ADMIN = ID
+# ADMIN = ADMIN_ID
 
 ADMIN = set()
 

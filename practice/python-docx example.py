@@ -1,7 +1,7 @@
 import docx
 from pathlib import Path
 from docx.shared import Cm, Pt
-destination = Path(__file__).resolve().parent.parent
+path = Path(__file__).resolve().parent.parent
 
 document = docx.Document()
 
@@ -57,4 +57,4 @@ for qty, id, desc in records:
     row_cells[1].text = id
     row_cells[2].text = desc
 
-document.save(f'{destination}/documents/example.docx')
+document.save(f'{path}/documents/example.docx')

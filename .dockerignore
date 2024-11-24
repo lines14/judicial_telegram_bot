@@ -25,4 +25,7 @@
 LICENSE
 README.md
 **/.env
-**/reserve
+**/practice/template_res.py
+**/documents/about_me.jpg
+**/documents/database.db
+**/documents/your_document.docx
