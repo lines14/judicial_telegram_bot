@@ -1,3 +1,4 @@
 .env
+.venv
 practice/template_res.py
 modules/__pycache__
